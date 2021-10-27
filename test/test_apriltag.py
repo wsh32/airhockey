@@ -1,7 +1,12 @@
 import cv2
 import apriltag
+import time
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(
+    '/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_A4EC6ABF-video-index0')
+
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920 / 2)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080 / 2)
 #cap.set(cv2.CAP_PROP_FOCUS, 255)
 
 apriltag_options = apriltag.DetectorOptions(families="tag16h5")
@@ -9,9 +14,12 @@ detector = apriltag.Detector(apriltag_options)
 
 try:
     while True:
+        time_start = time.time()
         _, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         results = detector.detect(gray)
+        time_end = time.time()
+        print(f"Apriltag detection in: {time_end - time_start}")
 
         for r in results:
             (ptA, ptB, ptC, ptD) = r.corners
