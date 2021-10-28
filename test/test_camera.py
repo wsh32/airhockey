@@ -1,9 +1,7 @@
 import cv2
+import camera
 
-cap = cv2.VideoCapture(
-    '/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_A4EC6ABF-video-index0')
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+cap = camera.Camera(width=1280, height=960)
 
 try:
     while True:

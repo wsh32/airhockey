@@ -2,12 +2,9 @@ import cv2
 import apriltag
 import time
 
-cap = cv2.VideoCapture(
-    '/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_A4EC6ABF-video-index0')
+import camera
 
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920 / 2)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080 / 2)
-#cap.set(cv2.CAP_PROP_FOCUS, 255)
+cap = camera.Camera(width=960, height=540)
 
 apriltag_options = apriltag.DetectorOptions(families="tag16h5")
 detector = apriltag.Detector(apriltag_options)
