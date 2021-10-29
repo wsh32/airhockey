@@ -1,6 +1,0 @@
-#!/usr/bin/env python
-
-from airhockey_vision import airhockey_vision_node_main
-
-if __name__ == '__main__':
-    airhockey_vision_node_main()

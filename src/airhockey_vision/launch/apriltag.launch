@@ -1,7 +1,7 @@
 <launch>
         <!--<include file="$(find airhockey_vision)/launch/camera.launch"/>-->
 
-    <node pkg="airhockey_vision" type="airhockey_vision_node" name="vision">
+    <node pkg="airhockey_vision" type="apriltag_node" name="vision">
     </node>
 
 </launch>

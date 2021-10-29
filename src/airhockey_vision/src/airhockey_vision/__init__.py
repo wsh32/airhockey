@@ -1,1 +1,1 @@
-from airhockey_vision.vision_node import main as airhockey_vision_node_main
+from airhockey_vision.apriltag_node import main as apriltag_node_main
