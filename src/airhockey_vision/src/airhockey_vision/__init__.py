@@ -1,0 +1,1 @@
+from airhockey_vision.vision_node import main as airhockey_vision_node_main
