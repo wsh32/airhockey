@@ -1,0 +1,4 @@
+string tag_family
+uint8 tag_id
+geometry_msgs/Point32 center_position
+geometry_msgs/Polygon corner_positions

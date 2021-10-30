@@ -1,17 +1,22 @@
 import rospy
-from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 import cv2
 import apriltag
 
+from airhockey_vision.msg import ApriltagDetection, ApriltagDetections
+from sensor_msgs.msg import Image
+from geometry_msgs.msg import Point32, Polygon
+
 
 class ApriltagNode:
     def __init__(self):
-        self.image_subscriber = rospy.Subscriber("/camera/image_raw", Image,
-                                                 self.image_callback)
-        self.image_publisher = rospy.Publisher("/vision/apriltags/image", Image,
-                                              queue_size=3)
+        self.image_subscriber = rospy.Subscriber(
+            "/camera/image_raw", Image, self.image_callback)
+        self.image_publisher = rospy.Publisher(
+            "/vision/apriltags/image", Image, queue_size=3)
+        self.detections_publisher = rospy.Publisher(
+            "/vision/apriltags/detections", ApriltagDetections, queue_size=3)
 
         self.bridge = CvBridge()
 
@@ -49,10 +54,27 @@ class ApriltagNode:
         frame = self.bridge.imgmsg_to_cv2(image_msg,
                                           desired_encoding='passthrough')
         detections = self.detect_tags(frame)
+
+        detection_msgs = []
+
+        for tag in detections:
+            detection_msg = ApriltagDetection()
+            detection_msg.tag_family = tag.tag_family
+            detection_msg.tag_id = tag.tag_id
+            detection_msg.center_position = Point32(tag.center[0],
+                                                    tag.center[1], 0)
+            detection_msg.corner_positions = Polygon([Point32(tag.center[0],
+                                                     tag.center[1], 0) for i
+                                                     in range(4)])
+            detection_msgs.append(detection_msg)
+
+        print(detection_msgs)
         self.annotate_frame(frame, detections)
+
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
                 frame, "rgb8"))
+            self.detections_publisher.publish(ApriltagDetections(detections=detection_msgs))
         except CvBridgeError as e:
             rospy.logerr(e)
 
