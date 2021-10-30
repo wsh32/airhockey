@@ -23,9 +23,9 @@ args = vars(ap.parse_args())
 # ball in the HSV color space, then initialize the
 # list of tracked points.
 
-## TODO: find colors for our specific puck
-greenLower = (29, 86, 6)
-greenUpper = (64, 255, 255)
+## Color range is found from range_detector_hsv.py
+greenLower = (16, 83, 76)
+greenUpper = (82, 219, 204)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
