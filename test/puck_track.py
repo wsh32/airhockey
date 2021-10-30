@@ -17,6 +17,8 @@ ap.add_argument("-v", "--video",
 	help="path to the (optional) video file")
 ap.add_argument("-b", "--buffer", type=int, default=64,
 	help="max buffer size")
+ap.add_argument("-p", "--puck", default="green",
+	help ="color of the puck in use, 'green' or 'blue'")
 args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the "green"
@@ -24,8 +26,12 @@ args = vars(ap.parse_args())
 # list of tracked points.
 
 ## Color range is found from range_detector_hsv.py
-greenLower = (16, 83, 76)
-greenUpper = (82, 219, 204)
+if args.get("puck") == "green":
+	puckLower = (16, 83, 76)
+	puckUpper = (82, 219, 204)
+if args.get("puck") == "blue":
+	puckLower = (74, 71, 0)
+	puckUpper = (134, 255, 71)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -45,6 +51,7 @@ time.sleep(2.0)
 while True:
 	# grab the current frame
 	frame = vs.get_frame()
+	last_time = time.time()
 	# handle the frame from VideoCapture or VideoStream
 	frame = frame[1] if args.get("video", False) else frame # <-- see if this line works
 	# if we are viewing a video and we did not grab a frame,
@@ -59,7 +66,7 @@ while True:
 	# construct a mask for the color "green", then perform
 	# a series of dilations and erosions to remove any small
 	# blobs left in the mask
-	mask = cv2.inRange(hsv, greenLower, greenUpper)
+	mask = cv2.inRange(hsv, puckLower, puckUpper)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 
@@ -80,6 +87,7 @@ while True:
 		M = cv2.moments(c)
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 		# only proceed if the radius meets a minimum size
+		print(last_time - time.time(), center)
 		if radius > 10:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
@@ -88,6 +96,7 @@ while True:
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 	# update the points queue
 	pts.appendleft(center)
+
 
 	# loop over the set of tracked points
 	for i in range(1, len(pts)):
