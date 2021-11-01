@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find airhockey_vision)/launch/apriltag.launch"/>
+    <include file="$(find airhockey_vision)/launch/puck_tracking.launch"/>
+</launch>
