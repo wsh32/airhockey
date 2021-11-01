@@ -8,11 +8,12 @@ project(airhockey_vision)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  rospy
-  std_msgs
-  sensor_msgs
-  geometry_msgs
-  message_generation
+    geometry_msgs
+    rospy
+    sensor_msgs
+    std_msgs
+    usb_cam
+    message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -22,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -53,7 +55,6 @@ add_message_files(
     ApriltagDetection.msg
     ApriltagDetections.msg
 )
-catkin_python_setup()
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -71,9 +72,10 @@ catkin_python_setup()
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-  DEPENDENCIES
-  std_msgs
-  geometry_msgs
+    DEPENDENCIES
+    geometry_msgs
+#   sensor_msgs#   
+    std_msgs
 )
 
 ################################################
@@ -108,7 +110,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES airhockey_vision
-  CATKIN_DEPENDS rospy std_msgs message_runtime
+#  CATKIN_DEPENDS geometry_msgs rospy sensor_msgs std_msgs usb_cam
 #  DEPENDS system_lib
 )
 

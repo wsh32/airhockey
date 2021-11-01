@@ -5,6 +5,7 @@ import cv2
 import apriltag
 
 from airhockey_vision.msg import ApriltagDetection, ApriltagDetections
+from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Point32, Polygon
 
@@ -16,7 +17,7 @@ class ApriltagNode:
         self.image_publisher = rospy.Publisher(
             "/vision/apriltags/image", Image, queue_size=3)
         self.detections_publisher = rospy.Publisher(
-            "/vision/apriltags/detections", ApriltagDetections, queue_size=3)
+            "/vision/apriltags/detections", ApriltagDetection, queue_size=3)
 
         self.bridge = CvBridge()
 
@@ -59,7 +60,7 @@ class ApriltagNode:
 
         for tag in detections:
             detection_msg = ApriltagDetection()
-            detection_msg.tag_family = tag.tag_family
+            #detection_msg.tag_family = String(data=tag.tag_family)
             detection_msg.tag_id = tag.tag_id
             detection_msg.center_position = Point32(tag.center[0],
                                                     tag.center[1], 0)
@@ -74,7 +75,9 @@ class ApriltagNode:
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
                 frame, "rgb8"))
-            self.detections_publisher.publish(ApriltagDetections(detections=detection_msgs))
+            #self.detections_publisher.publish(
+            #    ApriltagDetections(detections=detection_msgs))
+            self.detections_publisher.publish(detection_msgs[0])
         except CvBridgeError as e:
             rospy.logerr(e)
 

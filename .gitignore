@@ -224,6 +224,7 @@ dmypy.json
 cython_debug/
 
 ### ROS ###
+bags/
 devel/
 logs/
 bin/

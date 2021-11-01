@@ -1,1 +1,0 @@
-from airhockey_vision.apriltag_node import main as apriltag_node_main
