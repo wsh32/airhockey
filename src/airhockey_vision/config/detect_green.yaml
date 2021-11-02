@@ -7,6 +7,6 @@ puck_tracking: {
     v_upper: 204,
 
     visualize_color_r: 255,
-    visualize_color_g: 255,
-    visualize_color_b: 0
+    visualize_color_g: 0,
+    visualize_color_b: 255
 }
