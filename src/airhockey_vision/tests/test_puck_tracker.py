@@ -34,6 +34,9 @@ class TestPuckTracker(TestCase):
     def test_green_config_file_has_all_values(self):
         self.config_file_has_values(green_config_data)
 
+    def test_blue_config_file_has_all_values(self):
+        self.config_file_has_values(blue_config_data)
+
     def test_tracks_green(self):
         green_lower = (green_config_data['puck_tracking']['h_lower'],
                        green_config_data['puck_tracking']['s_lower'],
