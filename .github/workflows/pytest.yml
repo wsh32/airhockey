@@ -48,4 +48,10 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE
                   source devel/setup.bash
-                  python3 -m pytest src
+                  python3 -m pytest src | tee pytest_output.log
+
+            - name: comment
+                  uses: marocchino/sticky-pull-request-comment@v2
+                  with:
+                      path: pytest_output.log
+                                                
