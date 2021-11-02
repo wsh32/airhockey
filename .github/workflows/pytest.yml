@@ -43,4 +43,5 @@ jobs:
                   source /opt/ros/$ROS_DISTRO/setup.bash
                   catkin_make
                   source devel/setup.bash
-                  pytest src
+                  python3 -m pip install pytest
+                  python3 -m pytest src
