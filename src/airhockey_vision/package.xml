@@ -67,6 +67,9 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>usb_cam</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>python-opencv-contrib</exec_depend>
+  <exec_depend>python-apriltags</exec_depend>
+  <exec_depend>python-imutils</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
