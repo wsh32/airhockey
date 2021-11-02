@@ -44,14 +44,12 @@ jobs:
                   catkin_make
                   source devel/setup.bash
                   python3 -m pip install pytest
+                  if [ -f requirements.txt ]; then python3 -m pip install -r requirements.txt; fi
             - name: Run pytests
               run: |
                   cd $GITHUB_WORKSPACE
                   source devel/setup.bash
-                  python3 -m pytest src | tee pytest_output.log
-
+                  python3 -m pytest --cache-clear --cov=app src | tee pytest-coverage.txt
             - name: comment
-                  uses: marocchino/sticky-pull-request-comment@v2
-                  with:
-                      path: pytest_output.log
-                                                
+              uses: coroo/pytest-coverage-commentator@v1.0.2
+ 
