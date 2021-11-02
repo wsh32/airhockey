@@ -11,7 +11,7 @@ from geometry_msgs.msg import Point32, Polygon
 
 
 class ApriltagDetector:
-    def __init__(self, tag_families="tag16h5"):
+    def __init__(self, tag_families):
         apriltag_options = apriltag.DetectorOptions(families=tag_families)
         self.detector = apriltag.Detector(apriltag_options)
 
@@ -42,7 +42,7 @@ class ApriltagDetector:
 
 
 class ApriltagNode:
-    def __init__(self, tag_families="tag16h5"):
+    def __init__(self, tag_families):
         self.image_subscriber = rospy.Subscriber(
             "/camera/image_raw", Image, self.image_callback)
         self.image_publisher = rospy.Publisher(
@@ -85,7 +85,9 @@ class ApriltagNode:
 
 def main():
     rospy.init_node('apriltag_node', anonymous=True)
-    ApriltagNode()
+
+    tag_families = rospy.get_param("apriltag/tag_family")
+    ApriltagNode(tag_families)
 
 
 if __name__=='__main__':

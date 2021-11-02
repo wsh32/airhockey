@@ -82,14 +82,11 @@ def main():
              rospy.get_param("puck_tracking/s_upper"),
              rospy.get_param("puck_tracking/v_upper"))
 
-    try:
-        visualize_color = (rospy.get_param("puck_tracking/visualize_color_r"),
-                           rospy.get_param("puck_tracking/visualize_color_g"),
-                           rospy.get_param("puck_tracking/visualize_color_b"))
-    except KeyError:
-        visualize_color = (255, 255, 0)
+    visualize_color = (rospy.get_param("puck_tracking/visualize_color_r", 255),
+                       rospy.get_param("puck_tracking/visualize_color_g", 255),
+                       rospy.get_param("puck_tracking/visualize_color_b", 0))
 
-    PuckTrackingNode(lower=lower, upper=upper, visualize_color=visualize_color)
+    PuckTrackingNode(lower, upper, visualize_color)
 
 
 if __name__=='__main__':
