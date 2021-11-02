@@ -37,12 +37,6 @@ jobs:
                   cd $GITHUB_WORKSPACE
                   rosdep install --from-paths src --ignore-src -r -s
                   rosdep install --from-paths src --ignore-src -r -y
-            - name: catkin build
-              run: |
-                  source /opt/ros/$ROS_DISTRO/setup.bash
-                  cd $GITHUB_WORKSPACE
-                  catkin build --no-status
-                  source devel/setup.bash
             - name: test
               run: |
                   cd $GITHUB_WORKSPACE
