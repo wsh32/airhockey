@@ -59,16 +59,14 @@ class PuckTrackingNode:
                                           desired_encoding='passthrough')
         puck_position = self.puck_tracker.detect_puck(frame)
 
-        if not puck_position:
-            return
-
-        puck_x, puck_y = puck_position
-        self.puck_tracker.annotate_frame(frame, puck_position)
+        if puck_position:
+            puck_x, puck_y = puck_position
+            self.puck_tracker.annotate_frame(frame, puck_position)
+            self.detections_publisher.publish(Point32(x=puck_x, y=puck_y))
 
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
                 frame, "rgb8"))
-            self.detections_publisher.publish(Point32(x=puck_x, y=puck_y))
         except CvBridgeError as e:
             rospy.logerr(e)
 
