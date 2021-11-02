@@ -9,9 +9,10 @@ from sensor_msgs.msg import Image
 
 
 class PuckTrackingNode:
-    def __init__(self, lower=(16, 83, 76), upper=(82, 219, 204)):
+    def __init__(self, lower, upper, visualize_color):
         self.lower = lower
         self.upper = upper
+        self.visualize_color = visualize_color
 
         self.image_subscriber = rospy.Subscriber(
             "/camera/image_raw", Image, self.image_callback)
@@ -46,7 +47,7 @@ class PuckTrackingNode:
 
     def annotate_frame(self, frame, puck_position):
         if puck_position:
-            cv2.circle(frame, puck_position, 5, (0, 0, 255), -1)
+            cv2.circle(frame, puck_position, 5, self.visualize_color, -1)
 
     def image_callback(self, image_msg):
         frame = self.bridge.imgmsg_to_cv2(image_msg,
@@ -69,7 +70,21 @@ class PuckTrackingNode:
 
 def main():
     rospy.init_node('puck_tracking_node', anonymous=True)
-    PuckTrackingNode()
+    lower = (rospy.get_param("puck_tracking/h_lower"),
+             rospy.get_param("puck_tracking/s_lower"),
+             rospy.get_param("puck_tracking/v_lower"))
+    upper = (rospy.get_param("puck_tracking/h_upper"),
+             rospy.get_param("puck_tracking/s_upper"),
+             rospy.get_param("puck_tracking/v_upper"))
+
+    try:
+        visualize_color = (rospy.get_param("puck_tracking/visualize_color_r"),
+                           rospy.get_param("puck_tracking/visualize_color_g"),
+                           rospy.get_param("puck_tracking/visualize_color_b"))
+    except KeyError:
+        visualize_color = (255, 255, 0)
+
+    PuckTrackingNode(lower=lower, upper=upper, visualize_color=visualize_color)
 
 
 if __name__=='__main__':

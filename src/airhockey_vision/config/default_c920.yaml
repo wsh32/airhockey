@@ -1,0 +1,3 @@
+video_device: "/dev/v4l/by-id/usb-046d_HD_Pro_Webcam_C920_A4EC6ABF-video-index0"
+image_width: 1280
+image_height: 720
