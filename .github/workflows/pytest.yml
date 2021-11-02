@@ -2,7 +2,6 @@ name: pytest
 
 on:
     push:
-    pull_request:
 
 jobs:
     build_and_test:
@@ -50,6 +49,4 @@ jobs:
                   cd $GITHUB_WORKSPACE
                   source devel/setup.bash
                   python3 -m pytest --cache-clear --cov=app src | tee pytest-coverage.txt
-            - name: comment
-              uses: coroo/pytest-coverage-commentator@v1.0.2
  
