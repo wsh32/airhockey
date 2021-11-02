@@ -10,21 +10,10 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Point32, Polygon
 
 
-class ApriltagNode:
-    def __init__(self):
-        self.image_subscriber = rospy.Subscriber(
-            "/camera/image_raw", Image, self.image_callback)
-        self.image_publisher = rospy.Publisher(
-            "/vision/apriltags/image", Image, queue_size=3)
-        self.detections_publisher = rospy.Publisher(
-            "/vision/apriltags/detections", ApriltagDetections, queue_size=3)
-
-        self.bridge = CvBridge()
-
-        apriltag_options = apriltag.DetectorOptions(families="tag16h5")
+class ApriltagDetector:
+    def __init__(self, tag_families):
+        apriltag_options = apriltag.DetectorOptions(families=tag_families)
         self.detector = apriltag.Detector(apriltag_options)
-
-        rospy.spin()
 
     def detect_tags(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -51,13 +40,27 @@ class ApriltagNode:
             cv2.putText(frame, str(tag_id), (ptA[0], ptA[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
+
+class ApriltagNode:
+    def __init__(self, tag_families):
+        self.image_subscriber = rospy.Subscriber(
+            "/camera/image_raw", Image, self.image_callback)
+        self.image_publisher = rospy.Publisher(
+            "/vision/apriltags/image", Image, queue_size=3)
+        self.detections_publisher = rospy.Publisher(
+            "/vision/apriltags/detections", ApriltagDetections, queue_size=3)
+
+        self.bridge = CvBridge()
+        self.apriltag_detector = ApriltagDetector(tag_families=tag_families)
+
+        rospy.spin()
+
     def image_callback(self, image_msg):
         frame = self.bridge.imgmsg_to_cv2(image_msg,
                                           desired_encoding='passthrough')
-        detections = self.detect_tags(frame)
+        detections = self.apriltag_detector.detect_tags(frame)
 
         detection_msgs = []
-
         for tag in detections:
             detection_msg = ApriltagDetection()
             detection_msg.tag_family = str(tag.tag_family)
@@ -69,7 +72,7 @@ class ApriltagNode:
                                                      in range(4)])
             detection_msgs.append(detection_msg)
 
-        self.annotate_frame(frame, detections)
+        self.apriltag_detector.annotate_frame(frame, detections)
 
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
@@ -82,7 +85,9 @@ class ApriltagNode:
 
 def main():
     rospy.init_node('apriltag_node', anonymous=True)
-    ApriltagNode()
+
+    tag_families = rospy.get_param("apriltag/tag_family")
+    ApriltagNode(tag_families)
 
 
 if __name__=='__main__':

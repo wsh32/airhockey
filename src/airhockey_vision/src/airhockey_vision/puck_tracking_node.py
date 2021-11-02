@@ -8,21 +8,11 @@ from geometry_msgs.msg import Point32
 from sensor_msgs.msg import Image
 
 
-class PuckTrackingNode:
+class PuckTracker:
     def __init__(self, lower, upper, visualize_color):
         self.lower = lower
         self.upper = upper
         self.visualize_color = visualize_color
-
-        self.image_subscriber = rospy.Subscriber(
-            "/camera/image_raw", Image, self.image_callback)
-        self.image_publisher = rospy.Publisher(
-            "/vision/puck/image", Image, queue_size=3)
-        self.detections_publisher = rospy.Publisher(
-            "/vision/puck/puck_position", Point32, queue_size=3)
-
-        self.bridge = CvBridge()
-        rospy.spin()
 
     def detect_puck(self, frame):
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
@@ -49,16 +39,31 @@ class PuckTrackingNode:
         if puck_position:
             cv2.circle(frame, puck_position, 5, self.visualize_color, -1)
 
+
+class PuckTrackingNode:
+    def __init__(self, lower, upper, visualize_color):
+        self.image_subscriber = rospy.Subscriber(
+            "/camera/image_raw", Image, self.image_callback)
+        self.image_publisher = rospy.Publisher(
+            "/vision/puck/image", Image, queue_size=3)
+        self.detections_publisher = rospy.Publisher(
+            "/vision/puck/puck_position", Point32, queue_size=3)
+
+        self.puck_tracker = PuckTracker(lower, upper, visualize_color)
+
+        self.bridge = CvBridge()
+        rospy.spin()
+
     def image_callback(self, image_msg):
         frame = self.bridge.imgmsg_to_cv2(image_msg,
                                           desired_encoding='passthrough')
-        puck_position = self.detect_puck(frame)
+        puck_position = self.puck_tracker.detect_puck(frame)
 
         if not puck_position:
             return
 
         puck_x, puck_y = puck_position
-        self.annotate_frame(frame, puck_position)
+        self.puck_tracker.annotate_frame(frame, puck_position)
 
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
@@ -77,14 +82,11 @@ def main():
              rospy.get_param("puck_tracking/s_upper"),
              rospy.get_param("puck_tracking/v_upper"))
 
-    try:
-        visualize_color = (rospy.get_param("puck_tracking/visualize_color_r"),
-                           rospy.get_param("puck_tracking/visualize_color_g"),
-                           rospy.get_param("puck_tracking/visualize_color_b"))
-    except KeyError:
-        visualize_color = (255, 255, 0)
+    visualize_color = (rospy.get_param("puck_tracking/visualize_color_r", 255),
+                       rospy.get_param("puck_tracking/visualize_color_g", 255),
+                       rospy.get_param("puck_tracking/visualize_color_b", 0))
 
-    PuckTrackingNode(lower=lower, upper=upper, visualize_color=visualize_color)
+    PuckTrackingNode(lower, upper, visualize_color)
 
 
 if __name__=='__main__':
