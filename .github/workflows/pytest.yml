@@ -1,0 +1,55 @@
+name: pytest
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    build_and_test:
+        runs-on: ubuntu-20.04
+        env:
+            ROS_CI_DESKTOP: "`lsb_release -cs`"  # e.g. [trusty|xenial|...]
+            ROS_DISTRO: noetic
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install Non-ROS dependencies
+              run: |
+                  ls -l $GITHUB_WORKSPACE
+            - name: Install ROS
+              run: |
+                  sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
+                  sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+                  sudo apt-get update -qq
+                  sudo apt-get install dpkg
+                  sudo apt-get install -y python3-catkin-pkg
+                  sudo apt-get install -y python3-catkin-tools
+                  sudo apt-get install -y python3-osrf-pycommon
+                  sudo apt-get install -y python3-rosdep
+                  sudo apt-get install -y python3-wstool
+                  sudo apt-get install -y ros-cmake-modules
+                  sudo apt-get install -y ros-$ROS_DISTRO-catkin
+                  source /opt/ros/$ROS_DISTRO/setup.bash
+            - name: Install ROS packages with rosdep
+              run: |
+                  source /opt/ros/$ROS_DISTRO/setup.bash
+                  sudo rosdep init
+                  rosdep update
+                  cd $GITHUB_WORKSPACE
+                  rosdep install --from-paths src --ignore-src -r -s
+                  rosdep install --from-paths src --ignore-src -r -y
+            - name: Install Python package
+              run: |
+                  cd $GITHUB_WORKSPACE
+                  source /opt/ros/$ROS_DISTRO/setup.bash
+                  catkin_make
+                  source devel/setup.bash
+                  python3 -m pip install pytest
+                  if [ -f requirements.txt ]; then python3 -m pip install -r requirements.txt; fi
+            - name: Run pytests
+              run: |
+                  cd $GITHUB_WORKSPACE
+                  source devel/setup.bash
+                  python3 -m pytest --cache-clear --cov=app src | tee pytest-coverage.txt
+            - name: comment
+              uses: coroo/pytest-coverage-commentator@v1.0.2
+ 
