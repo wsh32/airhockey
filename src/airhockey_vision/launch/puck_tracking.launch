@@ -2,15 +2,6 @@
     <arg name="puck_tracker_config" default="$(find airhockey_vision)/config/detect_green.yaml" />
     <rosparam file="$(arg puck_tracker_config)" command="load" />
 
-    <!--
-    <param name="h_lower" type="int" value="34" />
-    <param name="s_lower" type="int" value="83" />
-    <param name="v_lower" type="int" value="76" />
-    <param name="h_upper" type="int" value="82" />
-    <param name="s_upper" type="int" value="219" />
-    <param name="v_upper" type="int" value="204" />
-        -->
-
     <node pkg="airhockey_vision" type="puck_tracking_node" name="puck_tracking">
     </node>
 
