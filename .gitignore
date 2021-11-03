@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/ros,python,c,c++,vim,opencv
-# Edit at https://www.toptal.com/developers/gitignore?templates=ros,python,c,c++,vim,opencv
+# Created by https://www.toptal.com/developers/gitignore/api/ros,python,c,c++,vim,opencv,kicad
+# Edit at https://www.toptal.com/developers/gitignore?templates=ros,python,c,c++,vim,opencv,kicad
 
 ### C ###
 # Prerequisites
@@ -74,6 +74,45 @@ dkms.conf
 *.lai
 
 # Executables
+
+### KiCad ###
+# For PCBs designed using KiCad: http://www.kicad-pcb.org/
+# Format documentation: http://kicad-pcb.org/help/file-formats/
+
+# Temporary files
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_prl
+*.sch-bak
+*~
+_autosave-*
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+fp-info-cache
+
+# Netlist files (exported from Eeschema)
+*.net
+
+# Autorouter files (exported from Pcbnew)
+*.dsn
+*.ses
+
+# Exported BOM files
+*.xml
+*.csv
+
+### KiCad Patch ###
+rescue-backup/
+
+*.tsv
+bom/
+
+# Gerber export output
+out/
 
 ### OpenCV ###
 #OpenCV for Mac and Linux
@@ -224,6 +263,7 @@ dmypy.json
 cython_debug/
 
 ### ROS ###
+bags/*.bag
 devel/
 logs/
 bin/
@@ -266,7 +306,6 @@ qtcreator-*
 /planning/docs
 /planning/src
 
-*~
 
 # Emacs
 .#*
@@ -294,4 +333,4 @@ tags
 # Persistent undo
 [._]*.un~
 
-# End of https://www.toptal.com/developers/gitignore/api/ros,python,c,c++,vim,opencv
+# End of https://www.toptal.com/developers/gitignore/api/ros,python,c,c++,vim,opencv,kicad

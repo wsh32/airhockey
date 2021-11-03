@@ -1,0 +1,8 @@
+<launch>
+    <arg name="apriltag_config" default="$(find airhockey_vision)/config/apriltag_16h5.yaml" />
+    <rosparam file="$(arg apriltag_config)" command="load" />
+
+    <node pkg="airhockey_vision" type="apriltag_node" name="apriltag">
+    </node>
+
+</launch>

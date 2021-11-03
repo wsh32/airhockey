@@ -1,0 +1,3 @@
+[submodule "hardware/kicad-common"]
+	path = hardware/kicad-common
+	url = git@github.com:wsh32/kicad-common.git
