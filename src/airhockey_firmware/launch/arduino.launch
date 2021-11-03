@@ -1,0 +1,7 @@
+<launch>
+    <arg name="serial_config" default="$(find airhockey_firmware)/config/default_arduino.yaml" />
+    <rosparam file="$(arg serial_config)" command="load" />
+
+    <node pkg="rosserial_python" type="serial_node.py" name="rosserial">
+    </node>
+</launch>
