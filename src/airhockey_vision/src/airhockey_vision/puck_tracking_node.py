@@ -4,7 +4,8 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import imutils
 
-from geometry_msgs.msg import Point32
+from std_msgs.msg import Header
+from geometry_msgs.msg import Point, PointStamped
 from sensor_msgs.msg import Image
 
 
@@ -47,7 +48,7 @@ class PuckTrackingNode:
         self.image_publisher = rospy.Publisher(
             "/vision/puck/image", Image, queue_size=3)
         self.detections_publisher = rospy.Publisher(
-            "/vision/puck/puck_position", Point32, queue_size=3)
+            "/vision/puck/puck_position", PointStamped, queue_size=3)
 
         self.puck_tracker = PuckTracker(lower, upper, visualize_color)
 
@@ -62,8 +63,10 @@ class PuckTrackingNode:
         if puck_position:
             puck_x, puck_y = puck_position
             self.puck_tracker.annotate_frame(frame, puck_position)
-            self.detections_publisher.publish(Point32(x=puck_x, y=puck_y))
-
+            header = Header(stamp=rospy.Time.now(), frame_id="camera")
+            point_msg = PointStamped(header=header,
+                                     point=Point(x=puck_x, y=puck_y))
+            self.detections_publisher.publish(point_msg)
         try:
             self.image_publisher.publish(self.bridge.cv2_to_imgmsg(
                 frame, "rgb8"))
