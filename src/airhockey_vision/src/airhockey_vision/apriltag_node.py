@@ -5,7 +5,6 @@ import cv2
 import apriltag
 
 from airhockey_vision.msg import ApriltagDetection, ApriltagDetections
-from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Point32, Polygon
 
@@ -67,6 +66,7 @@ class ApriltagNode:
             detection_msg.tag_id = tag.tag_id
             detection_msg.center_position = Point32(tag.center[0],
                                                     tag.center[1], 0)
+            # TODO: Add corner positions
             detection_msg.corner_positions = Polygon([Point32(tag.center[0],
                                                      tag.center[1], 0) for i
                                                      in range(4)])
