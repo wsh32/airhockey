@@ -16,31 +16,28 @@ int striker_pos = 0; // TODO: incorporate into an equation to determine actual p
 
 A4988 stepper(MOTOR_STEPS, DIR, STEP, MS1, MS2, MS3);
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
-void messageCb( const std_msgs::Empty& toggle_msg){
+void messageCb( const std_msgs::Int16& toggle_msg){
     stepper.rotate(180);   // eventually cause it to rotate the desired amount to reach the x,y coords we are fed
     striker_pos = ++striker_pos;
 }
 
 std_msgs::Int16 int_msg;
-ros::Publisher chatter("striker_pos", &int_msg);
-ros::Subscriber<std_msgs::Empty> sub("track_pos", &messageCb );
-
+ros::Publisher chatter("/arduino/striker_pos", &int_msg);
+ros::Subscriber<std_msgs::Int16> sub("/arduino/track_pos", &messageCb );
 
 void setup() {
     // Set target motor RPM to 1RPM and microstepping to 1 (full step mode)
-    stepper.begin(140, 1); // maximum ~250
+    stepper.begin(200, 1); // maximum ~250
     nh.initNode();
     nh.advertise(chatter);
     nh.subscribe(sub);
 }
 
 void loop() {
-    stepper.rotate(360);
     // Tell motor to rotate 360 degrees. That's it.
     int_msg.data = striker_pos;
     chatter.publish( &int_msg );
     nh.spinOnce();
-    delay(2000);
 }
