@@ -1,43 +1,42 @@
 #include <ros.h>
-#include <Arduino.h>
-#include "A4988.h"
-#include <std_msgs/Int16.h>
-#include <std_msgs/Empty.h>
+#include <A4988.h>
 
-// using a 200-step motor (most common)
+#include "pinout.h"
+#include "airhockey_firmware.h"
+
 #define MOTOR_STEPS 200
-// configure the pins connected
-#define DIR 8
-#define STEP 9
-#define MS1 10
-#define MS2 11
-#define MS3 12
-int striker_pos = 0; // TODO: incorporate into an equation to determine actual position
-
-A4988 stepper(MOTOR_STEPS, DIR, STEP, MS1, MS2, MS3);
 
 ros::NodeHandle nh;
 
-void messageCb( const std_msgs::Int16& toggle_msg){
-    stepper.rotate(180);   // eventually cause it to rotate the desired amount to reach the x,y coords we are fed
-    striker_pos = ++striker_pos;
-}
+// configure the pins connected
+int16_t striker_pos = 0;
 
-std_msgs::Int16 int_msg;
-ros::Publisher chatter("/arduino/striker_pos", &int_msg);
-ros::Subscriber<std_msgs::Int16> sub("/arduino/track_pos", &messageCb );
+A4988 stepper(MOTOR_STEPS, STEPPER_DIR_PIN, STEPPER_STEP_PIN, STEPPER_MS1_PIN,
+              STEPPER_MS2_PIN, STEPPER_MS3_PIN);
+
+ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
+                                           &position_feedback_msg);
+ros::Subscriber<std_msgs::Int16> position_command_subscriber(
+    "/arduino/command/striker_pos", &position_command_callback);
+
+void position_command_callback(const std_msgs::Int16& position_cmd) {
+    int16_t delta_pos = position_cmd.data - striker_pos;
+    striker_pos = position_cmd.data;
+    stepper.rotate(delta_pos);
+}
 
 void setup() {
     // Set target motor RPM to 1RPM and microstepping to 1 (full step mode)
-    stepper.begin(200, 1); // maximum ~250
+    stepper.begin(200, 1);
     nh.initNode();
-    nh.advertise(chatter);
-    nh.subscribe(sub);
+    nh.advertise(position_feedback_publisher);
+    nh.subscribe(position_command_subscriber);
 }
 
 void loop() {
     // Tell motor to rotate 360 degrees. That's it.
-    int_msg.data = striker_pos;
-    chatter.publish( &int_msg );
+    position_feedback_msg.data = striker_pos;
+    position_feedback_publisher.publish(&position_feedback_msg);
     nh.spinOnce();
+    delay(100);
 }
