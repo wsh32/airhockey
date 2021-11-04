@@ -27,7 +27,7 @@ void position_command_callback(const std_msgs::Int16& position_cmd) {
 
 void setup() {
     // Set target motor RPM to 1RPM and microstepping to 1 (full step mode)
-    stepper.begin(200, 1);
+    stepper.begin(200, 16);
     nh.initNode();
     nh.advertise(position_feedback_publisher);
     nh.subscribe(position_command_subscriber);
