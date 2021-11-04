@@ -37,6 +37,7 @@ void setup() {
 }
 
 void loop() {
+    stepper.rotate(360);
     // Tell motor to rotate 360 degrees. That's it.
     int_msg.data = striker_pos;
     chatter.publish( &int_msg );
