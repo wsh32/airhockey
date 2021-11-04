@@ -1,0 +1,182 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A 11000 8500
+encoding utf-8
+Sheet 1 1
+Title "Break Beam Board"
+Date "2021-10-28"
+Rev "A"
+Comp "Olin College of Engineering"
+Comment1 "Designer: Wesley Soo-Hoo"
+Comment2 "B^3"
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L kicad_common:OPB360N51 U1
+U 1 1 617B1C70
+P 5350 3950
+F 0 "U1" H 5350 4275 50  0000 C CNN
+F 1 "OPB360N51" H 5350 4184 50  0000 C CNN
+F 2 "kicad_common:OPB360N51" H 5350 3950 50  0001 C CNN
+F 3 "https://www.ttelectronics.com/TTElectronics/media/ProductFiles/Datasheets/OPB355-360to390-860to890.pdf" H 5350 3950 50  0001 C CNN
+	1    5350 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR03
+U 1 1 617B52DA
+P 4950 3550
+F 0 "#PWR03" H 4950 3400 50  0001 C CNN
+F 1 "VCC" H 4965 3723 50  0000 C CNN
+F 2 "" H 4950 3550 50  0001 C CNN
+F 3 "" H 4950 3550 50  0001 C CNN
+	1    4950 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L kicad_common:R_1M R2
+U 1 1 617B5928
+P 5750 3700
+F 0 "R2" H 5818 3746 50  0000 L CNN
+F 1 "R_1M" H 5818 3655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5800 3700 50  0001 C CNN
+F 3 "" H 5800 3700 50  0001 C CNN
+	1    5750 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR04
+U 1 1 617BA432
+P 4950 4150
+F 0 "#PWR04" H 4950 3900 50  0001 C CNN
+F 1 "GND" H 4955 3977 50  0000 C CNN
+F 2 "" H 4950 4150 50  0001 C CNN
+F 3 "" H 4950 4150 50  0001 C CNN
+	1    4950 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4950 4150 4950 4050
+Wire Wire Line
+	4950 4050 5050 4050
+$Comp
+L power:GND #PWR06
+U 1 1 617BA8FD
+P 5750 4150
+F 0 "#PWR06" H 5750 3900 50  0001 C CNN
+F 1 "GND" H 5755 3977 50  0000 C CNN
+F 2 "" H 5750 4150 50  0001 C CNN
+F 3 "" H 5750 4150 50  0001 C CNN
+	1    5750 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 4150 5750 4050
+Wire Wire Line
+	5750 4050 5650 4050
+Wire Wire Line
+	4950 3850 5050 3850
+Wire Wire Line
+	4950 3800 4950 3850
+Wire Wire Line
+	4950 3550 4950 3600
+$Comp
+L kicad_common:R_200 R1
+U 1 1 617B7C93
+P 4950 3700
+F 0 "R1" H 4800 3750 50  0000 L CNN
+F 1 "R_200" H 4650 3650 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 5000 3700 50  0001 C CNN
+F 3 "" H 5000 3700 50  0001 C CNN
+	1    4950 3700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5650 3850 5750 3850
+Wire Wire Line
+	5750 3850 5750 3800
+$Comp
+L power:VCC #PWR05
+U 1 1 617BEEB3
+P 5750 3550
+F 0 "#PWR05" H 5750 3400 50  0001 C CNN
+F 1 "VCC" H 5765 3723 50  0000 C CNN
+F 2 "" H 5750 3550 50  0001 C CNN
+F 3 "" H 5750 3550 50  0001 C CNN
+	1    5750 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 3550 5750 3600
+$Comp
+L Connector:Conn_01x03_Male J1
+U 1 1 617C5DA8
+P 3400 3800
+F 0 "J1" H 3508 4081 50  0000 C CNN
+F 1 "CONN" H 3508 3990 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 3400 3800 50  0001 C CNN
+F 3 "~" H 3400 3800 50  0001 C CNN
+	1    3400 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR01
+U 1 1 617C700A
+P 3700 3600
+F 0 "#PWR01" H 3700 3450 50  0001 C CNN
+F 1 "VCC" H 3715 3773 50  0000 C CNN
+F 2 "" H 3700 3600 50  0001 C CNN
+F 3 "" H 3700 3600 50  0001 C CNN
+	1    3700 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 3600 3700 3700
+Wire Wire Line
+	3700 3700 3600 3700
+$Comp
+L power:GND #PWR02
+U 1 1 617C77F2
+P 3700 3950
+F 0 "#PWR02" H 3700 3700 50  0001 C CNN
+F 1 "GND" H 3705 3777 50  0000 C CNN
+F 2 "" H 3700 3950 50  0001 C CNN
+F 3 "" H 3700 3950 50  0001 C CNN
+	1    3700 3950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 3950 3700 3900
+Wire Wire Line
+	3700 3900 3600 3900
+Text Label 5750 3850 0    50   ~ 0
+SIG
+Text Label 3600 3800 0    50   ~ 0
+SIG
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 617C916C
+P 3700 5250
+F 0 "#FLG0101" H 3700 5325 50  0001 C CNN
+F 1 "PWR_FLAG" H 3700 5423 50  0000 C CNN
+F 2 "" H 3700 5250 50  0001 C CNN
+F 3 "~" H 3700 5250 50  0001 C CNN
+	1    3700 5250
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:VCC #PWR0101
+U 1 1 617CA1F3
+P 3700 5150
+F 0 "#PWR0101" H 3700 5000 50  0001 C CNN
+F 1 "VCC" H 3715 5323 50  0000 C CNN
+F 2 "" H 3700 5150 50  0001 C CNN
+F 3 "" H 3700 5150 50  0001 C CNN
+	1    3700 5150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 5150 3700 5250
+$EndSCHEMATC
