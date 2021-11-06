@@ -522,10 +522,6 @@ Wire Wire Line
 	8000 2250 8000 2900
 Wire Wire Line
 	7900 2250 7900 2900
-Wire Wire Line
-	3800 2900 4050 2900
-Wire Wire Line
-	3800 2800 4050 2800
 Text GLabel 7900 3800 3    40   Input ~ 0
 ~MOT3_EN
 Text GLabel 8000 3800 3    50   Input ~ 0
@@ -602,4 +598,12 @@ Wire Wire Line
 	3800 3000 4400 3000
 Wire Wire Line
 	3800 4200 4400 4200
+Text GLabel 4400 2900 2    50   Input ~ 0
+UI_SWITCH_0
+Text GLabel 4400 2800 2    50   Input ~ 0
+UI_SWITCH_1
+Wire Wire Line
+	3800 2800 4400 2800
+Wire Wire Line
+	3800 2900 4400 2900
 $EndSCHEMATC
