@@ -65,11 +65,12 @@ class ApriltagNode:
             detection_msg = ApriltagDetection()
             detection_msg.tag_family = str(tag.tag_family)
             detection_msg.tag_id = tag.tag_id
-            detection_msg.center_position = Point32(tag.center[0],
-                                                    tag.center[1], 0)
-            detection_msg.corner_positions = Polygon([Point32(tag.center[0],
-                                                     tag.center[1], 0) for i
-                                                     in range(4)])
+            detection_msg.center_position = Point32(x=tag.center[0],
+                                                    y=tag.center[1])
+            corners = []
+            for corner in tag.corners:
+                corners.append(Point32(x=corner[0], y=corner[1]))
+            detection_msg.corner_positions = Polygon(points=corners)
             detection_msgs.append(detection_msg)
 
         self.apriltag_detector.annotate_frame(frame, detections)
