@@ -48,8 +48,6 @@ F 3 "" H 2500 2600 50  0001 C CNN
 	1    2500 2600
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2500 2600 2500 2750
 $Comp
 L power:GND #PWR02
 U 1 1 6191FECB
@@ -74,26 +72,6 @@ F 3 "" H 2500 4550 50  0001 C CNN
 	1    2500 4550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2650 2750 2500 2750
-Connection ~ 2500 2750
-Wire Wire Line
-	2500 2750 2500 2900
-$Comp
-L power:GND #PWR05
-U 1 1 61929737
-P 3000 2900
-F 0 "#PWR05" H 3000 2650 50  0001 C CNN
-F 1 "GND" H 3005 2727 50  0000 C CNN
-F 2 "" H 3000 2900 50  0001 C CNN
-F 3 "" H 3000 2900 50  0001 C CNN
-	1    3000 2900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3000 2900 3000 2750
-Wire Wire Line
-	3000 2750 2850 2750
 Wire Wire Line
 	2500 4400 2500 4550
 $Comp
@@ -131,8 +109,6 @@ F 3 "" H 4500 2600 50  0001 C CNN
 	1    4500 2600
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4500 2600 4500 2750
 $Comp
 L power:GND #PWR07
 U 1 1 6193D6C0
@@ -157,26 +133,6 @@ F 3 "" H 4500 4550 50  0001 C CNN
 	1    4500 4550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4650 2750 4500 2750
-Connection ~ 4500 2750
-Wire Wire Line
-	4500 2750 4500 2900
-$Comp
-L power:GND #PWR010
-U 1 1 6193D6DB
-P 5000 2900
-F 0 "#PWR010" H 5000 2650 50  0001 C CNN
-F 1 "GND" H 5005 2727 50  0000 C CNN
-F 2 "" H 5000 2900 50  0001 C CNN
-F 3 "" H 5000 2900 50  0001 C CNN
-	1    5000 2900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5000 2900 5000 2750
-Wire Wire Line
-	5000 2750 4850 2750
 Wire Wire Line
 	4500 4400 4500 4550
 $Comp
@@ -214,8 +170,6 @@ F 3 "" H 6500 2600 50  0001 C CNN
 	1    6500 2600
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6500 2600 6500 2750
 $Comp
 L power:GND #PWR012
 U 1 1 61944889
@@ -240,26 +194,6 @@ F 3 "" H 6500 4550 50  0001 C CNN
 	1    6500 4550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6650 2750 6500 2750
-Connection ~ 6500 2750
-Wire Wire Line
-	6500 2750 6500 2900
-$Comp
-L power:GND #PWR015
-U 1 1 619448A4
-P 7000 2900
-F 0 "#PWR015" H 7000 2650 50  0001 C CNN
-F 1 "GND" H 7005 2727 50  0000 C CNN
-F 2 "" H 7000 2900 50  0001 C CNN
-F 3 "" H 7000 2900 50  0001 C CNN
-	1    7000 2900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7000 2900 7000 2750
-Wire Wire Line
-	7000 2750 6850 2750
 Wire Wire Line
 	6500 4400 6500 4550
 $Comp
@@ -297,8 +231,6 @@ F 3 "" H 8500 2600 50  0001 C CNN
 	1    8500 2600
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	8500 2600 8500 2750
 $Comp
 L power:GND #PWR017
 U 1 1 6194E643
@@ -323,26 +255,6 @@ F 3 "" H 8500 4550 50  0001 C CNN
 	1    8500 4550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	8650 2750 8500 2750
-Connection ~ 8500 2750
-Wire Wire Line
-	8500 2750 8500 2900
-$Comp
-L power:GND #PWR020
-U 1 1 6194E65E
-P 9000 2900
-F 0 "#PWR020" H 9000 2650 50  0001 C CNN
-F 1 "GND" H 9005 2727 50  0000 C CNN
-F 2 "" H 9000 2900 50  0001 C CNN
-F 3 "" H 9000 2900 50  0001 C CNN
-	1    9000 2900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	9000 2900 9000 2750
-Wire Wire Line
-	9000 2750 8850 2750
 Wire Wire Line
 	8500 4400 8500 4550
 Text GLabel 1900 3500 0    40   Input ~ 0
@@ -501,48 +413,49 @@ Wire Wire Line
 	7550 3200 7550 3300
 Wire Wire Line
 	7550 3300 7900 3300
+Wire Wire Line
+	2500 2600 2500 2900
+Wire Wire Line
+	4500 2600 4500 2900
+Wire Wire Line
+	6500 2600 6500 2900
+$Comp
+L power:GND #PWR020
+U 1 1 6194E65E
+P 9600 2850
+F 0 "#PWR020" H 9600 2600 50  0001 C CNN
+F 1 "GND" H 9605 2677 50  0000 C CNN
+F 2 "" H 9600 2850 50  0001 C CNN
+F 3 "" H 9600 2850 50  0001 C CNN
+	1    9600 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9600 2550 9600 2450
 $Comp
 L Device:CP1_Small C1
-U 1 1 61AB75C2
-P 2750 2750
-F 0 "C1" V 2850 2750 50  0000 C CNN
-F 1 "100uF" V 2650 2750 50  0000 C CNN
-F 2 "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm" H 2750 2750 50  0001 C CNN
-F 3 "~" H 2750 2750 50  0001 C CNN
-	1    2750 2750
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:CP1_Small C2
-U 1 1 61AB9BEA
-P 4750 2750
-F 0 "C2" V 4850 2750 50  0000 C CNN
-F 1 "100uF" V 4650 2750 50  0000 C CNN
-F 2 "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm" H 4750 2750 50  0001 C CNN
-F 3 "~" H 4750 2750 50  0001 C CNN
-	1    4750 2750
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:CP1_Small C3
-U 1 1 61ABA585
-P 6750 2750
-F 0 "C3" V 6850 2750 50  0000 C CNN
-F 1 "100uF" V 6650 2750 50  0000 C CNN
-F 2 "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm" H 6750 2750 50  0001 C CNN
-F 3 "~" H 6750 2750 50  0001 C CNN
-	1    6750 2750
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:CP1_Small C4
 U 1 1 61ABB008
-P 8750 2750
-F 0 "C4" V 8850 2750 50  0000 C CNN
-F 1 "100uF" V 8650 2750 50  0000 C CNN
-F 2 "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm" H 8750 2750 50  0001 C CNN
-F 3 "~" H 8750 2750 50  0001 C CNN
-	1    8750 2750
-	0    -1   -1   0   
+P 9600 2650
+F 0 "C1" V 9700 2650 50  0000 C CNN
+F 1 "100uF" V 9500 2650 50  0000 C CNN
+F 2 "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm" H 9600 2650 50  0001 C CNN
+F 3 "~" H 9600 2650 50  0001 C CNN
+	1    9600 2650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9600 2750 9600 2850
+Wire Wire Line
+	8500 2600 8500 2900
+$Comp
+L power:+12V #PWR?
+U 1 1 6188338D
+P 9600 2450
+F 0 "#PWR?" H 9600 2300 50  0001 C CNN
+F 1 "+12V" H 9615 2623 50  0000 C CNN
+F 2 "" H 9600 2450 50  0001 C CNN
+F 3 "" H 9600 2450 50  0001 C CNN
+	1    9600 2450
+	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
