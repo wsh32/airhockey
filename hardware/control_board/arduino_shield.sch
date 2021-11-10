@@ -403,17 +403,9 @@ Wire Wire Line
 Wire Wire Line
 	3800 5350 4050 5350
 Wire Wire Line
-	7800 2900 7800 2700
-Wire Wire Line
-	7700 2900 7700 2700
-Wire Wire Line
 	7600 2900 7600 2700
 Wire Wire Line
 	7500 2900 7500 2700
-Wire Wire Line
-	7800 3400 7800 3700
-Wire Wire Line
-	7700 3400 7700 3700
 Wire Wire Line
 	7600 3400 7600 3800
 Wire Wire Line
@@ -606,4 +598,20 @@ Wire Wire Line
 	3800 2800 4400 2800
 Wire Wire Line
 	3800 2900 4400 2900
+Text GLabel 7800 2250 1    50   Input ~ 0
+MISC_0
+Text GLabel 7700 2250 1    50   Input ~ 0
+MISC_2
+Text GLabel 7800 3800 3    50   Input ~ 0
+MISC_1
+Text GLabel 7700 3800 3    50   Input ~ 0
+MISC_3
+Wire Wire Line
+	7700 3400 7700 3800
+Wire Wire Line
+	7800 3400 7800 3800
+Wire Wire Line
+	7800 2250 7800 2900
+Wire Wire Line
+	7700 2250 7700 2900
 $EndSCHEMATC

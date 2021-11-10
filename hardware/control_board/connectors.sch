@@ -231,65 +231,65 @@ Text GLabel 6500 2250 2    50   Input ~ 0
 MOT0_SWITCH_FW
 Text GLabel 7700 2250 2    50   Input ~ 0
 MOT0_SWITCH_BW
-Text Notes 1600 4500 0    60   ~ 0
+Text Notes 1600 3950 0    60   ~ 0
 UI Connectors
 $Comp
 L Connector:Screw_Terminal_01x04 J1
 U 1 1 61A3D0C7
-P 1800 5100
-F 0 "J1" H 1718 4675 50  0000 C CNN
-F 1 "PWR_SWITCHES" H 1718 4766 50  0000 C CNN
-F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5100 50  0001 C CNN
-F 3 "~" H 1800 5100 50  0001 C CNN
-	1    1800 5100
+P 1800 4550
+F 0 "J1" H 1718 4125 50  0000 C CNN
+F 1 "PWR_SWITCHES" H 1718 4216 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 4550 50  0001 C CNN
+F 3 "~" H 1800 4550 50  0001 C CNN
+	1    1800 4550
 	-1   0    0    1   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 J2
 U 1 1 61A41581
-P 1800 5750
-F 0 "J2" H 1718 5325 50  0000 C CNN
-F 1 "UI_SWITCHES" H 1718 5416 50  0000 C CNN
-F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5750 50  0001 C CNN
-F 3 "~" H 1800 5750 50  0001 C CNN
-	1    1800 5750
+P 1800 5200
+F 0 "J2" H 1718 4775 50  0000 C CNN
+F 1 "UI_SWITCHES" H 1718 4866 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5200 50  0001 C CNN
+F 3 "~" H 1800 5200 50  0001 C CNN
+	1    1800 5200
 	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR027
 U 1 1 61A4433E
-P 2150 5900
-F 0 "#PWR027" H 2150 5650 50  0001 C CNN
-F 1 "GND" H 2155 5727 50  0000 C CNN
-F 2 "" H 2150 5900 50  0001 C CNN
-F 3 "" H 2150 5900 50  0001 C CNN
-	1    2150 5900
+P 2150 5350
+F 0 "#PWR027" H 2150 5100 50  0001 C CNN
+F 1 "GND" H 2155 5177 50  0000 C CNN
+F 2 "" H 2150 5350 50  0001 C CNN
+F 3 "" H 2150 5350 50  0001 C CNN
+	1    2150 5350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2150 5900 2150 5850
+	2150 5350 2150 5300
 Wire Wire Line
-	2150 5850 2000 5850
+	2150 5300 2000 5300
 Wire Wire Line
-	2150 5850 2150 5650
+	2150 5300 2150 5100
 Wire Wire Line
-	2150 5650 2000 5650
-Connection ~ 2150 5850
-Text GLabel 2250 5750 2    50   Input ~ 0
+	2150 5100 2000 5100
+Connection ~ 2150 5300
+Text GLabel 2250 5200 2    50   Input ~ 0
 UI_SWITCH_0
 Wire Wire Line
-	2250 5750 2000 5750
-Text GLabel 2250 5550 2    50   Input ~ 0
+	2250 5200 2000 5200
+Text GLabel 2250 5000 2    50   Input ~ 0
 UI_SWITCH_1
 Wire Wire Line
-	2250 5550 2000 5550
-Text GLabel 2000 5200 2    50   Input ~ 0
+	2250 5000 2000 5000
+Text GLabel 2000 4650 2    50   Input ~ 0
 ESTOP_L
-Text GLabel 2000 5100 2    50   Input ~ 0
+Text GLabel 2000 4550 2    50   Input ~ 0
 ESTOP_H
-Text GLabel 2000 5000 2    50   Input ~ 0
+Text GLabel 2000 4450 2    50   Input ~ 0
 PWR_SW_L
-Text GLabel 2000 4900 2    50   Input ~ 0
+Text GLabel 2000 4350 2    50   Input ~ 0
 PWR_SW_H
 $Comp
 L Connector:Conn_01x03_Male J8
@@ -595,4 +595,90 @@ Text GLabel 2300 2300 0    50   Input ~ 0
 ~PS_ON
 Text GLabel 3300 2300 2    50   Input ~ 0
 PWR_OK
+$Comp
+L Connector:Screw_Terminal_01x04 J16
+U 1 1 618DB8BF
+P 1800 6250
+F 0 "J16" H 1718 5825 50  0000 C CNN
+F 1 "MISC_SIG" H 1718 5916 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 6250 50  0001 C CNN
+F 3 "~" H 1800 6250 50  0001 C CNN
+	1    1800 6250
+	-1   0    0    1   
+$EndComp
+Text GLabel 2250 6250 2    50   Input ~ 0
+MISC_1
+Text GLabel 2250 6050 2    50   Input ~ 0
+MISC_3
+Text Notes 1600 5750 0    60   ~ 0
+Misc Connectors
+Text GLabel 2250 6150 2    50   Input ~ 0
+MISC_2
+Text GLabel 2250 6350 2    50   Input ~ 0
+MISC_0
+Wire Wire Line
+	2250 6350 2000 6350
+Wire Wire Line
+	2000 6250 2250 6250
+Wire Wire Line
+	2250 6150 2000 6150
+Wire Wire Line
+	2000 6050 2250 6050
+$Comp
+L Connector:Screw_Terminal_01x04 J17
+U 1 1 618EFBF6
+P 1800 7050
+F 0 "J17" H 1718 6625 50  0000 C CNN
+F 1 "MISC_PWR" H 1718 6716 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 7050 50  0001 C CNN
+F 3 "~" H 1800 7050 50  0001 C CNN
+	1    1800 7050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2200 6950 2000 6950
+Wire Wire Line
+	2000 6850 2200 6850
+$Comp
+L power:GND #PWR05
+U 1 1 618F27FA
+P 2150 7250
+F 0 "#PWR05" H 2150 7000 50  0001 C CNN
+F 1 "GND" H 2155 7077 50  0000 C CNN
+F 2 "" H 2150 7250 50  0001 C CNN
+F 3 "" H 2150 7250 50  0001 C CNN
+	1    2150 7250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2150 7250 2150 7150
+Wire Wire Line
+	2000 7150 2150 7150
+Wire Wire Line
+	2150 7150 2150 7050
+Wire Wire Line
+	2000 7050 2150 7050
+Connection ~ 2150 7150
+$Comp
+L power:+5V #PWR015
+U 1 1 61900F48
+P 2200 6950
+F 0 "#PWR015" H 2200 6800 50  0001 C CNN
+F 1 "+5V" V 2215 7078 50  0000 L CNN
+F 2 "" H 2200 6950 50  0001 C CNN
+F 3 "" H 2200 6950 50  0001 C CNN
+	1    2200 6950
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+12V #PWR010
+U 1 1 619019A0
+P 2200 6850
+F 0 "#PWR010" H 2200 6700 50  0001 C CNN
+F 1 "+12V" V 2215 6978 50  0000 L CNN
+F 2 "" H 2200 6850 50  0001 C CNN
+F 3 "" H 2200 6850 50  0001 C CNN
+	1    2200 6850
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC
