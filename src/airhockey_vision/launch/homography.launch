@@ -1,0 +1,8 @@
+<launch>
+    <arg name="tag_locations" default="$(find airhockey_vision)/config/tag_locations_default.yaml" />
+    <rosparam file="$(arg tag_locations)" command="load" />
+
+    <node pkg="airhockey_vision" type="homography_node" name="homography">
+    </node>
+
+</launch>
