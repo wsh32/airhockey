@@ -3,4 +3,4 @@
 from airhockey_vision import homography_node
 
 if __name__ == '__main__':
-    apriltag_node.main()
+    homography_node.main()
