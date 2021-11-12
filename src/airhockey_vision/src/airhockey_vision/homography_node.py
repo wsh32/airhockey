@@ -2,6 +2,7 @@ import rospy
 import numpy as np
 import cv2
 
+from std_msgs.msg import Header
 from geometry_msgs.msg import PointStamped, Point
 from airhockey_vision.msg import ApriltagDetections
 
@@ -97,7 +98,7 @@ class HomographyNode:
     def puck_callback(self, puck_msg):
         camera_x = puck_msg.point.x
         camera_y = puck_msg.point.y
-        rospy.loginfo(f"X: {camera_x}, Y: {camera_y}")
+        rospy.logwarn(f"X: {camera_x}, Y: {camera_y}")
         table_pos = self.localizer.get_table_position_from_camera(
             camera_x, camera_y)
 
@@ -105,8 +106,8 @@ class HomographyNode:
             return
 
         point = Point(x=table_pos[0], y=table_pos[1])
-        self.puck_publisher.publish(PointStamped(point=point))
-        rospy.loginfo(f"Table position: {table_pos}")
+        header = Header(stamp=rospy.Time.now(), frame_id="table")
+        self.puck_publisher.publish(PointStamped(header=header, point=point))
 
 
 def main():

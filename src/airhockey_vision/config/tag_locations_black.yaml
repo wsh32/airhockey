@@ -46,7 +46,7 @@ tag_locations:
     tag_black_back_left:
         tag_family: "tag16h5"
         tag_id: 3
-        table_x: 33.75
+        table_x: 2
         table_y: 75.25
     tag_black_middle_left:
         tag_family: "tag16h5"
