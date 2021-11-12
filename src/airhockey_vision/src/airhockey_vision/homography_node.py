@@ -2,7 +2,7 @@ import rospy
 import numpy as np
 import cv2
 
-from geometry_msgs.msg import PointStamped
+from geometry_msgs.msg import PointStamped, Point
 from airhockey_vision.msg import ApriltagDetections
 
 
@@ -17,24 +17,50 @@ class TableLocalizer:
     def __init__(self, tag_locations):
         self.tag_locations = tag_locations
         self.homography_matrix = None
+        self.homography_matrix_inv = None
 
-    def update_tag_camera_locations(self, camera_locations):
-        for tag in camera_locations:
+    def update_tag_camera_positions(self, camera_positions):
+        tags_found = []
+        for tag in self.tag_locations:
             try:
-                self.tag_locations[tag].camera_position = camera_locations[tag]
+                self.tag_locations[tag].camera_position = camera_positions[tag]
+                tags_found.append(tag)
             except KeyError:
-                rospy.warning(f"Tag {tag} not registered")
+                self.tag_locations[tag].camera_position = None
 
-        # TODO: Calculate homography matrix here
+        rospy.loginfo(f"Tags found: {tags_found}")
+
+        if len(tags_found) < 4:
+            rospy.logwarn("Not enough apriltags found")
+        else:
+            self.update_homography_matrix()
+
+    def update_homography_matrix(self):
+        points_camera = []
+        points_table = []
+        for tag in self.tag_locations.values():
+            if tag.camera_position is None:
+                continue
+
+            points_camera.append(np.array(tag.camera_position))
+            points_table.append(np.array(tag.table_position))
+
+        self.homography_matrix, status = cv2.findHomography(
+            np.array(points_camera), np.array(points_table))
+        self.homography_matrix_inv, status = cv2.findHomography(
+            np.array(points_table), np.array(points_camera))
 
     def get_table_position_from_camera(self, camera_x, camera_y):
         if self.homography_matrix is None:
             rospy.logerr("Homography matrix not calculated yet")
-        pass
+            return None
+
+        return np.dot(np.array([camera_x, camera_y, 1]), self.homography_matrix)
 
     def get_camera_position_from_table(self, table_x, table_y):
         if self.homography_matrix is None:
             rospy.logerr("Homography matrix not calculated yet")
+            return None
         pass
 
 
@@ -45,7 +71,7 @@ class HomographyNode:
         self.puck_publisher = rospy.Publisher(
             "/vision/puck/puck_position_table", PointStamped, queue_size=3)
         self.apriltag_subscriber = rospy.Subscriber(
-            "/vision/apriltag/detections", ApriltagDetections,
+            "/vision/apriltags/detections", ApriltagDetections,
             self.apriltag_callback)
 
         tags = {}
@@ -65,6 +91,7 @@ class HomographyNode:
         for det in apriltag_msg.detections:
             position = (det.center_position.x, det.center_position.y)
             locations[f"{det.tag_family}_{det.tag_id}"] = position
+        self.localizer.update_tag_camera_positions(locations)
 
     def puck_callback(self, puck_msg):
         camera_x = puck_msg.point.x
@@ -72,11 +99,17 @@ class HomographyNode:
         rospy.loginfo(f"X: {camera_x}, Y: {camera_y}")
         table_pos = self.localizer.get_table_position_from_camera(
             camera_x, camera_y)
+
+        if table_pos is None:
+            return
+
+        point = Point(x=table_pos[0], y=table_pos[1])
+        self.puck_publisher.publish(PointStamped(point=point))
         rospy.loginfo(f"Table position: {table_pos}")
 
 
 def main():
-    rospy.init_node('localization_node', anonymous=True, log_level=rospy.INFO)
+    rospy.init_node('homography_node', anonymous=True, log_level=rospy.INFO)
 
 #    tag_families = rospy.get_param("apriltag/tag_family")
     HomographyNode()

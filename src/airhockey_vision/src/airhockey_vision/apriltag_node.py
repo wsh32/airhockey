@@ -63,7 +63,7 @@ class ApriltagNode:
         detection_msgs = []
         for tag in detections:
             detection_msg = ApriltagDetection()
-            detection_msg.tag_family = str(tag.tag_family)
+            detection_msg.tag_family = tag.tag_family.decode("utf-8")
             detection_msg.tag_id = tag.tag_id
             detection_msg.center_position = Point32(x=tag.center[0],
                                                     y=tag.center[1])
