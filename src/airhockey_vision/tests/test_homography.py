@@ -76,21 +76,33 @@ class TestHomography(TestCase):
         test_pos_expected = (5, 5)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
         test_pos = (0, 0)
         test_pos_expected = (0, 0)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
         test_pos = (50, 100)
         test_pos_expected = (10, 10)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
         test_pos = (100, 200)
         test_pos_expected = (20, 20)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
     def test_homography_translate(self):
         tag_locations_start = {
@@ -118,6 +130,9 @@ class TestHomography(TestCase):
         test_pos_expected = (6, 6)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
     def test_homography_rotate(self):
         tag_locations_start = {
@@ -145,9 +160,15 @@ class TestHomography(TestCase):
         test_pos_expected = (5, 5)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 
         test_pos = (2, 2)
         test_pos_expected = (2, 8)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
+        test_pos_inv = localizer.get_camera_position_from_table(
+            *test_pos_expected)
+        self.assert_close_2d(test_pos_inv, test_pos)
 

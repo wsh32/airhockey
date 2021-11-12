@@ -62,6 +62,8 @@ class TableLocalizer:
             rospy.logerr("Homography matrix not calculated yet")
             return None
 
+        return np.dot(self.homography_matrix_inv, np.array([table_x, table_y, 1]))
+
 
 class HomographyNode:
     def __init__(self):
