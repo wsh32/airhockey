@@ -4,6 +4,9 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import apriltag
 
+import yaml
+import os
+
 from airhockey_vision.msg import ApriltagDetection, ApriltagDetections
 from std_msgs.msg import String, Header
 from sensor_msgs.msg import Image
@@ -93,5 +96,11 @@ def main():
 
 
 if __name__=='__main__':
+    config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
+    apriltag_config = os.path.join(config_path, "apriltag_16h5.yaml")
+    config_data = yaml.load(open(apriltag_config, 'r'), Loader = yaml.Loader)
+
+    rospy.set_param("apriltag/tag_family",
+                    config_data['apriltag']['tag_family'])
     main()
 

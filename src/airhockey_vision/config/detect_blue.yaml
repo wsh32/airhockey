@@ -1,4 +1,4 @@
-puck_tracking: {
+puck_tracking:
     h_lower: 74,
     s_lower: 71,
     v_lower: 0,
@@ -9,4 +9,3 @@ puck_tracking: {
     visualize_color_r: 255,
     visualize_color_g: 255,
     visualize_color_b: 0
-}

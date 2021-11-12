@@ -2,6 +2,5 @@
     <arg name="camera_config" default="$(find airhockey_vision)/config/default_c920.yaml" />
     <rosparam file="$(arg camera_config)" command="load" />
 
-    <node pkg="usb_cam" type="usb_cam_node" name="camera">
-    </node>
+    <node pkg="usb_cam" type="usb_cam_node" name="camera" />
 </launch>

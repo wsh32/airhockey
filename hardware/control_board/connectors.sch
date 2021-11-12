@@ -1,0 +1,598 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A 11000 8500
+encoding utf-8
+Sheet 4 5
+Title "Airhockey Control Board"
+Date "2021-11-05"
+Rev "A"
+Comp "Olin Electric Motorsports"
+Comment1 "Designer: Wesley Soo-Hoo"
+Comment2 "Principles of Integrated Engineering"
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text Notes 1600 1700 0    60   ~ 0
+ATX Connector
+Wire Wire Line
+	3500 2600 3300 2600
+$Comp
+L power:+12V #PWR029
+U 1 1 618EAC35
+P 3500 2500
+F 0 "#PWR029" H 3500 2350 50  0001 C CNN
+F 1 "+12V" V 3515 2628 50  0000 L CNN
+F 2 "" H 3500 2500 50  0001 C CNN
+F 3 "" H 3500 2500 50  0001 C CNN
+	1    3500 2500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3500 2500 3300 2500
+$Comp
+L power:+5V #PWR030
+U 1 1 618E4516
+P 3500 2600
+F 0 "#PWR030" H 3500 2450 50  0001 C CNN
+F 1 "+5V" V 3515 2728 50  0000 L CNN
+F 2 "" H 3500 2600 50  0001 C CNN
+F 3 "" H 3500 2600 50  0001 C CNN
+	1    3500 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+3V3 #PWR031
+U 1 1 618F031A
+P 3500 2800
+F 0 "#PWR031" H 3500 2650 50  0001 C CNN
+F 1 "+3V3" V 3515 2928 50  0000 L CNN
+F 2 "" H 3500 2800 50  0001 C CNN
+F 3 "" H 3500 2800 50  0001 C CNN
+	1    3500 2800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3500 2800 3300 2800
+$Comp
+L power:-12V #PWR032
+U 1 1 618F55CE
+P 3500 3100
+F 0 "#PWR032" H 3500 3200 50  0001 C CNN
+F 1 "-12V" V 3515 3228 50  0000 L CNN
+F 2 "" H 3500 3100 50  0001 C CNN
+F 3 "" H 3500 3100 50  0001 C CNN
+	1    3500 3100
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3500 3100 3300 3100
+$Comp
+L power:GND #PWR028
+U 1 1 618F8D93
+P 2800 3400
+F 0 "#PWR028" H 2800 3150 50  0001 C CNN
+F 1 "GND" H 2805 3227 50  0000 C CNN
+F 2 "" H 2800 3400 50  0001 C CNN
+F 3 "" H 2800 3400 50  0001 C CNN
+	1    2800 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 3400 2800 3300
+$Comp
+L Connector:ATX-24 J3
+U 1 1 618DC579
+P 2800 2700
+F 0 "J3" H 2800 3367 50  0000 C CNN
+F 1 "ATX-24" H 2800 3276 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Mini-Fit_Jr_5569-24A2_2x12_P4.20mm_Horizontal" H 2800 2600 50  0001 C CNN
+F 3 "https://www.intel.com/content/dam/www/public/us/en/documents/guides/power-supply-design-guide-june.pdf#page=33" H 5200 2150 50  0001 C CNN
+	1    2800 2700
+	1    0    0    -1  
+$EndComp
+Text Label 3300 2700 0    50   ~ 0
+5V_SB
+$Comp
+L Connector:Screw_Terminal_01x04 J4
+U 1 1 619EE16C
+P 5450 2150
+F 0 "J4" H 5530 2142 50  0000 L CNN
+F 1 "MOT0" H 5530 2051 50  0000 L CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 5450 2150 50  0001 C CNN
+F 3 "~" H 5450 2150 50  0001 C CNN
+	1    5450 2150
+	1    0    0    -1  
+$EndComp
+Text Notes 4800 1700 0    60   ~ 0
+Stepper Connectors
+Text GLabel 5250 2350 0    50   Input ~ 0
+MOT0_1B
+Text GLabel 5250 2250 0    50   Input ~ 0
+MOT0_1A
+Text GLabel 5250 2150 0    50   Input ~ 0
+MOT0_2A
+Text GLabel 5250 2050 0    50   Input ~ 0
+MOT0_2B
+$Comp
+L Connector:Screw_Terminal_01x04 J5
+U 1 1 619F591F
+P 5450 3150
+F 0 "J5" H 5530 3142 50  0000 L CNN
+F 1 "MOT1" H 5530 3051 50  0000 L CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 5450 3150 50  0001 C CNN
+F 3 "~" H 5450 3150 50  0001 C CNN
+	1    5450 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J6
+U 1 1 619F6754
+P 5450 4150
+F 0 "J6" H 5530 4142 50  0000 L CNN
+F 1 "MOT2" H 5530 4051 50  0000 L CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 5450 4150 50  0001 C CNN
+F 3 "~" H 5450 4150 50  0001 C CNN
+	1    5450 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J7
+U 1 1 619F7AB6
+P 5450 5150
+F 0 "J7" H 5530 5142 50  0000 L CNN
+F 1 "MOT3" H 5530 5051 50  0000 L CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 5450 5150 50  0001 C CNN
+F 3 "~" H 5450 5150 50  0001 C CNN
+	1    5450 5150
+	1    0    0    -1  
+$EndComp
+Text GLabel 5250 3350 0    50   Input ~ 0
+MOT1_1B
+Text GLabel 5250 3250 0    50   Input ~ 0
+MOT1_1A
+Text GLabel 5250 3150 0    50   Input ~ 0
+MOT1_2A
+Text GLabel 5250 3050 0    50   Input ~ 0
+MOT1_2B
+Text GLabel 5250 5350 0    50   Input ~ 0
+MOT3_1B
+Text GLabel 5250 5250 0    50   Input ~ 0
+MOT3_1A
+Text GLabel 5250 5150 0    50   Input ~ 0
+MOT3_2A
+Text GLabel 5250 5050 0    50   Input ~ 0
+MOT3_2B
+Text GLabel 5250 4350 0    50   Input ~ 0
+MOT2_1B
+Text GLabel 5250 4250 0    50   Input ~ 0
+MOT2_1A
+Text GLabel 5250 4150 0    50   Input ~ 0
+MOT2_2A
+Text GLabel 5250 4050 0    50   Input ~ 0
+MOT2_2B
+$Comp
+L power:GND #PWR034
+U 1 1 61A0129E
+P 6500 2400
+F 0 "#PWR034" H 6500 2150 50  0001 C CNN
+F 1 "GND" H 6505 2227 50  0000 C CNN
+F 2 "" H 6500 2400 50  0001 C CNN
+F 3 "" H 6500 2400 50  0001 C CNN
+	1    6500 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 2400 6500 2350
+Wire Wire Line
+	6500 2350 6350 2350
+$Comp
+L power:GND #PWR042
+U 1 1 61A018E8
+P 7700 2400
+F 0 "#PWR042" H 7700 2150 50  0001 C CNN
+F 1 "GND" H 7705 2227 50  0000 C CNN
+F 2 "" H 7700 2400 50  0001 C CNN
+F 3 "" H 7700 2400 50  0001 C CNN
+	1    7700 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 2400 7700 2350
+Wire Wire Line
+	7700 2350 7550 2350
+$Comp
+L power:+5V #PWR033
+U 1 1 61A024A6
+P 6500 2100
+F 0 "#PWR033" H 6500 1950 50  0001 C CNN
+F 1 "+5V" H 6515 2273 50  0000 C CNN
+F 2 "" H 6500 2100 50  0001 C CNN
+F 3 "" H 6500 2100 50  0001 C CNN
+	1    6500 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 2250 6350 2250
+$Comp
+L power:+5V #PWR041
+U 1 1 61A04696
+P 7700 2100
+F 0 "#PWR041" H 7700 1950 50  0001 C CNN
+F 1 "+5V" H 7715 2273 50  0000 C CNN
+F 2 "" H 7700 2100 50  0001 C CNN
+F 3 "" H 7700 2100 50  0001 C CNN
+	1    7700 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 2250 7550 2250
+Text GLabel 6500 2250 2    50   Input ~ 0
+MOT0_SWITCH_FW
+Text GLabel 7700 2250 2    50   Input ~ 0
+MOT0_SWITCH_BW
+Text Notes 1600 4500 0    60   ~ 0
+UI Connectors
+$Comp
+L Connector:Screw_Terminal_01x04 J1
+U 1 1 61A3D0C7
+P 1800 5100
+F 0 "J1" H 1718 4675 50  0000 C CNN
+F 1 "PWR_SWITCHES" H 1718 4766 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5100 50  0001 C CNN
+F 3 "~" H 1800 5100 50  0001 C CNN
+	1    1800 5100
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J2
+U 1 1 61A41581
+P 1800 5750
+F 0 "J2" H 1718 5325 50  0000 C CNN
+F 1 "UI_SWITCHES" H 1718 5416 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5750 50  0001 C CNN
+F 3 "~" H 1800 5750 50  0001 C CNN
+	1    1800 5750
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR027
+U 1 1 61A4433E
+P 2150 5900
+F 0 "#PWR027" H 2150 5650 50  0001 C CNN
+F 1 "GND" H 2155 5727 50  0000 C CNN
+F 2 "" H 2150 5900 50  0001 C CNN
+F 3 "" H 2150 5900 50  0001 C CNN
+	1    2150 5900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2150 5900 2150 5850
+Wire Wire Line
+	2150 5850 2000 5850
+Wire Wire Line
+	2150 5850 2150 5650
+Wire Wire Line
+	2150 5650 2000 5650
+Connection ~ 2150 5850
+Text GLabel 2250 5750 2    50   Input ~ 0
+UI_SWITCH_0
+Wire Wire Line
+	2250 5750 2000 5750
+Text GLabel 2250 5550 2    50   Input ~ 0
+UI_SWITCH_1
+Wire Wire Line
+	2250 5550 2000 5550
+Text GLabel 2000 5200 2    50   Input ~ 0
+ESTOP_L
+Text GLabel 2000 5100 2    50   Input ~ 0
+ESTOP_H
+Text GLabel 2000 5000 2    50   Input ~ 0
+PWR_SW_L
+Text GLabel 2000 4900 2    50   Input ~ 0
+PWR_SW_H
+$Comp
+L Connector:Conn_01x03_Male J8
+U 1 1 61A4E548
+P 6150 2250
+F 0 "J8" H 6300 2450 50  0000 C CNN
+F 1 "MO0_SW_FW" H 6150 2050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 6150 2250 50  0001 C CNN
+F 3 "~" H 6150 2250 50  0001 C CNN
+	1    6150 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 2100 6500 2150
+Wire Wire Line
+	6500 2150 6350 2150
+$Comp
+L Connector:Conn_01x03_Male J12
+U 1 1 61A58F82
+P 7350 2250
+F 0 "J12" H 7500 2450 50  0000 C CNN
+F 1 "MO0_SW_BW" H 7350 2050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 7350 2250 50  0001 C CNN
+F 3 "~" H 7350 2250 50  0001 C CNN
+	1    7350 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 2100 7700 2150
+Wire Wire Line
+	7700 2150 7550 2150
+$Comp
+L power:GND #PWR036
+U 1 1 61A6C02D
+P 6500 3400
+F 0 "#PWR036" H 6500 3150 50  0001 C CNN
+F 1 "GND" H 6505 3227 50  0000 C CNN
+F 2 "" H 6500 3400 50  0001 C CNN
+F 3 "" H 6500 3400 50  0001 C CNN
+	1    6500 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 3400 6500 3350
+Wire Wire Line
+	6500 3350 6350 3350
+$Comp
+L power:GND #PWR044
+U 1 1 61A6C035
+P 7700 3400
+F 0 "#PWR044" H 7700 3150 50  0001 C CNN
+F 1 "GND" H 7705 3227 50  0000 C CNN
+F 2 "" H 7700 3400 50  0001 C CNN
+F 3 "" H 7700 3400 50  0001 C CNN
+	1    7700 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 3400 7700 3350
+Wire Wire Line
+	7700 3350 7550 3350
+$Comp
+L power:+5V #PWR035
+U 1 1 61A6C03D
+P 6500 3100
+F 0 "#PWR035" H 6500 2950 50  0001 C CNN
+F 1 "+5V" H 6515 3273 50  0000 C CNN
+F 2 "" H 6500 3100 50  0001 C CNN
+F 3 "" H 6500 3100 50  0001 C CNN
+	1    6500 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 3250 6350 3250
+$Comp
+L power:+5V #PWR043
+U 1 1 61A6C044
+P 7700 3100
+F 0 "#PWR043" H 7700 2950 50  0001 C CNN
+F 1 "+5V" H 7715 3273 50  0000 C CNN
+F 2 "" H 7700 3100 50  0001 C CNN
+F 3 "" H 7700 3100 50  0001 C CNN
+	1    7700 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 3250 7550 3250
+Text GLabel 6500 3250 2    50   Input ~ 0
+MOT1_SWITCH_FW
+Text GLabel 7700 3250 2    50   Input ~ 0
+MOT1_SWITCH_BW
+$Comp
+L Connector:Conn_01x03_Male J9
+U 1 1 61A6C04D
+P 6150 3250
+F 0 "J9" H 6300 3450 50  0000 C CNN
+F 1 "MO1_SW_FW" H 6150 3050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 6150 3250 50  0001 C CNN
+F 3 "~" H 6150 3250 50  0001 C CNN
+	1    6150 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 3100 6500 3150
+Wire Wire Line
+	6500 3150 6350 3150
+$Comp
+L Connector:Conn_01x03_Male J13
+U 1 1 61A6C055
+P 7350 3250
+F 0 "J13" H 7500 3450 50  0000 C CNN
+F 1 "MO1_SW_BW" H 7350 3050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 7350 3250 50  0001 C CNN
+F 3 "~" H 7350 3250 50  0001 C CNN
+	1    7350 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 3100 7700 3150
+Wire Wire Line
+	7700 3150 7550 3150
+$Comp
+L power:GND #PWR038
+U 1 1 61A87833
+P 6500 4400
+F 0 "#PWR038" H 6500 4150 50  0001 C CNN
+F 1 "GND" H 6505 4227 50  0000 C CNN
+F 2 "" H 6500 4400 50  0001 C CNN
+F 3 "" H 6500 4400 50  0001 C CNN
+	1    6500 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 4400 6500 4350
+Wire Wire Line
+	6500 4350 6350 4350
+$Comp
+L power:GND #PWR046
+U 1 1 61A8783B
+P 7700 4400
+F 0 "#PWR046" H 7700 4150 50  0001 C CNN
+F 1 "GND" H 7705 4227 50  0000 C CNN
+F 2 "" H 7700 4400 50  0001 C CNN
+F 3 "" H 7700 4400 50  0001 C CNN
+	1    7700 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 4400 7700 4350
+Wire Wire Line
+	7700 4350 7550 4350
+$Comp
+L power:+5V #PWR037
+U 1 1 61A87843
+P 6500 4100
+F 0 "#PWR037" H 6500 3950 50  0001 C CNN
+F 1 "+5V" H 6515 4273 50  0000 C CNN
+F 2 "" H 6500 4100 50  0001 C CNN
+F 3 "" H 6500 4100 50  0001 C CNN
+	1    6500 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 4250 6350 4250
+$Comp
+L power:+5V #PWR045
+U 1 1 61A8784A
+P 7700 4100
+F 0 "#PWR045" H 7700 3950 50  0001 C CNN
+F 1 "+5V" H 7715 4273 50  0000 C CNN
+F 2 "" H 7700 4100 50  0001 C CNN
+F 3 "" H 7700 4100 50  0001 C CNN
+	1    7700 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 4250 7550 4250
+Text GLabel 6500 4250 2    50   Input ~ 0
+MOT2_SWITCH_FW
+Text GLabel 7700 4250 2    50   Input ~ 0
+MOT2_SWITCH_BW
+$Comp
+L Connector:Conn_01x03_Male J10
+U 1 1 61A87853
+P 6150 4250
+F 0 "J10" H 6300 4450 50  0000 C CNN
+F 1 "MO2_SW_FW" H 6150 4050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 6150 4250 50  0001 C CNN
+F 3 "~" H 6150 4250 50  0001 C CNN
+	1    6150 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 4100 6500 4150
+Wire Wire Line
+	6500 4150 6350 4150
+$Comp
+L Connector:Conn_01x03_Male J14
+U 1 1 61A8785B
+P 7350 4250
+F 0 "J14" H 7500 4450 50  0000 C CNN
+F 1 "MO2_SW_BW" H 7350 4050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 7350 4250 50  0001 C CNN
+F 3 "~" H 7350 4250 50  0001 C CNN
+	1    7350 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 4100 7700 4150
+Wire Wire Line
+	7700 4150 7550 4150
+$Comp
+L power:GND #PWR040
+U 1 1 61A87863
+P 6500 5400
+F 0 "#PWR040" H 6500 5150 50  0001 C CNN
+F 1 "GND" H 6505 5227 50  0000 C CNN
+F 2 "" H 6500 5400 50  0001 C CNN
+F 3 "" H 6500 5400 50  0001 C CNN
+	1    6500 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 5400 6500 5350
+Wire Wire Line
+	6500 5350 6350 5350
+$Comp
+L power:GND #PWR048
+U 1 1 61A8786B
+P 7700 5400
+F 0 "#PWR048" H 7700 5150 50  0001 C CNN
+F 1 "GND" H 7705 5227 50  0000 C CNN
+F 2 "" H 7700 5400 50  0001 C CNN
+F 3 "" H 7700 5400 50  0001 C CNN
+	1    7700 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 5400 7700 5350
+Wire Wire Line
+	7700 5350 7550 5350
+$Comp
+L power:+5V #PWR039
+U 1 1 61A87873
+P 6500 5100
+F 0 "#PWR039" H 6500 4950 50  0001 C CNN
+F 1 "+5V" H 6515 5273 50  0000 C CNN
+F 2 "" H 6500 5100 50  0001 C CNN
+F 3 "" H 6500 5100 50  0001 C CNN
+	1    6500 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 5250 6350 5250
+$Comp
+L power:+5V #PWR047
+U 1 1 61A8787A
+P 7700 5100
+F 0 "#PWR047" H 7700 4950 50  0001 C CNN
+F 1 "+5V" H 7715 5273 50  0000 C CNN
+F 2 "" H 7700 5100 50  0001 C CNN
+F 3 "" H 7700 5100 50  0001 C CNN
+	1    7700 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 5250 7550 5250
+Text GLabel 6500 5250 2    50   Input ~ 0
+MOT3_SWITCH_FW
+Text GLabel 7700 5250 2    50   Input ~ 0
+MOT3_SWITCH_BW
+$Comp
+L Connector:Conn_01x03_Male J11
+U 1 1 61A87883
+P 6150 5250
+F 0 "J11" H 6300 5450 50  0000 C CNN
+F 1 "MO3_SW_FW" H 6150 5050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 6150 5250 50  0001 C CNN
+F 3 "~" H 6150 5250 50  0001 C CNN
+	1    6150 5250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6500 5100 6500 5150
+Wire Wire Line
+	6500 5150 6350 5150
+$Comp
+L Connector:Conn_01x03_Male J15
+U 1 1 61A8788B
+P 7350 5250
+F 0 "J15" H 7500 5450 50  0000 C CNN
+F 1 "MO3_SW_BW" H 7350 5050 50  0000 C CNN
+F 2 "Connector_Molex:Molex_Nano-Fit_105309-xx03_1x03_P2.50mm_Vertical" H 7350 5250 50  0001 C CNN
+F 3 "~" H 7350 5250 50  0001 C CNN
+	1    7350 5250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7700 5100 7700 5150
+Wire Wire Line
+	7700 5150 7550 5150
+Text GLabel 2300 2300 0    50   Input ~ 0
+~PS_ON
+Text GLabel 3300 2300 2    50   Input ~ 0
+PWR_OK
+$EndSCHEMATC
