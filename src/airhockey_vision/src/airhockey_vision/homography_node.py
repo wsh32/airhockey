@@ -55,13 +55,12 @@ class TableLocalizer:
             rospy.logerr("Homography matrix not calculated yet")
             return None
 
-        return np.dot(np.array([camera_x, camera_y, 1]), self.homography_matrix)
+        return np.dot(self.homography_matrix, np.array([camera_x, camera_y, 1]))
 
     def get_camera_position_from_table(self, table_x, table_y):
         if self.homography_matrix is None:
             rospy.logerr("Homography matrix not calculated yet")
             return None
-        pass
 
 
 class HomographyNode:

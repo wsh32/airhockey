@@ -113,15 +113,41 @@ class TestHomography(TestCase):
 
         localizer = TableLocalizer(tags)
         localizer.update_tag_camera_positions(tag_locations_start)
-        print(localizer.homography_matrix)
 
         test_pos = (5, 5)
         test_pos_expected = (6, 6)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected)
 
+    def test_homography_rotate(self):
+        tag_locations_start = {
+            "tag16h5_0": [0, 0],
+            "tag16h5_1": [0, 10],
+            "tag16h5_2": [10, 10],
+            "tag16h5_3": [10, 0],
+        }
 
-if __name__ == '__main__':
-    test = TestHomography()
-    test.test_homography_translate()
+        tag_locations_final = {
+            "tag16h5_0": [0, 10],
+            "tag16h5_1": [10, 10],
+            "tag16h5_2": [10, 0],
+            "tag16h5_3": [0, 0],
+        }
+
+        tags = {}
+        for i in tag_locations_final.keys():
+            tags[i] = Tag(i, np.array(tag_locations_final[i]))
+
+        localizer = TableLocalizer(tags)
+        localizer.update_tag_camera_positions(tag_locations_start)
+
+        test_pos = (5, 5)
+        test_pos_expected = (5, 5)
+        test_pos_out = localizer.get_table_position_from_camera(*test_pos)
+        self.assert_close_2d(test_pos_out, test_pos_expected)
+
+        test_pos = (2, 2)
+        test_pos_expected = (2, 8)
+        test_pos_out = localizer.get_table_position_from_camera(*test_pos)
+        self.assert_close_2d(test_pos_out, test_pos_expected)
 
