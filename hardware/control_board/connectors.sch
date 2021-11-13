@@ -15,58 +15,32 @@ Comment4 ""
 $EndDescr
 Text Notes 1600 1700 0    60   ~ 0
 ATX Connector
-Wire Wire Line
-	3500 2600 3300 2600
-$Comp
-L power:+12V #PWR029
-U 1 1 618EAC35
-P 3500 2500
-F 0 "#PWR029" H 3500 2350 50  0001 C CNN
-F 1 "+12V" V 3515 2628 50  0000 L CNN
-F 2 "" H 3500 2500 50  0001 C CNN
-F 3 "" H 3500 2500 50  0001 C CNN
-	1    3500 2500
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3500 2500 3300 2500
-$Comp
-L power:+5V #PWR030
-U 1 1 618E4516
-P 3500 2600
-F 0 "#PWR030" H 3500 2450 50  0001 C CNN
-F 1 "+5V" V 3515 2728 50  0000 L CNN
-F 2 "" H 3500 2600 50  0001 C CNN
-F 3 "" H 3500 2600 50  0001 C CNN
-	1    3500 2600
-	0    1    1    0   
-$EndComp
 $Comp
 L power:+3V3 #PWR031
 U 1 1 618F031A
-P 3500 2800
-F 0 "#PWR031" H 3500 2650 50  0001 C CNN
-F 1 "+3V3" V 3515 2928 50  0000 L CNN
-F 2 "" H 3500 2800 50  0001 C CNN
-F 3 "" H 3500 2800 50  0001 C CNN
-	1    3500 2800
+P 3700 2800
+F 0 "#PWR031" H 3700 2650 50  0001 C CNN
+F 1 "+3V3" V 3715 2928 50  0000 L CNN
+F 2 "" H 3700 2800 50  0001 C CNN
+F 3 "" H 3700 2800 50  0001 C CNN
+	1    3700 2800
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	3500 2800 3300 2800
+	3700 2800 3300 2800
 $Comp
 L power:-12V #PWR032
 U 1 1 618F55CE
-P 3500 3100
-F 0 "#PWR032" H 3500 3200 50  0001 C CNN
-F 1 "-12V" V 3515 3228 50  0000 L CNN
-F 2 "" H 3500 3100 50  0001 C CNN
-F 3 "" H 3500 3100 50  0001 C CNN
-	1    3500 3100
+P 3700 3100
+F 0 "#PWR032" H 3700 3200 50  0001 C CNN
+F 1 "-12V" V 3715 3228 50  0000 L CNN
+F 2 "" H 3700 3100 50  0001 C CNN
+F 3 "" H 3700 3100 50  0001 C CNN
+	1    3700 3100
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	3500 3100 3300 3100
+	3700 3100 3300 3100
 $Comp
 L power:GND #PWR028
 U 1 1 618F8D93
@@ -91,8 +65,6 @@ F 3 "https://www.intel.com/content/dam/www/public/us/en/documents/guides/power-s
 	1    2800 2700
 	1    0    0    -1  
 $EndComp
-Text Label 3300 2700 0    50   ~ 0
-5V_SB
 $Comp
 L Connector:Screw_Terminal_01x04 J4
 U 1 1 619EE16C
@@ -231,65 +203,65 @@ Text GLabel 6500 2250 2    50   Input ~ 0
 MOT0_SWITCH_FW
 Text GLabel 7700 2250 2    50   Input ~ 0
 MOT0_SWITCH_BW
-Text Notes 1600 4500 0    60   ~ 0
+Text Notes 1600 3950 0    60   ~ 0
 UI Connectors
 $Comp
 L Connector:Screw_Terminal_01x04 J1
 U 1 1 61A3D0C7
-P 1800 5100
-F 0 "J1" H 1718 4675 50  0000 C CNN
-F 1 "PWR_SWITCHES" H 1718 4766 50  0000 C CNN
-F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5100 50  0001 C CNN
-F 3 "~" H 1800 5100 50  0001 C CNN
-	1    1800 5100
+P 1800 4550
+F 0 "J1" H 2000 4450 50  0000 C CNN
+F 1 "PWR_SWITCHES" H 2200 4550 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 4550 50  0001 C CNN
+F 3 "~" H 1800 4550 50  0001 C CNN
+	1    1800 4550
 	-1   0    0    1   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 J2
 U 1 1 61A41581
-P 1800 5750
-F 0 "J2" H 1718 5325 50  0000 C CNN
-F 1 "UI_SWITCHES" H 1718 5416 50  0000 C CNN
-F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5750 50  0001 C CNN
-F 3 "~" H 1800 5750 50  0001 C CNN
-	1    1800 5750
+P 1800 5200
+F 0 "J2" H 1950 5100 50  0000 C CNN
+F 1 "UI_SWITCHES" H 2150 5200 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 5200 50  0001 C CNN
+F 3 "~" H 1800 5200 50  0001 C CNN
+	1    1800 5200
 	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR027
 U 1 1 61A4433E
-P 2150 5900
-F 0 "#PWR027" H 2150 5650 50  0001 C CNN
-F 1 "GND" H 2155 5727 50  0000 C CNN
-F 2 "" H 2150 5900 50  0001 C CNN
-F 3 "" H 2150 5900 50  0001 C CNN
-	1    2150 5900
+P 2150 5350
+F 0 "#PWR027" H 2150 5100 50  0001 C CNN
+F 1 "GND" H 2155 5177 50  0000 C CNN
+F 2 "" H 2150 5350 50  0001 C CNN
+F 3 "" H 2150 5350 50  0001 C CNN
+	1    2150 5350
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2150 5900 2150 5850
+	2150 5350 2150 5300
 Wire Wire Line
-	2150 5850 2000 5850
+	2150 5300 2000 5300
 Wire Wire Line
-	2150 5850 2150 5650
+	2150 5300 2150 5100
 Wire Wire Line
-	2150 5650 2000 5650
-Connection ~ 2150 5850
-Text GLabel 2250 5750 2    50   Input ~ 0
+	2150 5100 2000 5100
+Connection ~ 2150 5300
+Text GLabel 2250 5000 2    50   Input ~ 0
 UI_SWITCH_0
 Wire Wire Line
-	2250 5750 2000 5750
-Text GLabel 2250 5550 2    50   Input ~ 0
+	2250 5200 2000 5200
+Text GLabel 2250 5200 2    50   Input ~ 0
 UI_SWITCH_1
 Wire Wire Line
-	2250 5550 2000 5550
-Text GLabel 2000 5200 2    50   Input ~ 0
+	2250 5000 2000 5000
+Text GLabel 2000 4650 2    50   Input ~ 0
 ESTOP_L
-Text GLabel 2000 5100 2    50   Input ~ 0
+Text GLabel 2000 4550 2    50   Input ~ 0
 ESTOP_H
-Text GLabel 2000 5000 2    50   Input ~ 0
+Text GLabel 2000 4450 2    50   Input ~ 0
 PWR_SW_L
-Text GLabel 2000 4900 2    50   Input ~ 0
+Text GLabel 2000 4350 2    50   Input ~ 0
 PWR_SW_H
 $Comp
 L Connector:Conn_01x03_Male J8
@@ -595,4 +567,145 @@ Text GLabel 2300 2300 0    50   Input ~ 0
 ~PS_ON
 Text GLabel 3300 2300 2    50   Input ~ 0
 PWR_OK
+$Comp
+L Connector:Screw_Terminal_01x04 J16
+U 1 1 618DB8BF
+P 1800 6250
+F 0 "J16" H 2000 6150 50  0000 C CNN
+F 1 "MISC_SIG" H 2100 6250 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 6250 50  0001 C CNN
+F 3 "~" H 1800 6250 50  0001 C CNN
+	1    1800 6250
+	-1   0    0    1   
+$EndComp
+Text GLabel 2250 6250 2    50   Input ~ 0
+MISC_1
+Text GLabel 2250 6050 2    50   Input ~ 0
+MISC_3
+Text Notes 1600 5750 0    60   ~ 0
+Misc Connectors
+Text GLabel 2250 6150 2    50   Input ~ 0
+MISC_2
+Text GLabel 2250 6350 2    50   Input ~ 0
+MISC_0
+Wire Wire Line
+	2250 6350 2000 6350
+Wire Wire Line
+	2000 6250 2250 6250
+Wire Wire Line
+	2250 6150 2000 6150
+Wire Wire Line
+	2000 6050 2250 6050
+$Comp
+L Connector:Screw_Terminal_01x04 J17
+U 1 1 618EFBF6
+P 1800 7050
+F 0 "J17" H 2000 6950 50  0000 C CNN
+F 1 "MISC_PWR" H 2100 7050 50  0000 C CNN
+F 2 "TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x04_P3.50mm_Horizontal" H 1800 7050 50  0001 C CNN
+F 3 "~" H 1800 7050 50  0001 C CNN
+	1    1800 7050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2300 6950 2000 6950
+Wire Wire Line
+	2000 6850 2050 6850
+$Comp
+L power:GND #PWR05
+U 1 1 618F27FA
+P 2150 7250
+F 0 "#PWR05" H 2150 7000 50  0001 C CNN
+F 1 "GND" H 2155 7077 50  0000 C CNN
+F 2 "" H 2150 7250 50  0001 C CNN
+F 3 "" H 2150 7250 50  0001 C CNN
+	1    2150 7250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2150 7250 2150 7150
+Wire Wire Line
+	2000 7150 2150 7150
+Wire Wire Line
+	2150 7150 2150 7050
+Wire Wire Line
+	2000 7050 2150 7050
+Connection ~ 2150 7150
+$Comp
+L power:+5V #PWR015
+U 1 1 61900F48
+P 2300 6950
+F 0 "#PWR015" H 2300 6800 50  0001 C CNN
+F 1 "+5V" V 2315 7078 50  0000 L CNN
+F 2 "" H 2300 6950 50  0001 C CNN
+F 3 "" H 2300 6950 50  0001 C CNN
+	1    2300 6950
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+12V #PWR010
+U 1 1 619019A0
+P 2300 6850
+F 0 "#PWR010" H 2300 6700 50  0001 C CNN
+F 1 "+12V" V 2315 6978 50  0000 L CNN
+F 2 "" H 2300 6850 50  0001 C CNN
+F 3 "" H 2300 6850 50  0001 C CNN
+	1    2300 6850
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+12V #PWR0103
+U 1 1 6190D030
+P 3700 2500
+F 0 "#PWR0103" H 3700 2350 50  0001 C CNN
+F 1 "+12V" V 3715 2628 50  0000 L CNN
+F 2 "" H 3700 2500 50  0001 C CNN
+F 3 "" H 3700 2500 50  0001 C CNN
+	1    3700 2500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3700 2500 3300 2500
+$Comp
+L Device:Fuse_Small F1
+U 1 1 6191F3B4
+P 3500 2600
+F 0 "F1" H 3500 2675 50  0000 C CNN
+F 1 "1A" H 3500 2750 50  0000 C CNN
+F 2 "Fuse:Fuse_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3500 2600 50  0001 C CNN
+F 3 "~" H 3500 2600 50  0001 C CNN
+	1    3500 2600
+	-1   0    0    1   
+$EndComp
+NoConn ~ 3300 2700
+Wire Wire Line
+	3400 2600 3300 2600
+$Comp
+L power:+5V #PWR0104
+U 1 1 6192700C
+P 3700 2600
+F 0 "#PWR0104" H 3700 2450 50  0001 C CNN
+F 1 "+5V" V 3715 2728 50  0000 L CNN
+F 2 "" H 3700 2600 50  0001 C CNN
+F 3 "" H 3700 2600 50  0001 C CNN
+	1    3700 2600
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3700 2600 3600 2600
+Text Label 3350 2600 0    50   ~ 0
+5VPS
+$Comp
+L Device:Fuse_Small F2
+U 1 1 6195073C
+P 2150 6850
+F 0 "F2" H 2150 7035 50  0000 C CNN
+F 1 "1A" H 2150 6944 50  0000 C CNN
+F 2 "Fuse:Fuse_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2150 6850 50  0001 C CNN
+F 3 "~" H 2150 6850 50  0001 C CNN
+	1    2150 6850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2250 6850 2300 6850
 $EndSCHEMATC

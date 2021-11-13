@@ -1,3 +1,5 @@
 (fp_lib_table
   (lib (name Socket_Arduino_Mega)(type KiCad)(uri "$(KIPRJMOD)/Socket_Arduino_Mega.pretty")(options "")(descr ""))
+  (lib (name img)(type KiCad)(uri ${AIRHOCKEY_DIR}/hardware/kicad-common/img.pretty)(options "")(descr ""))
+  (lib (name kicad_common)(type KiCad)(uri ${AIRHOCKEY_DIR}/hardware/kicad-common/kicad_common.pretty)(options "")(descr ""))
 )

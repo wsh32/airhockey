@@ -97,24 +97,6 @@ if __name__=='__main__':
     green_config = os.path.join(config_path, "detect_green.yaml")
     config_data = yaml.load(open(green_config, 'r'), Loader = yaml.Loader)
 
-    rospy.set_param("puck_tracking/h_lower",
-                    config_data['puck_tracking']['h_lower'])
-    rospy.set_param("puck_tracking/s_lower",
-                    config_data['puck_tracking']['s_lower'])
-    rospy.set_param("puck_tracking/v_lower",
-                    config_data['puck_tracking']['v_lower'])
-    rospy.set_param("puck_tracking/h_upper",
-                    config_data['puck_tracking']['h_upper'])
-    rospy.set_param("puck_tracking/s_upper",
-                    config_data['puck_tracking']['s_upper'])
-    rospy.set_param("puck_tracking/v_upper",
-                    config_data['puck_tracking']['v_upper'])
-
-    rospy.set_param("puck_tracking/visualize_color_r",
-                    config_data['puck_tracking']['visualize_color_r'])
-    rospy.set_param("puck_tracking/visualize_color_g",
-                    config_data['puck_tracking']['visualize_color_g'])
-    rospy.set_param("puck_tracking/visualize_color_b",
-                    config_data['puck_tracking']['visualize_color_b'])
+    rospy.set_param("puck_tracking", config_data['puck_tracking'])
     main()
 
