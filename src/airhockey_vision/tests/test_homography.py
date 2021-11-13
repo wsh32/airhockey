@@ -173,29 +173,35 @@ class TestHomography(TestCase):
         self.assert_close_2d(test_pos_inv, test_pos)
 
     def test_homography_real(self):
-        tag_locations_start = {
+        tag_locations_camera = {
             "tag16h5_0": [1138, 615],
             "tag16h5_2": [169, 194],
             "tag16h5_3": [165, 611],
             "tag16h5_9": [666, 194],
         }
 
-        tag_locations_final = {
+        tag_locations_table = {
             "tag16h5_0": [2, 2],
             "tag16h5_2": [33.75, 75.25],
-            "tag16h5_3": [33.75, 75.25],
+            "tag16h5_3": [2, 75.25],
             "tag16h5_9": [33.75, 35],
         }
 
         tags = {}
-        for i in tag_locations_final.keys():
-            tags[i] = Tag(i, np.array(tag_locations_final[i]))
+        for i in tag_locations_table.keys():
+            tags[i] = Tag(i, np.array(tag_locations_table[i]))
 
         localizer = TableLocalizer(tags)
-        localizer.update_tag_camera_positions(tag_locations_start)
+        localizer.update_tag_camera_positions(tag_locations_camera)
 
+        print(localizer.homography_matrix)
         test_pos = (545, 343)
-        test_pos_expected = (5, 5)
+        test_pos_expected = (23, 48)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
-        self.assert_close_2d(test_pos_out, test_pos_expected)
+        self.assert_close_2d(test_pos_out, test_pos_expected, dist=1)
+
+
+if __name__ == '__main__':
+    t = TestHomography()
+    t.test_homography_real()
 
