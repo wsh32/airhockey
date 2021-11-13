@@ -36,7 +36,8 @@ class TestHomography(TestCase):
         assert len(config_file['tag_locations']) >= 4
 
     def assert_close_2d(self, point1, point2, dist=0.01):
-        assert point1[0] == pytest.approx(point2[0], dist)
+        assert np.linalg.norm(np.array([point1[0], point1[1]]) -
+                              np.array([point2[0], point2[1]])) < dist
 
     def test_default_config_has_values(self):
         self.config_file_has_values(default_config_data)
@@ -174,10 +175,10 @@ class TestHomography(TestCase):
 
     def test_homography_real(self):
         tag_locations_camera = {
-            "tag16h5_0": [1138, 615],
-            "tag16h5_2": [169, 194],
-            "tag16h5_3": [165, 611],
-            "tag16h5_9": [666, 194],
+            "tag16h5_0": [1138, 618],
+            "tag16h5_2": [164, 198],
+            "tag16h5_3": [165, 616],
+            "tag16h5_9": [663, 194],
         }
 
         tag_locations_table = {
@@ -194,9 +195,8 @@ class TestHomography(TestCase):
         localizer = TableLocalizer(tags)
         localizer.update_tag_camera_positions(tag_locations_camera)
 
-        print(localizer.homography_matrix)
-        test_pos = (545, 343)
-        test_pos_expected = (23, 48)
+        test_pos = (355, 408)
+        test_pos_expected = (18, 65)
         test_pos_out = localizer.get_table_position_from_camera(*test_pos)
         self.assert_close_2d(test_pos_out, test_pos_expected, dist=1)
 

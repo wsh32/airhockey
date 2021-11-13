@@ -4,7 +4,7 @@ import cv2
 
 from std_msgs.msg import Header
 from geometry_msgs.msg import PointStamped, Point
-from airhockey_vision.msg import ApriltagDetections
+from airhockey_vision.msg import ApriltagDetections, HomographyMatrix
 
 
 class Tag:
@@ -28,8 +28,6 @@ class TableLocalizer:
                 tags_found.append(tag)
             except KeyError:
                 self.tag_locations[tag].camera_position = None
-
-        rospy.loginfo(f"Tags found: {tags_found}")
 
         if len(tags_found) < 4:
             rospy.logwarn("Not enough apriltags found")
@@ -71,7 +69,9 @@ class HomographyNode:
         self.puck_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.puck_publisher = rospy.Publisher(
-            "/vision/puck/puck_position_table", PointStamped, queue_size=3)
+            "/vision/homography/puck_position", PointStamped, queue_size=3)
+        self.homography_matrix_publisher = rospy.Publisher(
+            "/vision/homography/homography_matrix", HomographyMatrix, queue_size=3)
         self.apriltag_subscriber = rospy.Subscriber(
             "/vision/apriltags/detections", ApriltagDetections,
             self.apriltag_callback)
@@ -95,10 +95,22 @@ class HomographyNode:
             locations[f"{det.tag_family}_{det.tag_id}"] = position
         self.localizer.update_tag_camera_positions(locations)
 
+        homography_matrix = HomographyMatrix(
+            h00=self.localizer.homography_matrix[0][0],
+            h01=self.localizer.homography_matrix[0][1],
+            h02=self.localizer.homography_matrix[0][2],
+            h10=self.localizer.homography_matrix[1][0],
+            h11=self.localizer.homography_matrix[1][1],
+            h12=self.localizer.homography_matrix[1][2],
+            h20=self.localizer.homography_matrix[2][0],
+            h21=self.localizer.homography_matrix[2][1],
+            h22=self.localizer.homography_matrix[2][2])
+
+        self.homography_matrix_publisher.publish(homography_matrix)
+
     def puck_callback(self, puck_msg):
         camera_x = puck_msg.point.x
         camera_y = puck_msg.point.y
-        rospy.logwarn(f"X: {camera_x}, Y: {camera_y}")
         table_pos = self.localizer.get_table_position_from_camera(
             camera_x, camera_y)
 

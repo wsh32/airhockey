@@ -54,6 +54,7 @@ add_message_files(
     FILES
     ApriltagDetection.msg
     ApriltagDetections.msg
+    HomographyMatrix.msg
 )
 
 ## Generate services in the 'srv' folder
