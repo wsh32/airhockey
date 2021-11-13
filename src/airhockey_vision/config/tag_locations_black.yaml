@@ -1,0 +1,60 @@
+# All measurements are in inches
+# Origin is set to the front left of the table
+#
+# Table drawing:
+#
+#    Human Side
+# ----------------
+# | D          C |
+# |              |
+# |              |
+# |              |
+# |              |
+# | E          F |
+# |              |
+# |              |
+# |              |
+# |              |
+# | A          B |
+# x---------------
+#    Robot side
+#
+# x: Origin
+# A: Approximate location of front left
+# B: Approximate location of front right
+# C: Approximate location of back right
+# D: Approximate location of back left
+# E: Approximate location of middle left
+# F: Approximate location of middle right
+
+tag_locations:
+    tag_black_front_left:
+        tag_family: "tag16h5"
+        tag_id: 0
+        table_x: 2
+        table_y: 2
+    tag_black_front_right:
+        tag_family: "tag16h5"
+        tag_id: 1
+        table_x: 33.75
+        table_y: 2
+    tag_black_back_right:
+        tag_family: "tag16h5"
+        tag_id: 2
+        table_x: 33.75
+        table_y: 75.25
+    tag_black_back_left:
+        tag_family: "tag16h5"
+        tag_id: 3
+        table_x: 2
+        table_y: 75.25
+    tag_black_middle_left:
+        tag_family: "tag16h5"
+        tag_id: 8
+        table_x: 2
+        table_y: 37
+    tag_black_middle_right:
+        tag_family: "tag16h5"
+        tag_id: 9
+        table_x: 33.75
+        table_y: 35
