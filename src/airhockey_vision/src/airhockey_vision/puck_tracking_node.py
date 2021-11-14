@@ -3,6 +3,8 @@ from cv_bridge import CvBridge, CvBridgeError
 
 import cv2
 import imutils
+import yaml
+import os
 
 from std_msgs.msg import Header
 from geometry_msgs.msg import Point, PointStamped
@@ -91,5 +93,10 @@ def main():
 
 
 if __name__=='__main__':
+    config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
+    green_config = os.path.join(config_path, "detect_green.yaml")
+    config_data = yaml.load(open(green_config, 'r'), Loader = yaml.Loader)
+
+    rospy.set_param("puck_tracking", config_data['puck_tracking'])
     main()
 

@@ -1,12 +1,11 @@
-puck_tracking: {
-    h_lower: 34,
-    s_lower: 83,
-    v_lower: 76,
-    h_upper: 82,
-    s_upper: 219,
-    v_upper: 204,
+puck_tracking:
+    h_lower: 34
+    s_lower: 50
+    v_lower: 76
+    h_upper: 82
+    s_upper: 219
+    v_upper: 204
 
-    visualize_color_r: 255,
-    visualize_color_g: 0,
+    visualize_color_r: 255
+    visualize_color_g: 0
     visualize_color_b: 255
-}
