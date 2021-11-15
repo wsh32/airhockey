@@ -65,7 +65,7 @@ class TableLocalizer:
 
 
 class HomographyNode:
-    def __init__(self):
+    def __init__(self, tag_locations):
         self.puck_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.puck_publisher = rospy.Publisher(
@@ -77,7 +77,6 @@ class HomographyNode:
             self.apriltag_callback)
 
         tags = {}
-        tag_locations = rospy.get_param("tag_locations")
         for tag_name in tag_locations:
             tag = tag_locations[tag_name]
             tag_key = f"{tag['tag_family']}_{tag['tag_id']}"
@@ -125,8 +124,8 @@ class HomographyNode:
 def main():
     rospy.init_node('homography_node', anonymous=True, log_level=rospy.INFO)
 
-#    tag_families = rospy.get_param("apriltag/tag_family")
-    HomographyNode()
+    tag_locations = rospy.get_param("tag_locations")
+    HomographyNode(tag_locations)
 
 
 if __name__=='__main__':
