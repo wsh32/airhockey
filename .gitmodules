@@ -1,3 +1,6 @@
 [submodule "hardware/kicad-common"]
 	path = hardware/kicad-common
 	url = git@github.com:wsh32/kicad-common.git
+[submodule "src/airhockey_firmware/src/Arduino-Makefile"]
+	path = src/airhockey_firmware/src/Arduino-Makefile
+	url = git@github.com:sudar/Arduino-Makefile.git

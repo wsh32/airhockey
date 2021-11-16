@@ -1,0 +1,203 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A 11000 8500
+encoding utf-8
+Sheet 5 5
+Title "Airhockey Control Board"
+Date "2021-11-05"
+Rev "A"
+Comp "Olin Electric Motorsports"
+Comment1 "Designer: Wesley Soo-Hoo"
+Comment2 "Principles of Integrated Engineering"
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text GLabel 5850 3000 3    50   Input ~ 0
+ESTOP_L
+Text GLabel 6200 3000 3    50   Input ~ 0
+ESTOP_H
+Text GLabel 3900 3200 0    50   Input ~ 0
+PWR_SW_L
+Text GLabel 3900 3000 0    50   Input ~ 0
+PWR_SW_H
+$Comp
+L power:+5V #PWR051
+U 1 1 61A8E0F0
+P 7300 2000
+F 0 "#PWR051" H 7300 1850 50  0001 C CNN
+F 1 "+5V" H 7315 2173 50  0000 C CNN
+F 2 "" H 7300 2000 50  0001 C CNN
+F 3 "" H 7300 2000 50  0001 C CNN
+	1    7300 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Small_US R3
+U 1 1 61A8EADE
+P 7300 2400
+F 0 "R3" H 7368 2446 50  0000 L CNN
+F 1 "R_10K" H 7368 2355 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 7300 2400 50  0001 C CNN
+F 3 "~" H 7300 2400 50  0001 C CNN
+	1    7300 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7300 2500 7300 2600
+Wire Wire Line
+	7300 2300 7300 2000
+$Comp
+L Transistor_FET:BSS138 Q1
+U 1 1 61A92686
+P 7200 3000
+F 0 "Q1" H 7404 3046 50  0000 L CNN
+F 1 "BSS138" H 7404 2955 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 7400 2925 50  0001 L CIN
+F 3 "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" H 7200 3000 50  0001 L CNN
+	1    7200 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR052
+U 1 1 61A9C523
+P 7300 3400
+F 0 "#PWR052" H 7300 3150 50  0001 C CNN
+F 1 "GND" H 7305 3227 50  0000 C CNN
+F 2 "" H 7300 3400 50  0001 C CNN
+F 3 "" H 7300 3400 50  0001 C CNN
+	1    7300 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7300 3400 7300 3300
+$Comp
+L Device:R_Small_US R2
+U 1 1 61A9CC4C
+P 7050 3300
+F 0 "R2" V 7150 3300 50  0000 C CNN
+F 1 "R_10K" V 6950 3300 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 7050 3300 50  0001 C CNN
+F 3 "~" H 7050 3300 50  0001 C CNN
+	1    7050 3300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7150 3300 7300 3300
+Connection ~ 7300 3300
+Wire Wire Line
+	7300 3300 7300 3200
+Wire Wire Line
+	6950 3300 6850 3300
+Wire Wire Line
+	6850 3300 6850 3000
+Wire Wire Line
+	6850 3000 7000 3000
+Wire Wire Line
+	6200 3000 6850 3000
+Connection ~ 6850 3000
+Text Label 6850 3000 2    50   ~ 0
+PS_ON_SIG
+Text GLabel 5500 3000 0    50   Input ~ 0
+PWR_ON_OUTPUT
+Wire Wire Line
+	5500 3000 5850 3000
+$Comp
+L power:GND #PWR050
+U 1 1 61AA0499
+P 4000 3300
+F 0 "#PWR050" H 4000 3050 50  0001 C CNN
+F 1 "GND" H 4005 3127 50  0000 C CNN
+F 2 "" H 4000 3300 50  0001 C CNN
+F 3 "" H 4000 3300 50  0001 C CNN
+	1    4000 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 3300 4000 3200
+Wire Wire Line
+	4000 3200 3900 3200
+Wire Wire Line
+	4000 3000 3900 3000
+$Comp
+L Device:R_Small_US R1
+U 1 1 61AA3ECC
+P 4000 2750
+F 0 "R1" H 4068 2796 50  0000 L CNN
+F 1 "R_10K" H 4068 2705 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 4000 2750 50  0001 C CNN
+F 3 "~" H 4000 2750 50  0001 C CNN
+	1    4000 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 2850 4000 3000
+$Comp
+L power:+5V #PWR049
+U 1 1 61AA27C2
+P 4000 2600
+F 0 "#PWR049" H 4000 2450 50  0001 C CNN
+F 1 "+5V" H 4015 2773 50  0000 C CNN
+F 2 "" H 4000 2600 50  0001 C CNN
+F 3 "" H 4000 2600 50  0001 C CNN
+	1    4000 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 2650 4000 2600
+Text GLabel 4000 3000 2    50   Input ~ 0
+PWR_SW
+$Comp
+L power:+5V #PWR0102
+U 1 1 618C3CC3
+P 6900 2000
+F 0 "#PWR0102" H 6900 1850 50  0001 C CNN
+F 1 "+5V" H 6915 2173 50  0000 C CNN
+F 2 "" H 6900 2000 50  0001 C CNN
+F 3 "" H 6900 2000 50  0001 C CNN
+	1    6900 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Small_US R4
+U 1 1 618C42EE
+P 6900 2400
+F 0 "R4" H 6968 2446 50  0000 L CNN
+F 1 "R_200" H 6968 2355 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 6900 2400 50  0001 C CNN
+F 3 "~" H 6900 2400 50  0001 C CNN
+	1    6900 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED_Small D1
+U 1 1 618C5C8C
+P 6900 2150
+F 0 "D1" V 6946 2080 50  0000 R CNN
+F 1 "PS_ON" V 6855 2080 50  0000 R CNN
+F 2 "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 6900 2150 50  0001 C CNN
+F 3 "~" V 6900 2150 50  0001 C CNN
+	1    6900 2150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6900 2050 6900 2000
+Wire Wire Line
+	6900 2250 6900 2300
+Wire Wire Line
+	6900 2500 6900 2600
+Wire Wire Line
+	6900 2600 7300 2600
+Connection ~ 7300 2600
+Text GLabel 7500 2700 2    50   Input ~ 0
+~PS_ON
+Wire Wire Line
+	7300 2600 7300 2700
+Connection ~ 7300 2700
+Wire Wire Line
+	7300 2800 7300 2700
+Wire Wire Line
+	7300 2700 7500 2700
+Text Notes 3400 1950 0    50   ~ 0
+PS_ON Circuit
+$EndSCHEMATC
