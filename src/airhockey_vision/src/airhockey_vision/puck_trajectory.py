@@ -33,7 +33,7 @@ class TrajectoryNode:
         self.position_subscriber = rospy.Subscriber(
         "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
-            "/vision/apriltags/detections", PuckState, queue_size=3)
+            "/vision/puck/puck_state", PuckState, queue_size=3)
 
         self.bridge = CvBridge()
         self.trajectory_calculator = TrajectoryCalculator()
