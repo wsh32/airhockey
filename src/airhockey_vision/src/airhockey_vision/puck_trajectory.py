@@ -10,10 +10,11 @@ from airhockey_vision.msg import PuckState
 
 
 class TrajectoryCalculator:
-    def __init__(self):
-        self.buffer = deque(np.zeros((4,4)), maxlen = 5) # [x, y, x_dot, y_dot]
+    def __init__(self, buffer_len = 5):
+        self.buffer = deque(maxlen = buffer_len) # [x, y, x_dot, y_dot]
         self.first_run = True
         self.prev_time = None
+        print(self.buffer)
 
     def calc_trajectory(self, x, y, time):
         if self.first_run:
@@ -31,11 +32,9 @@ class TrajectoryCalculator:
 class TrajectoryNode:
     def __init__(self):
         self.position_subscriber = rospy.Subscriber(
-        "/vision/puck/puck_position", PointStamped, self.puck_callback)
+            "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
             "/vision/puck/puck_state", PuckState, queue_size=3)
-
-        self.bridge = CvBridge()
         self.trajectory_calculator = TrajectoryCalculator()
 
         rospy.spin()
