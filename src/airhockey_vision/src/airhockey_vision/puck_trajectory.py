@@ -29,6 +29,7 @@ class TrajectoryCalculator:
         self.buffer.append(puck_pos_v)
         return x, y, x_dot, y_dot
 
+
 class TrajectoryNode:
     def __init__(self):
         self.position_subscriber = rospy.Subscriber(
