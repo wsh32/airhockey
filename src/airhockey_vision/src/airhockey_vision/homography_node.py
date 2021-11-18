@@ -2,6 +2,9 @@ import rospy
 import numpy as np
 import cv2
 
+import os
+import yaml
+
 from std_msgs.msg import Header
 from geometry_msgs.msg import PointStamped, Point
 from airhockey_vision.msg import ApriltagDetections, HomographyMatrix
@@ -61,20 +64,22 @@ class TableLocalizer:
             rospy.logerr("Homography matrix not calculated yet")
             return None
 
-        return np.dot(self.homography_matrix_inv, np.array([table_x, table_y, 1]))
+        return np.dot(self.homography_matrix_inv,
+                      np.array([table_x, table_y, 1]))
 
 
 class HomographyNode:
     def __init__(self, tag_locations):
         self.puck_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
-        self.puck_publisher = rospy.Publisher(
-            "/vision/homography/puck_position", PointStamped, queue_size=3)
-        self.homography_matrix_publisher = rospy.Publisher(
-            "/vision/homography/homography_matrix", HomographyMatrix, queue_size=3)
         self.apriltag_subscriber = rospy.Subscriber(
             "/vision/apriltags/detections", ApriltagDetections,
             self.apriltag_callback)
+        self.puck_publisher = rospy.Publisher(
+            "/vision/homography/puck_position", PointStamped, queue_size=3)
+        self.homography_matrix_publisher = rospy.Publisher(
+            "/vision/homography/homography_matrix", HomographyMatrix,
+            queue_size=3)
 
         tags = {}
         for tag_name in tag_locations:
@@ -129,5 +134,10 @@ def main():
 
 
 if __name__=='__main__':
+    config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
+    config = os.path.join(config_path, "tag_locations_default.yaml")
+    config_data = yaml.load(open(config, 'r'), Loader = yaml.Loader)
+
+    rospy.set_param("tag_locations", config_data['tag_locations'])
     main()
 
