@@ -48,5 +48,5 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE
                   source devel/setup.bash
-                  python3 -m pytest src | tee pytest-coverage.txt
+                  pytest src
  
