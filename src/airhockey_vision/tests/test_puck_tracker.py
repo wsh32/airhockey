@@ -74,7 +74,6 @@ class TestPuckTracker(TestCase):
 
         assert x == pytest.approx(1088, 10)
         assert y == pytest.approx(613, 10)
-        assert False
 
 
 if __name__ == '__main__':
