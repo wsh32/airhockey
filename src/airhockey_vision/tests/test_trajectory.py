@@ -2,11 +2,11 @@ import unittest
 from unittest import TestCase
 import pytest
 import numpy as np
-from airhockey_vision.puck_trajectory import TrajectoryCalculator
+from airhockey_vision.trajectory import TrajectoryCalculator
 
 class TestTrajectory(TestCase):
     def assert_close(self, arr1, arr2, dist=0.1):
-        assert np.linalg.norm(arr1 - arr2) < dist
+        assert np.linalg.norm(np.array(arr1) - np.array(arr2)) < dist
 
     def test_first_run(self):
         t = TrajectoryCalculator()
@@ -85,6 +85,65 @@ class TestTrajectory(TestCase):
         final_state = np.dot(transform_matrix, init_state)
 
         self.assert_close(final_state, final_state_expected)
+
+    def test_table_reflection_none(self):
+        t = TrajectoryCalculator(table_dimensions=(50, 50))
+
+        point = (10, 10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+    def test_table_reflection_single(self):
+        t = TrajectoryCalculator(table_dimensions=(50, 50))
+
+        point = (90, 10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (10, 90)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (90, 90)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (-10, 10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (10, -10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (-10, -10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+    def test_table_reflection_double(self):
+        t = TrajectoryCalculator(table_dimensions=(50, 50))
+
+        point = (110, 10)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (10, 110)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
+
+        point = (110, 110)
+        expected_point = (10, 10)
+        point_output = t.compute_table_reflection(*point)
+        self.assert_close(expected_point, point_output)
 
 
 if __name__ == '__main__':
