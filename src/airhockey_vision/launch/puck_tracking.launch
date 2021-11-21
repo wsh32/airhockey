@@ -1,5 +1,5 @@
 <launch>
-    <arg name="puck_tracker_config" default="$(find airhockey_vision)/config/detect_green.yaml" />
+    <arg name="puck_tracker_config" default="$(find airhockey_vision)/config/detect_blue.yaml" />
     <rosparam file="$(arg puck_tracker_config)" command="load" />
 
     <node pkg="airhockey_vision" type="puck_tracking_node" name="puck_tracking">
