@@ -135,7 +135,7 @@ def main():
 
 if __name__=='__main__':
     config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
-    config = os.path.join(config_path, "tag_locations_default.yaml")
+    config = os.path.join(config_path, "default_table.yaml")
     config_data = yaml.load(open(config, 'r'), Loader = yaml.Loader)
 
     rospy.set_param("tag_locations", config_data['tag_locations'])

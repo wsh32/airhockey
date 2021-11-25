@@ -9,7 +9,10 @@ from airhockey_vision.msg import PuckState
 
 
 class TrajectoryCalculator:
-    def __init__(self, buffer_len=5, prediction_matrix_generator=None):
+    def __init__(self, table_dimensions=(40, 80), buffer_len=5,
+                 prediction_matrix_generator=None):
+        self.table_x, self.table_y = table_dimensions
+
         self.buffer = deque(maxlen=buffer_len)  # [x, y, x_vel, y_vel]
         self.first_run = True
         self.prev_time = None
@@ -47,6 +50,31 @@ class TrajectoryCalculator:
     def predict_state_time_from_now(self, time_from_now):
         transform_matrix = self.prediction_matrix_generator(time_from_now)
         return np.dot(transform_matrix, self.buffer[-1])
+
+    def compute_table_reflection(self, puck_x, puck_y):
+        if 0 < puck_x < self.table_x and 0 < puck_y < self.table_y:
+            return puck_x, puck_y
+        else:
+            # Do reflections
+            puck_x_reflected = puck_x
+            puck_y_reflected = puck_y
+
+            if puck_x < 0:
+                puck_x_reflected *= -1
+            if puck_x > self.table_x:
+                # reflect across self.table_x
+                puck_x_reflected = -1 * (puck_x_reflected - self.table_x) \
+                        + self.table_x
+
+            if puck_y < 0:
+                puck_y_reflected *= -1
+            if puck_y > self.table_y:
+                # reflect across self.table_y
+                puck_y_reflected = -1 * (puck_y_reflected - self.table_y) \
+                        + self.table_y
+
+            return self.compute_table_reflection(puck_x_reflected,
+                                                 puck_y_reflected)
 
 
 class TrajectoryNode:
