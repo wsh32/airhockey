@@ -10,22 +10,22 @@ import numpy as np
 
 config_path = os.path.join(os.path.dirname(__file__), "..", "config")
 default_tag_location_config = os.path.join(config_path,
-                                           "tag_locations_default.yaml")
+                                           "default_table.yaml")
 default_config_data = yaml.load(open(default_tag_location_config, 'r'),
                                 Loader=yaml.Loader)
 
 all_tag_location_config = os.path.join(config_path,
-                                       "tag_locations_all.yaml")
+                                       "table_setup_all_tags.yaml")
 all_config_data = yaml.load(open(all_tag_location_config, 'r'),
                             Loader=yaml.Loader)
 
 black_tag_location_config = os.path.join(config_path,
-                                         "tag_locations_black.yaml")
+                                         "table_setup_black_tags.yaml")
 black_config_data = yaml.load(open(black_tag_location_config, 'r'),
                               Loader=yaml.Loader)
 
 white_tag_location_config = os.path.join(config_path,
-                                         "tag_locations_white.yaml")
+                                         "table_setup_white_tags.yaml")
 white_config_data = yaml.load(open(white_tag_location_config, 'r'),
                               Loader=yaml.Loader)
 
