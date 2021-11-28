@@ -21,8 +21,7 @@ ros::Subscriber<std_msgs::Int16> striker_position_subscriber(
     "/arduino/command/striker_fb", &striker_position_callback);
 
 void position_command_callback(const std_msgs::Int16& position_cmd) {
-    delta_pos = position_cmd.data - striker_pos;
-    striker_pos = position_cmd.data;
+    delta_pos = position_cmd.data - x_stepper.getCurrentPositionInMillimeters();
     x_stepper.moveToPositionInMillimeters(delta_pos);
 }
 
@@ -44,7 +43,7 @@ void setup() {
 }
 
 void loop() {
-  position_feedback_msg.data = striker_pos;
+  position_feedback_msg.data = x_stepper.getCurrentPositionInMillimeters();
   position_feedback_publisher.publish(&position_feedback_msg);
   nh.spinOnce();
   delay(100);
