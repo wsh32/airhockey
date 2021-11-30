@@ -8,8 +8,14 @@ from std_msgs.msg import Header
 from airhockey_vision.msg import PuckState
 
 
+X_POS = 0
+Y_POS = 1
+X_VEL = 2
+Y_VEL = 3
+
+
 class TrajectoryCalculator:
-    def __init__(self, table_dimensions=(40, 80), buffer_len=5,
+    def __init__(self, table_dimensions=(36, 78), buffer_len=5,
                  prediction_matrix_generator=None):
         self.table_x, self.table_y = table_dimensions
 
