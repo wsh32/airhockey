@@ -44,8 +44,8 @@ class Planner:
         # speed of contact_speed.
         striker_vel = contact_speed * (relative_target_position /
                                        np.linalg.norm(relative_target_position))
-        relative_puck_x_vel = puck_state[trajectory.X_VEL] + striker_vel[0]
-        relative_puck_y_vel = puck_state[trajectory.Y_VEL] + striker_vel[1]
+        relative_puck_x_vel = puck_state[trajectory.X_VEL] - striker_vel[0]
+        relative_puck_y_vel = puck_state[trajectory.Y_VEL] - striker_vel[1]
 
         # Calculate angles (rads) clockwise is positive, vertical is zero
         angle_incoming = np.arctan2(-relative_puck_x_vel, -relative_puck_y_vel)
