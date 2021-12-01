@@ -84,13 +84,14 @@ class TrajectoryCalculator:
 
 
 class TrajectoryNode:
-    def __init__(self):
+    def __init__(self, table_dimensions):
         self.position_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
             "/trajectory/puck_state", PuckState, queue_size=3)
 
-        self.trajectory_calculator = TrajectoryCalculator()
+        self.trajectory_calculator = TrajectoryCalculator(
+            table_dimensions=table_dimensions)
 
         rospy.spin()
 
@@ -107,9 +108,18 @@ class TrajectoryNode:
 
 def main():
     rospy.init_node('trajectory_node', anonymous=True)
-    TrajectoryNode()
+
+    table_x = rospy.get_param("table/width")
+    table_y = rospy.get_param("table/length")
+    TrajectoryNode((table_x, table_y))
 
 
 if __name__=='__main__':
+    config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
+    config = os.path.join(config_path, "default_table.yaml")
+    config_data = yaml.load(open(config, 'r'), Loader = yaml.Loader)
+
+    rospy.set_param("table", config_data['table'])
+
     main()
 
