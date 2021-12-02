@@ -39,6 +39,7 @@
 #define SPARE_FW_BB 37
 #define SPARE_BW_BB 35
 
-#define POWER_ON 11
+#define POWER_CTRL 11
+#define POWER_SW 10
 
 #define LED_PIN 13

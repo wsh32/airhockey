@@ -56,6 +56,7 @@ void setup() {
     nh.initNode();
     nh.advertise(position_feedback_publisher);
     nh.subscribe(position_command_subscriber);
+    pinMode(POWER_SW, INPUT);
     
     // Breakbeam sensors
     attachInterrupt(digitalPinToInterrupt(X_FW_BB), x_fw_bb, RISING);
@@ -70,15 +71,18 @@ void setup() {
 
 
 void loop() {
+  unsigned long elapsed = millis() - last_msg_time;
   nh.spinOnce();
   switch(mode){
     case 0: // stop
       stop_mode();
+        if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
+          mode = 2;
+        }
       delay(1000);
       break;
     case 1: // run
       run_mode();
-      unsigned long elapsed = millis() - last_msg_time;
       if (elapsed > 60000) {
         mode = 0; // over a minute elapses since last message
       }
@@ -89,24 +93,23 @@ void loop() {
       break;
     case 2: // homing
       x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB);
-      mode = 1;
+      mode = 1; // add move to center and jitter
       break;
   }
-    
 }
 
 void stop_mode() {
   digitalWrite(X_EN, HIGH); // need to think about where to put these calls
   digitalWrite(Y1_EN, HIGH);
   digitalWrite(Y2_EN, HIGH);
-  digitalWrite(POWER_ON, LOW); // TODO: figure out if power supply is active high or low and control here
+  digitalWrite(POWER_CTRL, LOW); // TODO: figure out if power supply is active high or low and control here
 }
 
 void run_mode() {
   digitalWrite(X_EN, LOW);
   digitalWrite(Y1_EN, LOW);
   digitalWrite(Y2_EN, LOW);
-  digitalWrite(POWER_ON, HIGH);
+  digitalWrite(POWER_CTRL, HIGH);
 }
 
 void x_fw_bb() {
