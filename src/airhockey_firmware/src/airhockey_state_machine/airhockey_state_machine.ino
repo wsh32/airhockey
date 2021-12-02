@@ -72,7 +72,6 @@ void setup() {
 
 void loop() {
   unsigned long elapsed = millis() - last_msg_time;
-  nh.spinOnce();
   switch(mode){
     case 0: // stop
       stop_mode();
@@ -87,8 +86,7 @@ void loop() {
         mode = 0; // over a minute elapses since last message
       }
       x_stepper.moveToPositionInMillimeters(pos);
-      position_feedback_msg.data = x_stepper.getCurrentPositionInMillimeters();
-      position_feedback_publisher.publish(&position_feedback_msg);
+
       delay(100);
       break;
     case 2: // homing
@@ -96,6 +94,11 @@ void loop() {
       mode = 1; // add move to center and jitter
       break;
   }
+      position_feedback_msg.data = x_stepper.getCurrentPositionInMillimeters();
+      position_feedback_publisher.publish(&position_feedback_msg);
+
+      nh.spinOnce();
+
 }
 
 void stop_mode() {
