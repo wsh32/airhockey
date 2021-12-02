@@ -11,7 +11,6 @@ FlexyStepper y2_stepper;
 
 ros::NodeHandle nh;
 
-
 // configure the pins connected
 int16_t pos; // change in position, brought in over ROS
 int mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
@@ -26,14 +25,13 @@ int16_t MAX_Y2 = 860;
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
-ros::Subscriber<std_msgs::Int16> position_command_subscriber(
+                                           
+ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
-ros::Subscriber<std_msgs::Int16> striker_position_subscriber(
-    "/arduino/command/striker_fb", &striker_position_callback);
 
-void position_command_callback(const std_msgs::Int16& position_cmd) {
+void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
-    pos = position_cmd.data;
+    pos = position_cmd.point.x;
 }
 
 void setup() {
@@ -79,6 +77,7 @@ void loop() {
       delay(1000);
       break;
     case 1: // run
+      run_mode();
       unsigned long elapsed = millis() - last_msg_time;
       if (elapsed > 60000) {
         mode = 0; // over a minute elapses since last message
@@ -89,7 +88,8 @@ void loop() {
       delay(100);
       break;
     case 2: // homing
-      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB); // TODO: measure x of table!!
+      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB);
+      mode = 1;
       break;
   }
     
@@ -99,14 +99,14 @@ void stop_mode() {
   digitalWrite(X_EN, HIGH); // need to think about where to put these calls
   digitalWrite(Y1_EN, HIGH);
   digitalWrite(Y2_EN, HIGH);
-//  digitalWrite(POWER_ON, ) // TODO: figure out if power supply is active high or low and control here
+  digitalWrite(POWER_ON, LOW); // TODO: figure out if power supply is active high or low and control here
 }
 
 void run_mode() {
-  mode = 1;
   digitalWrite(X_EN, LOW);
   digitalWrite(Y1_EN, LOW);
   digitalWrite(Y2_EN, LOW);
+  digitalWrite(POWER_ON, HIGH);
 }
 
 void x_fw_bb() {

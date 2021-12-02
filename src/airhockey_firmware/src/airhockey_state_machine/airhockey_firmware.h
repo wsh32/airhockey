@@ -3,12 +3,11 @@
 
 #include <Arduino.h>
 #include <std_msgs/Int16.h>
+#include <geometry_msgs/PointStamped.h>
 
-std_msgs::Int16 position_command_msg;
+geometry_msgs::PointStamped position_command_msg;
 std_msgs::Int16 position_feedback_msg;
-std_msgs::Int16 striker_feedback_msg;
 
-void position_command_callback(const std_msgs::Int16& position_cmd);
-void striker_position_callback(const std_msgs::Int16& striker_cmd);
+void position_command_callback(const geometry_msgs::PointStamped& position_cmd);
 
 #endif
