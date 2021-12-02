@@ -6,8 +6,8 @@
 #define X_MS3 20
 #define X_EN 30
 // breakbeam switches
-#define X_FRONT_BB 25
-#define X_BACK_BB 23
+#define X_FW_BB 25
+#define X_BW_BB 23
 
 // use motor 1 as Y1
 #define Y1_STEP_PIN 36
@@ -16,8 +16,8 @@
 #define Y1_MS2 40
 #define Y1_MS3 38
 #define Y1_EN 44
-#define Y1_FRONT_BB 29
-#define Y1_BACK_BB 27
+#define Y1_FW_BB 29
+#define Y1_BW_BB 27
 
 // use motor 2 as Y2
 #define Y2_STEP_PIN 2
@@ -26,8 +26,8 @@
 #define Y2_MS2 15
 #define Y2_MS3 14
 #define Y2_EN 17
-#define Y2_FRONT_BB 33
-#define Y2_BACK_BB 31
+#define Y2_FW_BB 33
+#define Y2_BW_BB 31
 
 // use motor 3 as spare motor pins, for reference
 #define SPARE_STEP_PIN 8
@@ -36,8 +36,9 @@
 #define SPARE_MS2 6
 #define SPARE_MS3 7
 #define SPARE_EN 4
-#define SPARE_FRONT_BB 37
-#define SPARE_BACK_BB 35
+#define SPARE_FW_BB 37
+#define SPARE_BW_BB 35
 
+#define POWER_ON 11
 
 #define LED_PIN 13
