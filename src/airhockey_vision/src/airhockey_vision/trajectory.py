@@ -5,7 +5,7 @@ from collections import deque
 from std_msgs.msg import String
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import Header
-from airhockey_vision.msg import PuckState
+from airhockey_vision.msg import State
 
 
 X_POS = 0
@@ -88,7 +88,7 @@ class TrajectoryNode:
         self.position_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
-            "/trajectory/puck_state", PuckState, queue_size=3)
+            "/trajectory/puck_state", State, queue_size=3)
 
         self.trajectory_calculator = TrajectoryCalculator(
             table_dimensions=table_dimensions)
@@ -101,7 +101,7 @@ class TrajectoryNode:
             puck_pos.point.x, puck_pos.point.y, time)
 
         header = Header(stamp=rospy.Time.now())
-        puck_state = PuckState(
+        puck_state = State(
             header=header, x_pos=x, y_pos=y, x_vel=x_dot, y_vel=y_dot)
         self.trajectory_publisher.publish(puck_state)
 

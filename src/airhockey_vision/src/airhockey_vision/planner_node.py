@@ -5,9 +5,11 @@ import os
 
 import numpy as np
 
-from std_msgs.msg import Header
+from std_msgs.msg import Header, Float64
 from geometry_msgs.msg import Point, PointStamped
 from sensor_msgs.msg import Image
+
+from airhockey_vision.msg import State
 
 import trajectory
 from trajectory import TrajectoryCalculator
@@ -35,7 +37,8 @@ class Planner:
     def compute_optimal_striker_contact_state(self, puck_state, striker_state,
                                               target_pos, contact_y_pos=6,
                                               contact_speed=0):
-        time, puck_x, puck_y = self.compute_optimal_puck_contact_position
+        time, puck_x, puck_y = self.compute_optimal_puck_contact_position(
+            puck_state, striker_state, contact_y_pos=contact_y_pos)
         relative_target_position = (np.array(target_pos)
                                     - np.array([puck_x, puck_y]))
 
@@ -60,13 +63,66 @@ class Planner:
             [-np.sin(contact_normal_angle), -np.cos(contact_normal_angle)])
         striker_position = striker_position_relative + np.array([puck_x, puck_y])
 
-        return (striker_position[0], striker_position[1],
+        return (time, striker_position[0], striker_position[1],
                 striker_vel[0], striker_vel[1])
 
 
 class PlannerNode:
-    def __init__(self):
+    def __init__(self, puck_diameter=3.875, striker_diameter=2.5, table_width=36,
+                 table_length=78, goal_width=12):
+        self.puck_state_subscriber = rospy.Subscriber(
+            "/trajectory/puck_state", State, self.puck_state_callback)
+        self.target_command_subscriber = rospy.Subscriber(
+            "/game/target", Point, self.target_command_callback)
+        self.contact_position_command_subscriber = rospy.Subscriber(
+            "/game/contact_y_pos", Float64, self.contact_position_command_callback)
+        self.contact_speed_command_subscriber = rospy.Subscriber(
+            "/game/contact_speed", Float64, self.contact_speed_command_callback)
+        self.striker_state_command_publisher = rospy.Publisher(
+            "/planner/striker_state", State, queue_size=3)
+
+        self.target = (table_width / 2, table_length)
+        self.planner = Planner(puck_diameter=puck_diameter,
+                               striker_diameter=striker_diameter)
+
+        self.contact_y_pos = default_contact_y_pos
+        self.contact_speed = default_contact_speed
+
+        self.striker_state = np.zeros(4)
+
         rospy.spin()
+
+    def puck_state_callback(self, puck_state_msg):
+        puck_state = np.array([
+            puck_state_msg.x_pos,
+            puck_state_msg.y_pos,
+            puck_state_msg.x_vel,
+            puck_state_msg.y_vel
+        ])
+
+        time, x_pos, y_pos, x_vel, y_vel = \
+            self.planner.compute_optimal_strike_contact_state(
+                puck_state, self.striker_state, self.target,
+                contact_y_pos=self.contact_y_pos,
+                contact_speed=self.contact_speed)
+
+        header = Header(stamp=rospy.get_rostime + rospy.Duration(time))
+        striker_state = State(header=header, x_pos=x_pos, y_pos=y_pos,
+                              x_vel=x_vel, y_vel=y_vel)
+
+        self.striker_state_command_publisher.publish(striker_state)
+
+    def target_command_callback(self, target_msg):
+        self.target = (target_msg.x, target_msg.y)
+
+    def contact_y_pos_callback(self, position_msg):
+        self.contact_y_pos = position_msg.data
+
+    def contact_speed_callback(self, speed_msg):
+        self.contact_speed = speed_msg.data
+
+    def striker_state_callback(self, striker_state_msg):
+        pass
 
 
 def main():
