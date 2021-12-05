@@ -28,8 +28,8 @@
 # F: Approximate location of middle right
 
 table:
-    width: 40
-    length: 80
+    width: 35.875
+    length: 78
     goal_width: 12
 
 tag_locations:

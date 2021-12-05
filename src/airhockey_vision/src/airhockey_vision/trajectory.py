@@ -5,11 +5,17 @@ from collections import deque
 from std_msgs.msg import String
 from geometry_msgs.msg import PointStamped
 from std_msgs.msg import Header
-from airhockey_vision.msg import PuckState
+from airhockey_vision.msg import State
+
+
+X_POS = 0
+Y_POS = 1
+X_VEL = 2
+Y_VEL = 3
 
 
 class TrajectoryCalculator:
-    def __init__(self, table_dimensions=(40, 80), buffer_len=5,
+    def __init__(self, table_dimensions=(36, 78), buffer_len=5,
                  prediction_matrix_generator=None):
         self.table_x, self.table_y = table_dimensions
 
@@ -78,13 +84,14 @@ class TrajectoryCalculator:
 
 
 class TrajectoryNode:
-    def __init__(self):
+    def __init__(self, table_dimensions):
         self.position_subscriber = rospy.Subscriber(
             "/vision/puck/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
-            "/trajectory/puck_state", PuckState, queue_size=3)
+            "/trajectory/puck_state", State, queue_size=3)
 
-        self.trajectory_calculator = TrajectoryCalculator()
+        self.trajectory_calculator = TrajectoryCalculator(
+            table_dimensions=table_dimensions)
 
         rospy.spin()
 
@@ -94,16 +101,25 @@ class TrajectoryNode:
             puck_pos.point.x, puck_pos.point.y, time)
 
         header = Header(stamp=rospy.Time.now())
-        puck_state = PuckState(
+        puck_state = State(
             header=header, x_pos=x, y_pos=y, x_vel=x_dot, y_vel=y_dot)
         self.trajectory_publisher.publish(puck_state)
 
 
 def main():
     rospy.init_node('trajectory_node', anonymous=True)
-    TrajectoryNode()
+
+    table_x = rospy.get_param("table/width")
+    table_y = rospy.get_param("table/length")
+    TrajectoryNode((table_x, table_y))
 
 
 if __name__=='__main__':
+    config_path = os.path.join(os.path.dirname(__file__), "../..", "config")
+    config = os.path.join(config_path, "default_table.yaml")
+    config_data = yaml.load(open(config, 'r'), Loader = yaml.Loader)
+
+    rospy.set_param("table", config_data['table'])
+
     main()
 
