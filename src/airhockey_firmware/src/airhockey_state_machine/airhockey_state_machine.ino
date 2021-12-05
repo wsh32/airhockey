@@ -25,9 +25,12 @@ int16_t STEPS_PER_MM = 400 / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm pe
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
+ros::Publisher striker_state_publisher("/arduino/feedback/striker_state",
+                                          &striker_state_msg);
                                            
 ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
+    
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
@@ -58,6 +61,7 @@ void setup() {
 
     nh.initNode();
     nh.advertise(position_feedback_publisher);
+    nh.advertise(striker_state_publisher);
     nh.subscribe(position_command_subscriber);
     pinMode(POWER_SW, INPUT);
     
@@ -68,6 +72,7 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(Y1_BW_BB), y1_bw_bb, RISING);
     attachInterrupt(digitalPinToInterrupt(Y2_FW_BB), y2_fw_bb, RISING);
     attachInterrupt(digitalPinToInterrupt(Y2_BW_BB), y2_bw_bb, RISING);
+    attachInterrupt(digitalPinToInterrupt(POWER_SW), setStop, RISING);
     // EStop -- TODO: figure out which pin this is
 //    attachInterrupt(digitalPinToInterrupt(), update_mode, RISING);
 }
@@ -79,7 +84,7 @@ void loop() {
     case 0: // stop
       stop_mode();
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
-          mode = 2;
+          setHoming();
         }
       delay(1000);
       break;
@@ -91,20 +96,21 @@ void loop() {
       x_stepper.processMovement();
       y1_stepper.processMovement();
       y2_stepper.processMovement();
-      delay(100);
       break;
     case 2: // homing
       x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB);
-      mode = 1; // add move to center and jitter
+      setRun(); // add move to center and jitter
       break;
   }
-      position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
-      position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
-      position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
-      position_feedback_msg.y_vel = y1_stepper.getCurrentVelocityInMillimetersPerSecond();
-      position_feedback_publisher.publish(&position_feedback_msg);
-
-      nh.spinOnce();
+  position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
+  position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
+  position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
+  position_feedback_msg.y_vel = y1_stepper.getCurrentVelocityInMillimetersPerSecond();
+  striker_state_msg.data = mode;
+  
+  position_feedback_publisher.publish(&position_feedback_msg);
+  striker_state_publisher.publish(&striker_state_msg);
+  nh.spinOnce();
 
 }
 
@@ -150,4 +156,16 @@ void y2_fw_bb() {
 void y2_bw_bb() {
   x_stepper.setCurrentPositionInMillimeters(MAX_Y2);
   pos = MAX_Y2;
+}
+
+void setStop() {
+  mode = 0;
+}
+
+void setRun() {
+  mode = 1;
+}
+
+void setHoming() {
+  mode = 2;
 }
