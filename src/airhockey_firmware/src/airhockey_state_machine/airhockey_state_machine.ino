@@ -72,7 +72,7 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(Y1_BW_BB), y1_bw_bb, RISING);
     attachInterrupt(digitalPinToInterrupt(Y2_FW_BB), y2_fw_bb, RISING);
     attachInterrupt(digitalPinToInterrupt(Y2_BW_BB), y2_bw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(POWER_SW), setStop, RISING);
+    attachInterrupt(digitalPinToInterrupt(POWER_SW), setStop, FALLING);
     // EStop -- TODO: figure out which pin this is
 //    attachInterrupt(digitalPinToInterrupt(), update_mode, RISING);
 }
@@ -110,6 +110,7 @@ void loop() {
   
   position_feedback_publisher.publish(&position_feedback_msg);
   striker_state_publisher.publish(&striker_state_msg);
+  
   nh.spinOnce();
 
 }
