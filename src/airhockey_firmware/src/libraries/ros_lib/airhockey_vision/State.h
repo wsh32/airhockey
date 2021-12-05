@@ -1,5 +1,5 @@
-#ifndef _ROS_airhockey_vision_PuckState_h
-#define _ROS_airhockey_vision_PuckState_h
+#ifndef _ROS_airhockey_vision_State_h
+#define _ROS_airhockey_vision_State_h
 
 #include <stdint.h>
 #include <string.h>
@@ -10,7 +10,7 @@
 namespace airhockey_vision
 {
 
-  class PuckState : public ros::Msg
+  class State : public ros::Msg
   {
     public:
       typedef std_msgs::Header _header_type;
@@ -24,7 +24,7 @@ namespace airhockey_vision
       typedef float _y_vel_type;
       _y_vel_type y_vel;
 
-    PuckState():
+    State():
       header(),
       x_pos(0),
       y_pos(0),
@@ -55,7 +55,7 @@ namespace airhockey_vision
      return offset;
     }
 
-    virtual const char * getType() override { return "airhockey_vision/PuckState"; };
+    virtual const char * getType() override { return "airhockey_vision/State"; };
     virtual const char * getMD5() override { return "a6feb44357e1187284915a8dda3f9271"; };
 
   };

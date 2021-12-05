@@ -31,7 +31,10 @@ ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
-    pos = position_cmd.point.x;
+    x_stepper.setTargetPositionInMillimeters(position_cmd.point.x);
+    y1_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
+    y2_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
+
 }
 
 void setup() {
@@ -85,8 +88,9 @@ void loop() {
       if (elapsed > 60000) {
         mode = 0; // over a minute elapses since last message
       }
-      x_stepper.moveToPositionInMillimeters(pos);
-
+      x_stepper.processMovement();
+      y1_stepper.processMovement();
+      y2_stepper.processMovement();
       delay(100);
       break;
     case 2: // homing
@@ -94,7 +98,10 @@ void loop() {
       mode = 1; // add move to center and jitter
       break;
   }
-      position_feedback_msg.data = x_stepper.getCurrentPositionInMillimeters();
+      position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
+      position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
+      position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
+      position_feedback_msg.y_vel = y1_stepper.getCurrentVelocityInMillimetersPerSecond();
       position_feedback_publisher.publish(&position_feedback_msg);
 
       nh.spinOnce();
@@ -116,11 +123,11 @@ void run_mode() {
 }
 
 void x_fw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MIN_X);
+  MIN_X = x_stepper.getCurrentPositionInMillimeters();
   pos = MIN_X;
 }
 void x_bw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MAX_X);
+  MAX_X = x_stepper.getCurrentPositionInMillimeters();
   pos = MAX_X;
 }
 
@@ -129,6 +136,7 @@ void y1_fw_bb() {
   pos = MIN_Y1;
 }
 
+// TODO: Update these functions
 void y1_bw_bb() {
   x_stepper.setCurrentPositionInMillimeters(MAX_Y1);
   pos = MAX_Y1;
