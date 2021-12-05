@@ -21,7 +21,7 @@ int16_t MIN_Y1 = 0;
 int16_t MAX_Y1 = 860;
 int16_t MIN_Y2 = 0;
 int16_t MAX_Y2 = 860;
-int16_t STEPS_PER_MM = 400 / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
+
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
@@ -36,19 +36,19 @@ void position_command_callback(const geometry_msgs::PointStamped& position_cmd) 
 
 void setup() {
     x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
-    x_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
+    x_stepper.setStepsPerMillimeter(400 / (60 * 2)); // 400 steps per rev, 120 mm per rev
     x_stepper.setSpeedInMillimetersPerSecond(10.0);
     x_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
     x_stepper.setCurrentPositionInMillimeters(0);
 
     y1_stepper.connectToPins(Y1_STEP_PIN, Y1_DIR_PIN);
-    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM);
+    y1_stepper.setStepsPerMillimeter(400 / (60 * 2)); // 400 steps per rev, 120 mm per rev
     y1_stepper.setSpeedInMillimetersPerSecond(10.0);
     y1_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
     y1_stepper.setCurrentPositionInMillimeters(0);
 
     y2_stepper.connectToPins(Y2_STEP_PIN, Y2_DIR_PIN);
-    y2_stepper.setStepsPerMillimeter(STEPS_PER_MM);
+    y2_stepper.setStepsPerMillimeter(400 / (60 * 2)); // 400 steps per rev, 120 mm per rev
     y2_stepper.setSpeedInMillimetersPerSecond(10.0);
     y2_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
     y2_stepper.setCurrentPositionInMillimeters(0);
