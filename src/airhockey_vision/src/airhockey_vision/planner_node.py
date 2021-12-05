@@ -11,8 +11,8 @@ from sensor_msgs.msg import Image
 
 from airhockey_vision.msg import State
 
-import trajectory
-from trajectory import TrajectoryCalculator
+from airhockey_vision import trajectory
+from airhockey_vision.trajectory import TrajectoryCalculator
 
 
 class Planner:
@@ -68,8 +68,9 @@ class Planner:
 
 
 class PlannerNode:
-    def __init__(self, puck_diameter=3.875, striker_diameter=2.5, table_width=36,
-                 table_length=78, goal_width=12):
+    def __init__(self, puck_diameter=2.5, striker_diameter=3.875, table_width=36,
+                 table_length=78, goal_width=12, default_contact_y_pos=6,
+                 default_contact_speed=0):
         self.puck_state_subscriber = rospy.Subscriber(
             "/trajectory/puck_state", State, self.puck_state_callback)
         self.target_command_subscriber = rospy.Subscriber(
@@ -115,10 +116,10 @@ class PlannerNode:
     def target_command_callback(self, target_msg):
         self.target = (target_msg.x, target_msg.y)
 
-    def contact_y_pos_callback(self, position_msg):
+    def contact_position_command_callback(self, position_msg):
         self.contact_y_pos = position_msg.data
 
-    def contact_speed_callback(self, speed_msg):
+    def contact_speed_command_callback(self, speed_msg):
         self.contact_speed = speed_msg.data
 
     def striker_state_callback(self, striker_state_msg):
@@ -128,7 +129,17 @@ class PlannerNode:
 def main():
     rospy.init_node('planner_node', anonymous=True)
 
-    PuckTrackingNode()
+    table_width = rospy.get_param("table/width")
+    table_length = rospy.get_param("table/length")
+    goal_width = rospy.get_param("table/goal_width")
+    puck_diameter = rospy.get_param("table/puck_diameter")
+    striker_diameter = rospy.get_param("robot/striker_diameter")
+    robot_min_y = rospy.get_param("robot/y_min")
+    default_contact_speed = rospy.get_param("robot/default_contact_speed")
+    PlannerNode(puck_diameter=puck_diameter, striker_diameter=striker_diameter,
+                table_width=table_width, table_length=table_length,
+                goal_width=goal_width, default_contact_y_pos=robot_min_y,
+                default_contact_speed=default_contact_speed)
 
 
 if __name__=='__main__':

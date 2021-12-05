@@ -31,6 +31,7 @@ table:
     width: 35.875
     length: 78
     goal_width: 12
+    puck_diameter: 2.5
 
 tag_locations:
     tag_black_front_left:

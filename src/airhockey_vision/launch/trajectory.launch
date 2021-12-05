@@ -1,0 +1,8 @@
+<launch>
+    <arg name="table_config" default="$(find airhockey_vision)/config/default_table.yaml" />
+    <rosparam file="$(arg table_config)" command="load" />
+
+    <node pkg="airhockey_vision" type="trajectory_node" name="trajectory">
+    </node>
+
+</launch>
