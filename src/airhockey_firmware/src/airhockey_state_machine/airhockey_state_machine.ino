@@ -37,7 +37,6 @@ void position_command_callback(const geometry_msgs::PointStamped& position_cmd) 
     x_stepper.setTargetPositionInMillimeters(position_cmd.point.x);
     y1_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
     y2_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
-
 }
 
 void setup() {
@@ -64,6 +63,11 @@ void setup() {
     nh.advertise(striker_state_publisher);
     nh.subscribe(position_command_subscriber);
     pinMode(POWER_SW, INPUT);
+
+    digitalWrite(X_EN, LOW);
+    digitalWrite(Y1_EN, LOW);
+    digitalWrite(Y2_EN, LOW);
+    digitalWrite(POWER_CTRL, HIGH);
     
     // Breakbeam sensors
     attachInterrupt(digitalPinToInterrupt(X_FW_BB), x_fw_bb, RISING);
@@ -82,26 +86,32 @@ void loop() {
   unsigned long elapsed = millis() - last_msg_time;
   switch(mode){
     case 0: // stop
-      stop_mode();
+//      stop_mode();
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
           setHoming();
         }
       delay(1000);
       break;
     case 1: // run
-      run_mode();
+//      run_mode();
       if (elapsed > 60000) {
-        mode = 0; // over a minute elapses since last message
+        setStop(); // over a minute elapses since last message
+      }
+      if (newPos == TRUE) {
+        x_stepper.setTargetPositionInMillimeters(x_pos);
+        y1_stepper.setTargetPositionInMillimeters(y_pos);
+        y2_stepper.setTargetPositionInMillimeters(y_pos);
       }
       x_stepper.processMovement();
       y1_stepper.processMovement();
       y2_stepper.processMovement();
       break;
     case 2: // homing
-      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB);
+      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
       setRun(); // add move to center and jitter
       break;
   }
+  // change so this happens once a second (20x a sec max)
   position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
   position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
   position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
@@ -115,19 +125,16 @@ void loop() {
 
 }
 
-void stop_mode() {
-  digitalWrite(X_EN, HIGH); // need to think about where to put these calls
-  digitalWrite(Y1_EN, HIGH);
-  digitalWrite(Y2_EN, HIGH);
-  digitalWrite(POWER_CTRL, LOW); // TODO: figure out if power supply is active high or low and control here
-}
+//void stop_mode() {
+//  digitalWrite(X_EN, HIGH); // need to think about where to put these calls
+//  digitalWrite(Y1_EN, HIGH);
+//  digitalWrite(Y2_EN, HIGH);
+//  digitalWrite(POWER_CTRL, LOW); // TODO: figure out if power supply is active high or low and control here
+//}
 
-void run_mode() {
-  digitalWrite(X_EN, LOW);
-  digitalWrite(Y1_EN, LOW);
-  digitalWrite(Y2_EN, LOW);
-  digitalWrite(POWER_CTRL, HIGH);
-}
+//void run_mode() {
+//
+//}
 
 void x_fw_bb() {
   MIN_X = x_stepper.getCurrentPositionInMillimeters();
