@@ -18,11 +18,11 @@ int mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
 unsigned long last_msg_time = millis() - 70000;
 unsigned long last_loop = millis();
 int16_t MIN_X = 0;
-int16_t MAX_X = 872;
+int16_t MAX_X = 872 / 2;
 int16_t MIN_Y1 = 0;
-int16_t MAX_Y1 = 860;
+int16_t MAX_Y1 = 860 / 2;
 int16_t MIN_Y2 = 0;
-int16_t MAX_Y2 = 860;
+int16_t MAX_Y2 = 860 / 2;
 int16_t STEPS_PER_MM = 400 / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
 bool newPos = false;
 
@@ -140,7 +140,7 @@ void loop() {
     case 2: // homing
       Serial.println("homing");
       Serial.println(digitalRead(X_BW_BB));
-      x_stepper.moveToHomeInMillimeters(1, 20.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      x_stepper.moveToHomeInMillimeters(-1, 50.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
       Serial.println(digitalRead(X_BW_BB));
 
       Serial.println("Homing Complete");

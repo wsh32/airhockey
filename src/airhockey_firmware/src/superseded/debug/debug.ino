@@ -14,14 +14,16 @@ void setup() {
     x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
     x_stepper.setSpeedInStepsPerSecond(2500);
     x_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
-
+    Serial.begin(115200);
     pinMode(X_EN, OUTPUT);
-
+    pinMode(X_BW_BB, INPUT);
 }
 
 void loop() {
     digitalWrite(X_EN, LOW);
-    x_stepper.moveRelativeInSteps(-100000);
+//    x_stepper.moveRelativeInSteps(-100000);
+    Serial.println(digitalRead(X_BW_BB));
+    delay(700);
     
 //    if (digitalRead(POWER_SW) == LOW) {
 //  x_stepper.setTargetPositionRelativeInSteps(0);
