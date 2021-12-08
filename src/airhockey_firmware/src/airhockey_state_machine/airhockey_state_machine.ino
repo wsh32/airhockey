@@ -3,8 +3,8 @@
 
 #include "pinout.h"
 #include "airhockey_firmware.h"
+#define STEPS_PER_REV 400
 
-#define MOTOR_STEPS 200
 FlexyStepper x_stepper;
 FlexyStepper y1_stepper;
 FlexyStepper y2_stepper;
@@ -12,16 +12,21 @@ FlexyStepper y2_stepper;
 ros::NodeHandle nh;
 
 // configure the pins connected
-int16_t pos; // change in position, brought in over ROS
+int16_t x_pos; // change in position, brought in over ROS
+int16_t y_pos; 
 int mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
 unsigned long last_msg_time = millis();
+unsigned long last_send = millis();
 int16_t MIN_X = 0;
 int16_t MAX_X = 872;
 int16_t MIN_Y1 = 0;
 int16_t MAX_Y1 = 860;
 int16_t MIN_Y2 = 0;
 int16_t MAX_Y2 = 860;
-int16_t STEPS_PER_MM = 400 / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
+int16_t STEPS_PER_MM = STEPS_PER_REV / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
+int16_t SPEED_IN_STEPS = 4000;
+int16_t ACCEL_IN_STEPS = 5000;
+bool newPos = false;
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
@@ -34,51 +39,39 @@ ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
-    x_stepper.setTargetPositionInMillimeters(position_cmd.point.x);
-    y1_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
-    y2_stepper.setTargetPositionInMillimeters(position_cmd.point.y);
+    x_pos = position_cmd.point.x;
+    y_pos = position_cmd.point.y;
 }
 
 void setup() {
     x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
+    x_stepper.setStepsPerRevolution(STEPS_PER_REV);
     x_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
-    x_stepper.setSpeedInMillimetersPerSecond(10.0);
-    x_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
-    x_stepper.setCurrentPositionInMillimeters(0);
+    x_stepper.setSpeedInStepsPerSecond(SPEED_IN_STEPS);
+    x_stepper.setAccelerationInStepsPerSecondPerSecond(ACCEL_IN_STEPS);
 
-    y1_stepper.connectToPins(Y1_STEP_PIN, Y1_DIR_PIN);
-    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM);
-    y1_stepper.setSpeedInMillimetersPerSecond(10.0);
-    y1_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
-    y1_stepper.setCurrentPositionInMillimeters(0);
-
-    y2_stepper.connectToPins(Y2_STEP_PIN, Y2_DIR_PIN);
-    y2_stepper.setStepsPerMillimeter(STEPS_PER_MM);
-    y2_stepper.setSpeedInMillimetersPerSecond(10.0);
-    y2_stepper.setAccelerationInMillimetersPerSecondPerSecond(10.0);
-    y2_stepper.setCurrentPositionInMillimeters(0);
+//    y1_stepper.connectToPins(Y1_STEP_PIN, Y1_DIR_PIN);
+//    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM);
+//    y1_stepper.setSpeedInStepsPerSecond(SPEED_IN_STEPS);
+//    y1_stepper.setAccelerationInStepsPerSecondPerSecond(ACCEL_IN_STEPS);
+//
+//    y2_stepper.connectToPins(Y2_STEP_PIN, Y2_DIR_PIN);
+//    y2_stepper.setStepsPerMillimeter(STEPS_PER_MM);
+//    y2_stepper.setSpeedInStepsPerSecond(SPEED_IN_STEPS);
+//    y2_stepper.setAccelerationInStepsPerSecondPerSecond(ACCEL_IN_STEPS);
 
     nh.initNode();
     nh.advertise(position_feedback_publisher);
     nh.advertise(striker_state_publisher);
     nh.subscribe(position_command_subscriber);
+    
     pinMode(POWER_SW, INPUT);
-
+    pinMode(X_EN, OUTPUT);
     digitalWrite(X_EN, LOW);
-    digitalWrite(Y1_EN, LOW);
-    digitalWrite(Y2_EN, LOW);
     digitalWrite(POWER_CTRL, HIGH);
     
-    // Breakbeam sensors
-    attachInterrupt(digitalPinToInterrupt(X_FW_BB), x_fw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(X_BW_BB), x_bw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(Y1_FW_BB), y1_fw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(Y1_BW_BB), y1_bw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(Y2_FW_BB), y2_fw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(Y2_BW_BB), y2_bw_bb, RISING);
-    attachInterrupt(digitalPinToInterrupt(POWER_SW), setStop, FALLING);
-    // EStop -- TODO: figure out which pin this is
-//    attachInterrupt(digitalPinToInterrupt(), update_mode, RISING);
+//    digitalWrite(Y1_EN, LOW);
+//    digitalWrite(Y2_EN, LOW);
 }
 
 
@@ -86,84 +79,49 @@ void loop() {
   unsigned long elapsed = millis() - last_msg_time;
   switch(mode){
     case 0: // stop
-//      stop_mode();
+        x_stepper.moveRelativeInSteps(-80); // bounce back and forth to indicate stop mode
+        x_stepper.moveRelativeInSteps(80);
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
           setHoming();
         }
       delay(1000);
       break;
     case 1: // run
-//      run_mode();
-      if (elapsed > 60000) {
-        setStop(); // over a minute elapses since last message
+      if (elapsed > 120000) {
+        setStop(); // over two minute elapses since last message
+        x_stepper.moveToPositionInMillimeters(100); // signal that we're in stop mode
       }
-      if (newPos == TRUE) {
+      if (newPos == true) {
         x_stepper.setTargetPositionInMillimeters(x_pos);
-        y1_stepper.setTargetPositionInMillimeters(y_pos);
-        y2_stepper.setTargetPositionInMillimeters(y_pos);
+//        y1_stepper.setTargetPositionInMillimeters(y_pos);
+//        y2_stepper.setTargetPositionInMillimeters(y_pos);
       }
       x_stepper.processMovement();
-      y1_stepper.processMovement();
-      y2_stepper.processMovement();
+//      y1_stepper.processMovement();
+//      y2_stepper.processMovement();
       break;
     case 2: // homing
       x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
-      setRun(); // add move to center and jitter
+      x_stepper.moveToPositionInMillimeters(MAX_X / 2);
+      x_stepper.moveRelativeInMillimeters(-10.0);
+      x_stepper.moveRelativeInMillimeters(10.0);
+      setRun();
       break;
   }
   // change so this happens once a second (20x a sec max)
-  position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
-  position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
-  position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
-  position_feedback_msg.y_vel = y1_stepper.getCurrentVelocityInMillimetersPerSecond();
-  striker_state_msg.data = mode;
-  
-  position_feedback_publisher.publish(&position_feedback_msg);
-  striker_state_publisher.publish(&striker_state_msg);
-  
+  if (last_send - millis() > 600) {
+    position_feedback_msg.x_pos = x_stepper.getCurrentPositionInMillimeters();
+//    position_feedback_msg.y_pos = y1_stepper.getCurrentPositionInMillimeters();
+    position_feedback_msg.x_vel = x_stepper.getCurrentVelocityInMillimetersPerSecond();
+//    position_feedback_msg.y_vel = y1_stepper.getCurrentVelocityInMillimetersPerSecond();
+    striker_state_msg.data = mode;
+    
+    position_feedback_publisher.publish(&position_feedback_msg);
+    striker_state_publisher.publish(&striker_state_msg);
+    last_send = millis();
+  }
   nh.spinOnce();
 
-}
-
-//void stop_mode() {
-//  digitalWrite(X_EN, HIGH); // need to think about where to put these calls
-//  digitalWrite(Y1_EN, HIGH);
-//  digitalWrite(Y2_EN, HIGH);
-//  digitalWrite(POWER_CTRL, LOW); // TODO: figure out if power supply is active high or low and control here
-//}
-
-//void run_mode() {
-//
-//}
-
-void x_fw_bb() {
-  MIN_X = x_stepper.getCurrentPositionInMillimeters();
-  pos = MIN_X;
-}
-void x_bw_bb() {
-  MAX_X = x_stepper.getCurrentPositionInMillimeters();
-  pos = MAX_X;
-}
-
-void y1_fw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MIN_Y1);
-  pos = MIN_Y1;
-}
-
-// TODO: Update these functions
-void y1_bw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MAX_Y1);
-  pos = MAX_Y1;
-}
-
-void y2_fw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MIN_Y2);
-  pos = MIN_Y2;
-}
-
-void y2_bw_bb() {
-  x_stepper.setCurrentPositionInMillimeters(MAX_Y2);
-  pos = MAX_Y2;
 }
 
 void setStop() {

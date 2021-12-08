@@ -12,7 +12,8 @@ FlexyStepper x_stepper;
 void setup() {
     // Set target motor RPM to 1RPM and microstepping to 1 (full step mode)
     x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
-    x_stepper.setSpeedInStepsPerSecond(2500);
+    x_stepper.setStepsPerRevolution(400);
+    x_stepper.setSpeedInStepsPerSecond(4000);
     x_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
     Serial.begin(115200);
     pinMode(X_EN, OUTPUT);
@@ -21,9 +22,9 @@ void setup() {
 
 void loop() {
     digitalWrite(X_EN, LOW);
-//    x_stepper.moveRelativeInSteps(-100000);
-    Serial.println(digitalRead(X_BW_BB));
-    delay(700);
+    x_stepper.moveRelativeInSteps(-1000000);
+//    Serial.println(digitalRead(X_BW_BB));
+    delay(1000);
     
 //    if (digitalRead(POWER_SW) == LOW) {
 //  x_stepper.setTargetPositionRelativeInSteps(0);

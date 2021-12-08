@@ -12,14 +12,6 @@ std_msgs::Int16 striker_state_msg;
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd);
 
-void stop_mode();
-void run_mode();
-void x_fw_bb();
-void x_bw_bb();
-void y1_bw_bb();
-void y1_fw_bb();
-void y2_bw_bb();
-void y2_fw_bb();
 void setStop();
 void setRun();
 void setHoming();
