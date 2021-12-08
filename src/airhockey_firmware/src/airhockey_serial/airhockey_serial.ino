@@ -104,6 +104,8 @@ void loop() {
     Serial.println(input);
   }
 
+  
+
     
   switch(mode){
     case 0: // stop
@@ -137,7 +139,10 @@ void loop() {
       break;
     case 2: // homing
       Serial.println("homing");
-      x_stepper.moveToHomeInMillimeters(1, 100.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      Serial.println(digitalRead(X_BW_BB));
+      x_stepper.moveToHomeInMillimeters(1, 20.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      Serial.println(digitalRead(X_BW_BB));
+
       Serial.println("Homing Complete");
       x_stepper.moveToPositionInMillimeters(MAX_X / 2);
       x_stepper.moveRelativeInMillimeters(-10.0);
