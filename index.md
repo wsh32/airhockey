@@ -1,6 +1,6 @@
-## Welcome to GitHub Pages
+## What The Puck?
 
-You can use the [editor on GitHub](https://github.com/wsh32/airhockey/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Principles of Integrated Engineering is a required course at Olin College. 
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
