@@ -15,6 +15,7 @@ void setup() {
     x_stepper.setStepsPerRevolution(400);
     x_stepper.setSpeedInStepsPerSecond(4000);
     x_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
+    x_stepper.setStepsPerMillimeter(400 / (60 * 2)); 
     Serial.begin(115200);
     pinMode(X_EN, OUTPUT);
     pinMode(X_BW_BB, INPUT);
@@ -22,9 +23,9 @@ void setup() {
 
 void loop() {
     digitalWrite(X_EN, LOW);
-    x_stepper.moveRelativeInSteps(-1000000);
+    x_stepper.moveRelativeInSteps(-100000);
 //    Serial.println(digitalRead(X_BW_BB));
-    delay(1000);
+    delay(5000);
     
 //    if (digitalRead(POWER_SW) == LOW) {
 //  x_stepper.setTargetPositionRelativeInSteps(0);

@@ -18,12 +18,13 @@ int mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
 unsigned long last_msg_time = millis() - 70000;
 unsigned long last_loop = millis();
 int16_t MIN_X = 0;
-int16_t MAX_X = 400;
-int16_t MIN_Y1 = 0;
-int16_t MAX_Y1 = 400;
-int16_t MIN_Y2 = 0;
-int16_t MAX_Y2 = 400;
-int16_t STEPS_PER_MM = 400 / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
+int16_t MAX_X = 815; // mm
+//int16_t MIN_Y1 = 0;
+//int16_t MAX_Y1 = 400;
+//int16_t MIN_Y2 = 0;
+//int16_t MAX_Y2 = 400;
+int16_t STEPS_PER_REV = 1600;
+int16_t STEPS_PER_MM = (STEPS_PER_REV / (60 * 2)); // 400 steps per rev / 60 teeth * 2 mm per tooth
 bool newPos = false;
 
 String input = "";
@@ -47,11 +48,11 @@ int x_pos;
 void setup() {
     Serial.begin(115200);
     x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
-    x_stepper.setSpeedInStepsPerSecond(2500);
-    x_stepper.setAccelerationInStepsPerSecondPerSecond(2500);
-//    x_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
-//    x_stepper.setSpeedInMillimetersPerSecond(70.0);
-//    x_stepper.setAccelerationInMillimetersPerSecondPerSecond(70.0);
+//    x_stepper.setSpeedInStepsPerSecond(15000);
+//    x_stepper.setAccelerationInStepsPerSecondPerSecond(15000);
+    x_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
+    x_stepper.setSpeedInMillimetersPerSecond(20000.0);
+    x_stepper.setAccelerationInMillimetersPerSecondPerSecond(20000.0);
 
 //    y1_stepper.connectToPins(Y1_STEP_PIN, Y1_DIR_PIN);
 //    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM);
@@ -99,21 +100,21 @@ void loop() {
       newPos = true;
       x_pos = (input.substring(1)).toInt();
       last_msg_time = millis();
+    } else if (input[0] == 'h') {
+      setHoming();
     }
     Serial.print("got: ");
-    Serial.println(input);
+    Serial.println(x_pos);
   }
 
-  
-
-    
   switch(mode){
     case 0: // stop
 //      stop_mode();
         Serial.println("in stop");
         Serial.print("elapsed: ");
         Serial.println(elapsed);
-        x_stepper.moveRelativeInSteps(-100);
+        x_stepper.moveRelativeInSteps(-80); // bounce back and forth to indicate stop mode
+        x_stepper.moveRelativeInSteps(80);
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
           Serial.println("homing time!");
           setHoming();
@@ -127,6 +128,11 @@ void loop() {
       }
 
       if (newPos == true) {
+        if (x_pos > MAX_X) {
+          x_pos = MAX_X - 10;
+        } else if (x_pos < MIN_X) {
+          x_pos = MIN_X + 10;
+        }
         x_stepper.setTargetPositionInMillimeters(x_pos);
 //        y1_stepper.setTargetPositionInMillimeters(y_pos);
 //        y2_stepper.setTargetPositionInMillimeters(y_pos);
@@ -134,13 +140,11 @@ void loop() {
       }
       digitalWrite(X_EN, LOW);
       x_stepper.processMovement();
-//      y1_stepper.processMovement();
-//      y2_stepper.processMovement();
       break;
     case 2: // homing
       Serial.println("homing");
       Serial.println(digitalRead(X_BW_BB));
-      x_stepper.moveToHomeInMillimeters(-1, 150.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      x_stepper.moveToHomeInMillimeters(-1, 4000.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
       Serial.println(digitalRead(X_BW_BB));
 
       Serial.println("Homing Complete");

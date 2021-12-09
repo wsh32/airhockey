@@ -3,19 +3,21 @@
 
 #include "pinout.h"
 #include "airhockey_firmware.h"
-#define STEPS_PER_REV 400
 
 FlexyStepper x_stepper;
-FlexyStepper y1_stepper;
-FlexyStepper y2_stepper;
+//FlexyStepper y1_stepper;
+//FlexyStepper y2_stepper;
 
 ros::NodeHandle nh;
 
 // configure the pins connected
 int16_t x_pos; // change in position, brought in over ROS
-int16_t y_pos; 
-int mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
-unsigned long last_msg_time = millis();
+//int16_t y_pos; 
+
+int16_t mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
+
+// time 
+unsigned long last_msg_time = millis() - 70000;
 unsigned long last_send = millis();
 int16_t MIN_X = 0;
 int16_t MAX_X = 872;
@@ -23,7 +25,8 @@ int16_t MIN_Y1 = 0;
 int16_t MAX_Y1 = 860;
 int16_t MIN_Y2 = 0;
 int16_t MAX_Y2 = 860;
-int16_t STEPS_PER_MM = STEPS_PER_REV / (60 * 2); // 400 steps per rev / 60 teeth * 2 mm per tooth
+int16_t STEPS_PER_REV = 400;
+int16_t STEPS_PER_MM = (STEPS_PER_REV / (60 * 2)); // 400 steps per rev / 60 teeth * 2 mm per tooth
 int16_t SPEED_IN_STEPS = 4000;
 int16_t ACCEL_IN_STEPS = 5000;
 bool newPos = false;
@@ -40,7 +43,7 @@ ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
     x_pos = position_cmd.point.x;
-    y_pos = position_cmd.point.y;
+//    y_pos = position_cmd.point.y;
 }
 
 void setup() {
@@ -83,8 +86,9 @@ void loop() {
         x_stepper.moveRelativeInSteps(80);
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
           setHoming();
+        } else {
+          delay(1000);
         }
-      delay(1000);
       break;
     case 1: // run
       if (elapsed > 120000) {
@@ -95,13 +99,15 @@ void loop() {
         x_stepper.setTargetPositionInMillimeters(x_pos);
 //        y1_stepper.setTargetPositionInMillimeters(y_pos);
 //        y2_stepper.setTargetPositionInMillimeters(y_pos);
+          newPos = false;
       }
+      digitalWrite(X_EN, LOW);
       x_stepper.processMovement();
 //      y1_stepper.processMovement();
 //      y2_stepper.processMovement();
       break;
     case 2: // homing
-      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      x_stepper.moveToHomeInMillimeters(-1, 10.0, MAX_X - MIN_X, X_BW_BB);
       x_stepper.moveToPositionInMillimeters(MAX_X / 2);
       x_stepper.moveRelativeInMillimeters(-10.0);
       x_stepper.moveRelativeInMillimeters(10.0);
