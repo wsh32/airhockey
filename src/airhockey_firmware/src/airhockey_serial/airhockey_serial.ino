@@ -113,8 +113,8 @@ void loop() {
         Serial.println("in stop");
         Serial.print("elapsed: ");
         Serial.println(elapsed);
-        x_stepper.moveRelativeInSteps(-80); // bounce back and forth to indicate stop mode
-        x_stepper.moveRelativeInSteps(80);
+//        x_stepper.moveRelativeInSteps(-150); // bounce back and forth to indicate stop mode
+//        x_stepper.moveRelativeInSteps(150);
         if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
           Serial.println("homing time!");
           setHoming();
@@ -144,13 +144,13 @@ void loop() {
     case 2: // homing
       Serial.println("homing");
       Serial.println(digitalRead(X_BW_BB));
-      x_stepper.moveToHomeInMillimeters(-1, 4000.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
+      x_stepper.moveToHomeInMillimeters(-1, 250.0, MAX_X - MIN_X, X_BW_BB); //x_bw_bb goes low to signify homing done
       Serial.println(digitalRead(X_BW_BB));
 
       Serial.println("Homing Complete");
       x_stepper.moveToPositionInMillimeters(MAX_X / 2);
-      x_stepper.moveRelativeInMillimeters(-10.0);
-      x_stepper.moveRelativeInMillimeters(10.0);
+      x_stepper.moveRelativeInMillimeters(-50.0);
+      x_stepper.moveRelativeInMillimeters(50.0);
       Serial.println("Moved to Center");
       x_pos = MAX_X / 2;
       setRun(); // add move to center and jitter

@@ -7,7 +7,7 @@
 #define X_EN 30
 // breakbeam switches
 #define X_FW_BB 25
-#define X_BW_BB 23
+#define X_BW_BB 28
 
 // use motor 1 as Y1
 #define Y1_STEP_PIN 36

@@ -701,8 +701,8 @@ bool FlexyStepper::moveToHomeInSteps(long directionTowardHome,
     limitSwitchFlag = false;
     while(!processMovement())
     {
-      Serial.print("THIS IS THE PIN READING: ");
-      Serial.println(digitalRead(homeLimitSwitchPin));
+      // Serial.print("THIS IS THE PIN READING: ");
+      // Serial.println(digitalRead(homeLimitSwitchPin));
       if (digitalRead(homeLimitSwitchPin) == HIGH)
       {
         limitSwitchFlag = true;
