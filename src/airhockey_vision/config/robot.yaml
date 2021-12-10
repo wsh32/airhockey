@@ -1,0 +1,7 @@
+robot:
+    striker_diameter: 3.875
+    x_min: 6
+    x_max: 30
+    y_min: 4.5
+    y_max: 4.5
+    default_contact_speed: 0
