@@ -44,3 +44,33 @@
 
 
 #define LED_PIN 13
+
+void setup_pins() {
+    pinMode(POWER_SW, INPUT);
+    pinMode(POWER_CTRL, OUTPUT);
+    pinMode(X_EN, OUTPUT);
+    pinMode(Y1_EN, OUTPUT);
+    pinMode(Y2_EN, OUTPUT);
+    pinMode(X_MS1, OUTPUT);
+    pinMode(X_MS2, OUTPUT);
+    pinMode(X_MS3, OUTPUT);
+    pinMode(Y1_MS1, OUTPUT);
+    pinMode(Y1_MS2, OUTPUT);
+    pinMode(Y1_MS3, OUTPUT);
+    pinMode(Y2_MS1, OUTPUT);
+    pinMode(Y2_MS2, OUTPUT);
+    pinMode(Y2_MS3, OUTPUT);
+    digitalWrite(X_EN, LOW);
+    digitalWrite(X_MS1, LOW);
+    digitalWrite(X_MS2, LOW);
+    digitalWrite(X_MS3, LOW);
+    digitalWrite(Y1_EN, LOW);
+    digitalWrite(Y1_MS1, LOW);
+    digitalWrite(Y1_MS2, LOW);
+    digitalWrite(Y1_MS3, LOW);
+    digitalWrite(Y2_EN, LOW);
+    digitalWrite(Y2_MS1, LOW);
+    digitalWrite(Y2_MS2, LOW);
+    digitalWrite(Y2_MS3, LOW);
+}
+
