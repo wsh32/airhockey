@@ -86,7 +86,7 @@ class TrajectoryCalculator:
 class TrajectoryNode:
     def __init__(self, table_dimensions):
         self.position_subscriber = rospy.Subscriber(
-            "/vision/puck/puck_position", PointStamped, self.puck_callback)
+            "/vision/homography/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
             "/trajectory/puck_state", State, queue_size=3)
 
