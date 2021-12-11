@@ -29,6 +29,10 @@ class Planner:
         # best place to hit the puck.
         time_to_contact = ((contact_y_pos - puck_state[trajectory.Y_POS])
                            / puck_state[trajectory.Y_VEL])
+
+        if puck_state[trajectory.Y_VEL] == 0:
+            time_to_contact = 0
+
         contact_x_pos = (puck_state[trajectory.X_VEL] * time_to_contact
                          + puck_state[trajectory.X_POS])
 
@@ -102,12 +106,12 @@ class PlannerNode:
         ])
 
         time, x_pos, y_pos, x_vel, y_vel = \
-            self.planner.compute_optimal_strike_contact_state(
+            self.planner.compute_optimal_striker_contact_state(
                 puck_state, self.striker_state, self.target,
                 contact_y_pos=self.contact_y_pos,
                 contact_speed=self.contact_speed)
 
-        header = Header(stamp=rospy.get_rostime + rospy.Duration(time))
+        header = Header(stamp=rospy.get_rostime() + rospy.Duration(time))
         striker_state = State(header=header, x_pos=x_pos, y_pos=y_pos,
                               x_vel=x_vel, y_vel=y_vel)
 

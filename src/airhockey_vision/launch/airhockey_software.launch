@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find airhockey_vision)/launch/camera.launch"/>
+    <include file="$(find airhockey_vision)/launch/airhockey_no_camera.launch"/>
+</launch>
