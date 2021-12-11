@@ -1,59 +1,53 @@
-#ifndef _ROS_SERVICE_SetMap_h
-#define _ROS_SERVICE_SetMap_h
+#ifndef _ROS_SERVICE_SendFilePath_h
+#define _ROS_SERVICE_SendFilePath_h
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "ros/msg.h"
-#include "nav_msgs/OccupancyGrid.h"
-#include "geometry_msgs/PoseWithCovarianceStamped.h"
+#include "std_msgs/String.h"
 
-namespace nav_msgs
+namespace rviz
 {
 
-static const char SETMAP[] = "nav_msgs/SetMap";
+static const char SENDFILEPATH[] = "rviz/SendFilePath";
 
-  class SetMapRequest : public ros::Msg
+  class SendFilePathRequest : public ros::Msg
   {
     public:
-      typedef nav_msgs::OccupancyGrid _map_type;
-      _map_type map;
-      typedef geometry_msgs::PoseWithCovarianceStamped _initial_pose_type;
-      _initial_pose_type initial_pose;
+      typedef std_msgs::String _path_type;
+      _path_type path;
 
-    SetMapRequest():
-      map(),
-      initial_pose()
+    SendFilePathRequest():
+      path()
     {
     }
 
     virtual int serialize(unsigned char *outbuffer) const override
     {
       int offset = 0;
-      offset += this->map.serialize(outbuffer + offset);
-      offset += this->initial_pose.serialize(outbuffer + offset);
+      offset += this->path.serialize(outbuffer + offset);
       return offset;
     }
 
     virtual int deserialize(unsigned char *inbuffer) override
     {
       int offset = 0;
-      offset += this->map.deserialize(inbuffer + offset);
-      offset += this->initial_pose.deserialize(inbuffer + offset);
+      offset += this->path.deserialize(inbuffer + offset);
      return offset;
     }
 
-    virtual const char * getType() override { return SETMAP; };
-    virtual const char * getMD5() override { return "91149a20d7be299b87c340df8cc94fd4"; };
+    virtual const char * getType() override { return SENDFILEPATH; };
+    virtual const char * getMD5() override { return "8a631822f6e3078667af5e13f8ab06b7"; };
 
   };
 
-  class SetMapResponse : public ros::Msg
+  class SendFilePathResponse : public ros::Msg
   {
     public:
       typedef bool _success_type;
       _success_type success;
 
-    SetMapResponse():
+    SendFilePathResponse():
       success(0)
     {
     }
@@ -85,15 +79,15 @@ static const char SETMAP[] = "nav_msgs/SetMap";
      return offset;
     }
 
-    virtual const char * getType() override { return SETMAP; };
+    virtual const char * getType() override { return SENDFILEPATH; };
     virtual const char * getMD5() override { return "358e233cde0c8a8bcfea4ce193f8fc15"; };
 
   };
 
-  class SetMap {
+  class SendFilePath {
     public:
-    typedef SetMapRequest Request;
-    typedef SetMapResponse Response;
+    typedef SendFilePathRequest Request;
+    typedef SendFilePathResponse Response;
   };
 
 }
