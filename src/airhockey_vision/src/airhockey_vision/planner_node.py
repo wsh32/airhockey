@@ -30,6 +30,7 @@ class Planner:
         time_to_contact = ((contact_y_pos - puck_state[trajectory.Y_POS])
                            / puck_state[trajectory.Y_VEL])
 
+        # Go for the puck asap
         if puck_state[trajectory.Y_VEL] == 0:
             time_to_contact = 0
 

@@ -33,6 +33,8 @@ class Controller:
 
 class ControllerNode:
     def __init__(self):
+        self.puck_state_subscriber = rospy.Subscriber(
+            "/trajectory/puck_state", State, self.puck_state_callback)
         self.striker_state_subscriber = rospy.Subscriber(
             "/planner/striker_state", State, self.striker_state_callback)
         self.arduino_command_publisher = rospy.Publisher(
@@ -41,19 +43,40 @@ class ControllerNode:
         # TODO: add robot constraints
 
         self.controller = Controller()
+        self.x_pos = 0
 
+        rospy.Timer(rospy.Duration(0.1), self.publish_state)
         rospy.spin()
 
-    def striker_state_callback(self, striker_state_msg):
-        x = striker_state_msg.x_pos
-        y = striker_state_msg.x_pos
-        header = Header(stamp=rospy.get_rostime)
+    def puck_state_callback(self, puck_state_msg):
+        self.x_pos = puck_state_msg.x_pos
 
+    def publish_state(self, event=None):
+        header = Header(stamp=rospy.get_rostime())
+        point = Point(x=self.x_pos, y=0)
+        self.arduino_command_publisher.publish(PointStamped(header=header,
+                                                            point=point))
+
+    def striker_state_callback(self, striker_state_msg):
+        return
+        time = striker_state_msg.header.stamp
+        x_pos = striker_state_msg.x_pos
+        y_pos = striker_state_msg.y_pos
+        x_vel = striker_state_msg.x_vel
+        y_vel = striker_state_msg.y_vel
+
+        self.controller.update_striker_state(time, x_pos, y_pos, x_vel, y_vel)
+        x, y = self.controller.get_striker_position(rospy.get_rostime())
+
+        header = Header(stamp=rospy.get_rostime())
+        point = Point(x=x, y=y)
+        self.arduino_command_publisher.publish(PointStamped(header=header,
+                                                            point=point))
 
 def main():
     rospy.init_node('controller_node', anonymous=True)
 
-    PlannerNode()
+    ControllerNode()
 
 
 if __name__=='__main__':
