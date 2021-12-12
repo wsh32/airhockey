@@ -45,10 +45,13 @@ ros::Publisher striker_command_publisher("/arduino/feedback/striker_command_mm",
 ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
     
+int16_t clamp(int16_t input, int16_t min_val, int16_t max_val) {
+    return min(max(input, min_val), max_val);
+}
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
-    int16_t new_x_pos = (position_cmd.point.x) * inch_to_mm;
+    int16_t new_x_pos = clamp((position_cmd.point.x) * inch_to_mm, MIN_X, MAX_X);
     x_pos = new_x_pos;
     newPos = (new_x_pos - x_pos) > 1;
 //    y_pos = position_cmd.point.y;
