@@ -28,7 +28,10 @@ class Controller:
         self.y_vel = y_vel
 
     def get_striker_position(self, time):
-        return self.x_pos, self.y_pos
+        # TODO: Add the math here
+        if self.x_pos is not None and self.y_pos is not None:
+            return self.x_pos, self.y_pos
+        return 400, 0
 
 
 class ControllerNode:
@@ -43,19 +46,33 @@ class ControllerNode:
         # TODO: add robot constraints
 
         self.controller = Controller()
-        self.x_pos = 0
+        self.enable = True
+        self.center = False
 
         rospy.Timer(rospy.Duration(0.1), self.publish_state)
         rospy.spin()
 
     def puck_state_callback(self, puck_state_msg):
-        self.x_pos = puck_state_msg.x_pos
+        self.enable = abs(puck_state_msg.y_vel) > 0.1
+        self.center = puck_state_msg.y_vel > 0.5
+
+        self.controller.update_striker_state(0, puck_state_msg.x_pos, 0, 0, 0)
 
     def publish_state(self, event=None):
+        x, y = self.controller.get_striker_position(rospy.get_rostime())
+
+        if x is None or y is None:
+            return
+
         header = Header(stamp=rospy.get_rostime())
-        point = Point(x=self.x_pos, y=0)
-        self.arduino_command_publisher.publish(PointStamped(header=header,
-                                                            point=point))
+        point = Point(x=round(x - 62.5, 2), y=round(y, 2))
+
+        if self.center:
+            point = Point(x=400, y=0)
+
+        if True: #self.enable:
+            self.arduino_command_publisher.publish(
+                PointStamped(header=header, point=point))
 
     def striker_state_callback(self, striker_state_msg):
         return
@@ -66,12 +83,7 @@ class ControllerNode:
         y_vel = striker_state_msg.y_vel
 
         self.controller.update_striker_state(time, x_pos, y_pos, x_vel, y_vel)
-        x, y = self.controller.get_striker_position(rospy.get_rostime())
 
-        header = Header(stamp=rospy.get_rostime())
-        point = Point(x=x, y=y)
-        self.arduino_command_publisher.publish(PointStamped(header=header,
-                                                            point=point))
 
 def main():
     rospy.init_node('controller_node', anonymous=True)

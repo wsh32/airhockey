@@ -16,12 +16,13 @@ Y_VEL = 3
 
 class TrajectoryCalculator:
     def __init__(self, table_dimensions=(36, 78), buffer_len=5,
-                 prediction_matrix_generator=None):
+                 filter_coef=0.125, prediction_matrix_generator=None):
         self.table_x, self.table_y = table_dimensions
 
-        self.buffer = deque(maxlen=buffer_len)  # [x, y, x_vel, y_vel]
+        self.buffer = deque([[0, 0, 0, 0]], maxlen=buffer_len)  # [x, y, x_vel, y_vel]
         self.first_run = True
         self.prev_time = None
+        self.filter_coef = filter_coef
 
         if prediction_matrix_generator is not None:
             self.prediction_matrix_generator = prediction_matrix_generator
@@ -39,16 +40,20 @@ class TrajectoryCalculator:
         ])
 
     def update_state(self, x, y, time):
+        x_filtered = ((x * self.filter_coef)
+                      + (self.buffer[-1][X_POS] * (1 - self.filter_coef)))
+        y_filtered = ((y * self.filter_coef)
+                      + (self.buffer[-1][Y_POS] * (1 - self.filter_coef)))
         if self.first_run:
             x_vel = 0
             y_vel = 0
             self.first_run = False
         else:
-            x_vel = (x - self.buffer[-1][0]) / (time - self.prev_time)
-            y_vel = (y - self.buffer[-1][1]) / (time - self.prev_time)
+            x_vel = (x_filtered - self.buffer[-1][0]) / (time - self.prev_time)
+            y_vel = (y_filtered - self.buffer[-1][1]) / (time - self.prev_time)
 
         self.prev_time = time
-        puck_state = np.array([x, y, x_vel, y_vel])
+        puck_state = np.array([x_filtered, y_filtered, x_vel, y_vel])
         self.buffer.append(puck_state)
 
         return x, y, x_vel, y_vel
