@@ -1,7 +1,7 @@
 <launch>
     <arg name="table_config" default="$(find airhockey_vision)/config/default_table.yaml" />
     <rosparam file="$(arg table_config)" command="load" />
-    <arg name="robot_config" default="$(find airhockey_vision)/config/robot.yaml" />
+    <arg name="robot_config" default="$(find airhockey_vision)/config/default_robot.yaml" />
     <rosparam file="$(arg robot_config)" command="load" />
 
     <node pkg="airhockey_vision" type="planner_node" name="planner">

@@ -40,15 +40,15 @@ class TrajectoryCalculator:
         ])
 
     def update_state(self, x, y, time):
+        x_filtered = ((x * self.filter_coef)
+                      + (self.buffer[-1][X_POS] * (1 - self.filter_coef)))
+        y_filtered = ((y * self.filter_coef)
+                      + (self.buffer[-1][Y_POS] * (1 - self.filter_coef)))
         if self.first_run:
             x_vel = 0
             y_vel = 0
             self.first_run = False
         else:
-            x_filtered = ((x * self.filter_coef)
-                          + (self.buffer[-1][X_POS] * (1 - self.filter_coef)))
-            y_filtered = ((y * self.filter_coef)
-                          + (self.buffer[-1][Y_POS] * (1 - self.filter_coef)))
             x_vel = (x_filtered - self.buffer[-1][0]) / (time - self.prev_time)
             y_vel = (y_filtered - self.buffer[-1][1]) / (time - self.prev_time)
 

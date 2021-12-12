@@ -30,7 +30,7 @@ class Controller:
     def get_striker_position(self, time):
         # TODO: Add the math here
         if self.x_pos is not None and self.y_pos is not None:
-            return (self.x_pos - 2.5) * 25.4, self.y_pos * 25.4
+            return self.x_pos, self.y_pos
         return 400, 0
 
 
@@ -65,10 +65,10 @@ class ControllerNode:
             return
 
         header = Header(stamp=rospy.get_rostime())
-        point = Point(x=round(x, 2), y=round(y, 2))
+        point = Point(x=round(x - 62.5, 2), y=round(y, 2))
 
-        #if self.center:
-        #    point = Point(x=400, y=0)
+        if self.center:
+            point = Point(x=400, y=0)
 
         if True: #self.enable:
             self.arduino_command_publisher.publish(

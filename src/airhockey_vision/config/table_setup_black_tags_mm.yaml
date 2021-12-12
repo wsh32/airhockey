@@ -1,0 +1,66 @@
+# All measurements are in inches
+# Origin is set to the front left of the table
+#
+# Table drawing:
+#
+#    Human Side
+# ----------------
+# | D          C |
+# |              |
+# |              |
+# |              |
+# |              |
+# | E          F |
+# |              |
+# |              |
+# |              |
+# |              |
+# | A          B |
+# x---------------
+#    Robot side
+#
+# x: Origin
+# A: Approximate location of front left
+# B: Approximate location of front right
+# C: Approximate location of back right
+# D: Approximate location of back left
+# E: Approximate location of middle left
+# F: Approximate location of middle right
+
+table:
+    width: 35.875
+    length: 78
+    goal_width: 12
+    puck_diameter: 2.5
+
+tag_locations:
+    tag_black_front_left:
+        tag_family: "tag16h5"
+        tag_id: 0
+        table_x: 50.8
+        table_y: 50.8
+    tag_black_front_right:
+        tag_family: "tag16h5"
+        tag_id: 1
+        table_x: 857.25
+        table_y: 50.8
+    tag_black_back_right:
+        tag_family: "tag16h5"
+        tag_id: 2
+        table_x: 857.25
+        table_y: 1911.35
+    tag_black_back_left:
+        tag_family: "tag16h5"
+        tag_id: 3
+        table_x: 50.8
+        table_y: 1911.35
+    tag_black_middle_left:
+        tag_family: "tag16h5"
+        tag_id: 8
+        table_x: 50.8
+        table_y: 939.8
+    tag_black_middle_right:
+        tag_family: "tag16h5"
+        tag_id: 9
+        table_x: 857.25
+        table_y: 889
