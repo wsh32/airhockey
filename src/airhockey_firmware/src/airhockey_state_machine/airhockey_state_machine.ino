@@ -3,7 +3,7 @@
 
 #include "pinout.h"
 #include "airhockey_firmware.h"
-
+  
 FlexyStepper x_stepper;
 FlexyStepper y1_stepper;
 FlexyStepper y2_stepper;
@@ -28,8 +28,8 @@ int16_t MAX_Y2 = 860;
 int16_t STEPS_PER_REV = 400;
 int16_t MM_PER_REV = 60 * 2;
 int16_t STEPS_PER_MM = STEPS_PER_REV / MM_PER_REV;  // 400 steps per rev / 60 teeth * 2 mm per tooth
-int16_t SPEED_MM_SEC = 10000.0;
-int16_t ACCEL_MM_SEC2 = 10000.0;
+int16_t SPEED_MM_SEC = 1000.0;
+int16_t ACCEL_MM_SEC2 = 5000.0;
 bool newPos = false;
 
 float inch_to_mm = 25.4;
@@ -45,15 +45,15 @@ ros::Publisher striker_command_publisher("/arduino/feedback/striker_command_mm",
 ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
     
-int16_t clamp(int16_t input, int16_t min_val, int16_t max_val) {
-    return min(max(input, min_val), max_val);
-}
+//int16_t clamp(int16_t input, int16_t min_val, int16_t max_val) {
+//    return min(max(input, min_val), max_val);
+//}
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
-    int16_t new_x_pos = clamp((position_cmd.point.x) * inch_to_mm, MIN_X, MAX_X);
-    x_pos = new_x_pos;
-    newPos = (new_x_pos - x_pos) > 1;
+//    int16_t new_x_pos = clamp((position_cmd.point.x) * inch_to_mm, MIN_X, MAX_X);
+    newPos = true; //(new_x_pos - x_pos) > 1;
+    x_pos = position_cmd.point.x; //new_x_pos;
 //    y_pos = position_cmd.point.y;
 }
 
@@ -95,40 +95,40 @@ void setup() {
     nh.subscribe(position_command_subscriber);
 }
 
-long power_count = 0;
-
-bool handle_power_switch() {
-    if (digitalRead(POWER_SW) == HIGH) {
-        power_count++;
-    } else {
-        power_count = 0;
-    }
-
-    return power_count < 10;
-    // returns true if switch is on
-}
+//long power_count = 0;
+//
+//bool handle_power_switch() {
+//    if (digitalRead(POWER_SW) == HIGH) {
+//        power_count++;
+//    } else {
+//        power_count = 0;
+//    }
+//
+//    return power_count < 10;
+//    // returns true if switch is on
+//}
 
 void loop() {
     unsigned long elapsed = millis() - last_msg_time;
 
-    bool switch_state = handle_power_switch();
+//    bool switch_state = true;
 
-    if (switch_state) {
-        digitalWrite(POWER_CTRL, LOW);
-    } else {
-        digitalWrite(POWER_CTRL, HIGH);
-    }
+//    if (switch_state) {
+//        digitalWrite(POWER_CTRL, LOW);
+//    } else {
+//        digitalWrite(POWER_CTRL, HIGH);
+//    }
 
     switch(mode){
         case 0: // stop
-            if (switch_state && elapsed < 60000) {
+            if (elapsed < 60000) {
                 setHoming();
             } else {
                 delay(100);
             }
             break;
         case 1: // run
-            if (!switch_state || elapsed > 120000) {
+            if (elapsed > 120000) {
                 setStop(); // over two minute elapses since last message
                 break;
             }
@@ -142,6 +142,10 @@ void loop() {
 
         case 2: // homing
             x_stepper.moveToHomeInMillimeters(-1, 250.0, MAX_X - MIN_X, X_BW_BB);
+            x_stepper.moveToPositionInMillimeters(MAX_X / 2);
+            x_stepper.moveRelativeInMillimeters(-50.0);
+            x_stepper.moveRelativeInMillimeters(50.0);
+            x_pos = MAX_X / 2;
             setRun();
             break;
     }
