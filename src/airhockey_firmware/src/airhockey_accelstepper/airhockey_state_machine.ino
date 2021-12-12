@@ -1,12 +1,12 @@
 #include <ros.h>
-#include <FlexyStepper.h>
+#include <AccelStepper.h>
 
 #include "pinout.h"
 #include "airhockey_firmware.h"
   
-FlexyStepper x_stepper;
-FlexyStepper y1_stepper;
-FlexyStepper y2_stepper;
+AccelStepper x_stepper(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
+AccelStepper y1_stepper(AccelStepper::DRIVER, Y1_STEP_PIN, Y1_DIR_PIN);
+AccelStepper y2_stepper(AccelStepper::DRIVER, Y2_STEP_PIN, Y2_DIR_PIN);
 
 ros::NodeHandle nh;
 
@@ -44,6 +44,12 @@ ros::Publisher striker_command_publisher("/arduino/feedback/striker_command_mm",
  
 ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
+ros::Subscriber<std_msgs::Int16> speed_update_subscriber(
+    "/arduino/command/set_max_speed", &speed_update_callback);
+ros::Subscriber<std_msgs::Int16> acceleration_update_subscriber(
+    "/arduino/command/set_acceleration", &acceleration_update_callback);
+ros::Subscriber<std_msgs::Int16> state_subscriber(
+    "/arduino/command/set_state", &set_state_callback);
     
 int16_t clamp(int16_t input, int16_t min_val, int16_t max_val) {
     return min(max(input, min_val), max_val);
@@ -54,6 +60,18 @@ void position_command_callback(const geometry_msgs::PointStamped& position_cmd) 
     x_pos = clamp(position_cmd.point.x, MIN_X, MAX_X);
     newPos = true; //(new_x_pos - x_pos) > 1;
 //    y_pos = position_cmd.point.y;
+}
+
+void speed_update_callback(const std_msgs::Int16& speed) {
+    x_stepper.setMaxSpeed(speed.data);
+}
+
+void acceleration_update_callback(const std_msgs::Int16& acceleration) {
+    x_stepper.setAcceleration(acceleration.data);
+}
+
+void set_state_callback(const std_msgs::Int16& state) {
+    mode = state.data;
 }
 
 long last_sent = 0;
@@ -67,60 +85,48 @@ void publish_data() {
 
 void setup() {
     setup_pins();
-    x_stepper.connectToPins(X_STEP_PIN, X_DIR_PIN);
-//    x_stepper.setStepsPerRevolution(STEPS_PER_REV);
-    x_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
-    x_stepper.setSpeedInMillimetersPerSecond(SPEED_MM_SEC);
-    x_stepper.setAccelerationInMillimetersPerSecondPerSecond(ACCEL_MM_SEC2);
 
-    y1_stepper.connectToPins(Y1_STEP_PIN, Y1_DIR_PIN);
-//    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM);
-    y1_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
-    y1_stepper.setSpeedInStepsPerSecond(SPEED_MM_SEC);
-    y1_stepper.setAccelerationInStepsPerSecondPerSecond(ACCEL_MM_SEC2);
-//
-    y2_stepper.connectToPins(Y2_STEP_PIN, Y2_DIR_PIN);
-    y2_stepper.setSpeedInStepsPerSecond(3200);
-    y2_stepper.setAccelerationInStepsPerSecondPerSecond(3200);
-//    y2_stepper.setStepsPerMillimeter(STEPS_PER_MM);
-//    y2_stepper.setStepsPerMillimeter(STEPS_PER_MM); 
-//    y2_stepper.setSpeedInStepsPerSecond(SPEED_MM_SEC);
-//    y2_stepper.setAccelerationInStepsPerSecondPerSecond(ACCEL_MM_SEC2);
+    x_stepper.setMaxSpeed(8000); //SPEED_MM_SEC * STEPS_PER_MM);
+    x_stepper.setAcceleration(8000); //ACCEL_MM_SEC2 * STEPS_PER_MM);
+    x_stepper.setPinsInverted(true, false, false);
 
     nh.initNode();
     nh.advertise(position_feedback_publisher);
     nh.advertise(striker_state_publisher);
     nh.advertise(striker_command_publisher);
     nh.subscribe(position_command_subscriber);
+    nh.subscribe(speed_update_subscriber);
+    nh.subscribe(acceleration_update_subscriber);
+    nh.subscribe(state_subscriber);
 }
 
-//long power_count = 0;
-//
-//bool handle_power_switch() {
-//    if (digitalRead(POWER_SW) == HIGH) {
-//        power_count++;
-//    } else {
-//        power_count = 0;
-//    }
-//
-//    return power_count < 10;
-//    // returns true if switch is on
-//}
+long power_count = 0;
+
+bool handle_power_switch() {
+    if (digitalRead(POWER_SW) == HIGH) {
+        power_count++;
+    } else {
+        power_count = 0;
+    }
+
+    return power_count < 10;
+    // returns true if switch is on
+}
 
 void loop() {
     unsigned long elapsed = millis() - last_msg_time;
 
-//    bool switch_state = true;
+    bool switch_state = handle_power_switch();
 
-//    if (switch_state) {
-//        digitalWrite(POWER_CTRL, LOW);
-//    } else {
-//        digitalWrite(POWER_CTRL, HIGH);
-//    }
+    if (switch_state) {
+        digitalWrite(POWER_CTRL, LOW);
+    } else {
+        digitalWrite(POWER_CTRL, HIGH);
+    }
 
     switch(mode){
         case 0: // stop
-            if (elapsed < 60000) {
+            if (elapsed < 6000) {
                 setHoming();
             } else {
                 delay(100);
@@ -131,22 +137,20 @@ void loop() {
                 setStop(); // over two minute elapses since last message
                 break;
             }
-            if (newPos == true) {
-                x_stepper.setTargetPositionInMillimeters(x_pos);
-                newPos = false;
-            }
-            digitalWrite(X_EN, LOW);
-            x_stepper.processMovement();
+            x_stepper.moveTo(x_pos * STEPS_PER_MM);
+            x_stepper.run();
             break;
 
         case 2: // homing
-            x_stepper.moveToHomeInMillimeters(-1, 250.0, MAX_X - MIN_X, X_BW_BB);
-            x_stepper.moveToPositionInMillimeters(MAX_X / 2);
-            x_stepper.moveRelativeInMillimeters(-50.0);
-            x_stepper.moveRelativeInMillimeters(50.0);
-            x_pos = MAX_X / 2;
-            setRun();
+            if (homeX()) {
+                setRun();
+            }
             break;
+    }
+
+    // oops recovery
+    if (digitalRead(X_BW_BB)) {
+        x_stepper.setCurrentPosition(MIN_X);
     }
 
     if (millis() - last_sent > 50) {
@@ -156,14 +160,31 @@ void loop() {
     nh.spinOnce();
 }
 
+bool homeX() {
+    // Returns true if homing is done, returns false if we need to call again
+    if (digitalRead(X_BW_BB)) {
+        x_stepper.stop();
+        x_stepper.setCurrentPosition(MIN_X);
+        return true;
+    }
+
+    x_stepper.move(-500); 
+    x_stepper.run();
+    return false;
+}
+
 void setStop() {
+    digitalWrite(X_EN, HIGH);
+    x_stepper.stop();
     mode = 0;
 }
 
 void setRun() {
+    digitalWrite(X_EN, LOW);
     mode = 1;
 }
 
 void setHoming() {
+    digitalWrite(X_EN, LOW);
     mode = 2;
 }
