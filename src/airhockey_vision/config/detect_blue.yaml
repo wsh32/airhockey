@@ -1,7 +1,7 @@
 puck_tracking:
     h_lower: 60
     s_lower: 50
-    v_lower: 150
+    v_lower: 0
     h_upper: 150
     s_upper: 255
     v_upper: 255
