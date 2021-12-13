@@ -29,7 +29,7 @@ int16_t STEPS_PER_REV = 400;
 int16_t MM_PER_REV = 60 * 2;
 float STEPS_PER_MM = 3.33;  // 400 steps per rev / 60 teeth * 2 mm per tooth
 int16_t SPEED_MM_SEC = 5000.0;
-int16_t ACCEL_MM_SEC2 = 3000.0;
+int16_t ACCEL_MM_SEC2 = 2000.0;
 bool newPos = false;
 
 float inch_to_mm = 25.4;
@@ -70,10 +70,12 @@ void position_command_callback(const geometry_msgs::PointStamped& position_cmd) 
 
 void speed_update_callback(const std_msgs::Int16& speed) {
     x_stepper.setMaxSpeed(speed.data);
+    run_speed = speed.data;
 }
 
 void acceleration_update_callback(const std_msgs::Int16& acceleration) {
     x_stepper.setAcceleration(acceleration.data);
+    run_accel = acceleration.data;
 }
 
 void set_state_callback(const std_msgs::Int16& state) {

@@ -53,7 +53,7 @@ class ControllerNode:
         rospy.spin()
 
     def puck_state_callback(self, puck_state_msg):
-        self.enable = abs(puck_state_msg.y_vel) > 10
+        self.enable = abs(puck_state_msg.y_vel) > 20
         self.center = puck_state_msg.y_vel > 50
 
         return
