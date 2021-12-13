@@ -16,11 +16,13 @@ from airhockey_vision.trajectory import TrajectoryCalculator
 
 
 class Planner:
-    def __init__(self, puck_diameter=2.5, striker_diameter=2.5):
+    def __init__(self, puck_diameter=2.5, striker_diameter=2.5,
+                 table_dimensions=(851, 1925)):
         self.puck_diameter = puck_diameter
         self.striker_diameter = striker_diameter
 
-        self.trajectory_calculator = TrajectoryCalculator()
+        self.trajectory_calculator = TrajectoryCalculator(
+            table_dimensions=table_dimensions)
 
     def compute_optimal_puck_contact_position(self, puck_state, striker_state,
                                               contact_y_pos=6):
@@ -29,8 +31,17 @@ class Planner:
         # best place to hit the puck.
         time_to_contact = ((contact_y_pos - puck_state[trajectory.Y_POS])
                            / puck_state[trajectory.Y_VEL])
+
+        # Go for the puck asap
+        if puck_state[trajectory.Y_VEL] == 0:
+            time_to_contact = 0
+
         contact_x_pos = (puck_state[trajectory.X_VEL] * time_to_contact
                          + puck_state[trajectory.X_POS])
+
+        contact_x_pos, contact_y_pos = \
+            self.trajectory_calculator.compute_table_reflection(
+                contact_x_pos, contact_y_pos)
 
         return time_to_contact, contact_x_pos, contact_y_pos
 
@@ -102,12 +113,12 @@ class PlannerNode:
         ])
 
         time, x_pos, y_pos, x_vel, y_vel = \
-            self.planner.compute_optimal_strike_contact_state(
+            self.planner.compute_optimal_striker_contact_state(
                 puck_state, self.striker_state, self.target,
                 contact_y_pos=self.contact_y_pos,
                 contact_speed=self.contact_speed)
 
-        header = Header(stamp=rospy.get_rostime + rospy.Duration(time))
+        header = Header(stamp=rospy.get_rostime() + rospy.Duration(time))
         striker_state = State(header=header, x_pos=x_pos, y_pos=y_pos,
                               x_vel=x_vel, y_vel=y_vel)
 
@@ -138,7 +149,7 @@ def main():
     default_contact_speed = rospy.get_param("robot/default_contact_speed")
     PlannerNode(puck_diameter=puck_diameter, striker_diameter=striker_diameter,
                 table_width=table_width, table_length=table_length,
-                goal_width=goal_width, default_contact_y_pos=robot_min_y,
+                goal_width=goal_width, default_contact_y_pos=305,
                 default_contact_speed=default_contact_speed)
 
 

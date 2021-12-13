@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find airhockey_vision)/launch/vision.launch"/>
+    <include file="$(find airhockey_vision)/launch/trajectory.launch"/>
+    <include file="$(find airhockey_vision)/launch/planner.launch"/>
+</launch>

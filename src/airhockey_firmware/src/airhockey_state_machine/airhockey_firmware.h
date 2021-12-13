@@ -9,6 +9,7 @@
 geometry_msgs::PointStamped position_command_msg;
 airhockey_vision::State position_feedback_msg;
 std_msgs::Int16 striker_state_msg;
+std_msgs::Int16 striker_pos_msg;
 
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd);
 

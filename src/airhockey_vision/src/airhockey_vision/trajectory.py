@@ -16,12 +16,13 @@ Y_VEL = 3
 
 class TrajectoryCalculator:
     def __init__(self, table_dimensions=(36, 78), buffer_len=5,
-                 prediction_matrix_generator=None):
+                 filter_coef=0.125, prediction_matrix_generator=None):
         self.table_x, self.table_y = table_dimensions
 
-        self.buffer = deque(maxlen=buffer_len)  # [x, y, x_vel, y_vel]
+        self.buffer = deque([[0, 0, 0, 0]], maxlen=buffer_len)  # [x, y, x_vel, y_vel]
         self.first_run = True
         self.prev_time = None
+        self.filter_coef = filter_coef
 
         if prediction_matrix_generator is not None:
             self.prediction_matrix_generator = prediction_matrix_generator
@@ -39,16 +40,20 @@ class TrajectoryCalculator:
         ])
 
     def update_state(self, x, y, time):
+        x_filtered = ((x * self.filter_coef)
+                      + (self.buffer[-1][X_POS] * (1 - self.filter_coef)))
+        y_filtered = ((y * self.filter_coef)
+                      + (self.buffer[-1][Y_POS] * (1 - self.filter_coef)))
         if self.first_run:
             x_vel = 0
             y_vel = 0
             self.first_run = False
         else:
-            x_vel = (x - self.buffer[-1][0]) / (time - self.prev_time)
-            y_vel = (y - self.buffer[-1][1]) / (time - self.prev_time)
+            x_vel = (x_filtered - self.buffer[-1][0]) / (time - self.prev_time)
+            y_vel = (y_filtered - self.buffer[-1][1]) / (time - self.prev_time)
 
         self.prev_time = time
-        puck_state = np.array([x, y, x_vel, y_vel])
+        puck_state = np.array([x_filtered, y_filtered, x_vel, y_vel])
         self.buffer.append(puck_state)
 
         return x, y, x_vel, y_vel
@@ -58,13 +63,14 @@ class TrajectoryCalculator:
         return np.dot(transform_matrix, self.buffer[-1])
 
     def compute_table_reflection(self, puck_x, puck_y):
-        if 0 < puck_x < self.table_x and 0 < puck_y < self.table_y:
-            return puck_x, puck_y
+        puck_x_reflected = abs(puck_x) % (self.table_x * 2)
+        puck_y_reflected = abs(puck_y) % (self.table_y * 2)
+
+        if (0 < puck_x_reflected < self.table_x
+            and 0 < puck_y_reflected < self.table_y):
+            return puck_x_reflected, puck_y_reflected
         else:
             # Do reflections
-            puck_x_reflected = puck_x
-            puck_y_reflected = puck_y
-
             if puck_x < 0:
                 puck_x_reflected *= -1
             if puck_x > self.table_x:
@@ -79,14 +85,13 @@ class TrajectoryCalculator:
                 puck_y_reflected = -1 * (puck_y_reflected - self.table_y) \
                         + self.table_y
 
-            return self.compute_table_reflection(puck_x_reflected,
-                                                 puck_y_reflected)
+            return puck_x_reflected, puck_y_reflected
 
 
 class TrajectoryNode:
     def __init__(self, table_dimensions):
         self.position_subscriber = rospy.Subscriber(
-            "/vision/puck/puck_position", PointStamped, self.puck_callback)
+            "/vision/homography/puck_position", PointStamped, self.puck_callback)
         self.trajectory_publisher = rospy.Publisher(
             "/trajectory/puck_state", State, queue_size=3)
 

@@ -73,6 +73,7 @@ void setup() {
     pinMode(POWER_SW, INPUT);
     pinMode(12, OUTPUT);
     pinMode(X_EN, OUTPUT);
+    pinMode(POWER_CTRL, OUTPUT);
     digitalWrite(X_EN, LOW);
 //    digitalWrite(Y1_EN, LOW);
 //    digitalWrite(Y2_EN, LOW);
@@ -90,9 +91,27 @@ void setup() {
 //    attachInterrupt(digitalPinToInterrupt(), update_mode, RISING);
 }
 
+//long power_count = 0;
+//
+//bool handle_power_switch() {
+//    if (digitalRead(POWER_SW) == HIGH) {
+//        power_count++;
+//    } else {
+//        power_count = 0;
+//    }
+//
+//    return power_count < 10;
+//    // returns true if switch is on
+//}
 
 void loop() {
   unsigned long elapsed = millis() - last_msg_time;
+  bool switch_state = true; //handle_power_switch();
+  if (switch_state) {
+    digitalWrite(POWER_CTRL, LOW);
+} else {
+    digitalWrite(POWER_CTRL, HIGH);
+}
   if(Serial.available()){
     input = Serial.readStringUntil('\n');
     // modify turn speed
@@ -115,17 +134,27 @@ void loop() {
         Serial.println(elapsed);
 //        x_stepper.moveRelativeInSteps(-150); // bounce back and forth to indicate stop mode
 //        x_stepper.moveRelativeInSteps(150);
-        if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
-          Serial.println("homing time!");
-          setHoming();
-        }
+//        if (digitalRead(POWER_SW) == HIGH && elapsed < 60000) {
+//          Serial.println("homing time!");
+//          setHoming();
+            if (switch_state && elapsed < 60000) {
+                setHoming();
+                Serial.println("homing time!");
+            } else {
+                delay(100);
+            }
+            break;
       delay(1000);
       break;
     case 1: // run
 //      run_mode();
-      if (elapsed > 60000) {
-        setStop(); // over a minute elapses since last message
-      }
+        if (!switch_state || elapsed > 120000) {
+            setStop(); // over two minute elapses since last message
+            break;
+        }
+//      if (elapsed > 60000) {
+//        setStop(); // over a minute elapses since last message
+//      }
 
       if (newPos == true) {
         if (x_pos > MAX_X) {
@@ -157,7 +186,7 @@ void loop() {
       break;
   }
   // change so this happens once a second (20x a sec max)
-  if (millis() - last_loop > 1000) {
+  if (millis() - last_loop > 6000) {
     Serial.print("x pos ");
     Serial.println(x_stepper.getCurrentPositionInMillimeters());
     Serial.print("mode: ");
