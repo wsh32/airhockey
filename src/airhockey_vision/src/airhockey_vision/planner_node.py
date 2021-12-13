@@ -16,11 +16,13 @@ from airhockey_vision.trajectory import TrajectoryCalculator
 
 
 class Planner:
-    def __init__(self, puck_diameter=2.5, striker_diameter=2.5):
+    def __init__(self, puck_diameter=2.5, striker_diameter=2.5,
+                 table_dimensions=(851, 1925)):
         self.puck_diameter = puck_diameter
         self.striker_diameter = striker_diameter
 
-        self.trajectory_calculator = TrajectoryCalculator()
+        self.trajectory_calculator = TrajectoryCalculator(
+            table_dimensions=table_dimensions)
 
     def compute_optimal_puck_contact_position(self, puck_state, striker_state,
                                               contact_y_pos=6):
@@ -36,6 +38,10 @@ class Planner:
 
         contact_x_pos = (puck_state[trajectory.X_VEL] * time_to_contact
                          + puck_state[trajectory.X_POS])
+
+        contact_x_pos, contact_y_pos = \
+            self.trajectory_calculator.compute_table_reflection(
+                contact_x_pos, contact_y_pos)
 
         return time_to_contact, contact_x_pos, contact_y_pos
 
@@ -143,7 +149,7 @@ def main():
     default_contact_speed = rospy.get_param("robot/default_contact_speed")
     PlannerNode(puck_diameter=puck_diameter, striker_diameter=striker_diameter,
                 table_width=table_width, table_length=table_length,
-                goal_width=goal_width, default_contact_y_pos=robot_min_y,
+                goal_width=goal_width, default_contact_y_pos=305,
                 default_contact_speed=default_contact_speed)
 
 

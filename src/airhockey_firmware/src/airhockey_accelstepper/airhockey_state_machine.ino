@@ -20,20 +20,26 @@ int16_t mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
 unsigned long last_msg_time = millis() - 70000;
 unsigned long last_send = millis();
 int16_t MIN_X = 0;
-int16_t MAX_X = 872;
+int16_t MAX_X = 800;
 int16_t MIN_Y1 = 0;
 int16_t MAX_Y1 = 860;
 int16_t MIN_Y2 = 0;
 int16_t MAX_Y2 = 860;
 int16_t STEPS_PER_REV = 400;
 int16_t MM_PER_REV = 60 * 2;
-int16_t STEPS_PER_MM = STEPS_PER_REV / MM_PER_REV;  // 400 steps per rev / 60 teeth * 2 mm per tooth
-int16_t SPEED_MM_SEC = 2000.0;
-int16_t ACCEL_MM_SEC2 = 5000.0;
+float STEPS_PER_MM = 3.33;  // 400 steps per rev / 60 teeth * 2 mm per tooth
+int16_t SPEED_MM_SEC = 5000.0;
+int16_t ACCEL_MM_SEC2 = 3000.0;
 bool newPos = false;
 
 float inch_to_mm = 25.4;
 float x_offset_in = 2;
+
+int16_t run_speed = SPEED_MM_SEC * STEPS_PER_MM;
+int16_t run_accel = ACCEL_MM_SEC2 * STEPS_PER_MM;
+
+int16_t home_speed = run_speed / 10;
+int16_t home_accel = run_accel;
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
@@ -86,8 +92,8 @@ void publish_data() {
 void setup() {
     setup_pins();
 
-    x_stepper.setMaxSpeed(8000); //SPEED_MM_SEC * STEPS_PER_MM);
-    x_stepper.setAcceleration(8000); //ACCEL_MM_SEC2 * STEPS_PER_MM);
+    x_stepper.setMaxSpeed(home_speed); //SPEED_MM_SEC * STEPS_PER_MM);
+    x_stepper.setAcceleration(home_accel); //ACCEL_MM_SEC2 * STEPS_PER_MM);
     x_stepper.setPinsInverted(true, false, false);
 
     nh.initNode();
@@ -137,7 +143,7 @@ void loop() {
                 setStop(); // over two minute elapses since last message
                 break;
             }
-            x_stepper.moveTo(x_pos * STEPS_PER_MM);
+            x_stepper.moveTo((long) (x_pos * STEPS_PER_MM));
             x_stepper.run();
             break;
 
@@ -181,10 +187,14 @@ void setStop() {
 
 void setRun() {
     digitalWrite(X_EN, LOW);
+    x_stepper.setMaxSpeed(run_speed);
+    x_stepper.setAcceleration(run_accel);
     mode = 1;
 }
 
 void setHoming() {
     digitalWrite(X_EN, LOW);
+    x_stepper.setMaxSpeed(home_speed);
+    x_stepper.setAcceleration(home_accel);
     mode = 2;
 }

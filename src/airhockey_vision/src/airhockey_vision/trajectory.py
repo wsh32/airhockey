@@ -63,13 +63,14 @@ class TrajectoryCalculator:
         return np.dot(transform_matrix, self.buffer[-1])
 
     def compute_table_reflection(self, puck_x, puck_y):
-        if 0 < puck_x < self.table_x and 0 < puck_y < self.table_y:
-            return puck_x, puck_y
+        puck_x_reflected = abs(puck_x) % (self.table_x * 2)
+        puck_y_reflected = abs(puck_y) % (self.table_y * 2)
+
+        if (0 < puck_x_reflected < self.table_x
+            and 0 < puck_y_reflected < self.table_y):
+            return puck_x_reflected, puck_y_reflected
         else:
             # Do reflections
-            puck_x_reflected = puck_x
-            puck_y_reflected = puck_y
-
             if puck_x < 0:
                 puck_x_reflected *= -1
             if puck_x > self.table_x:
@@ -84,8 +85,7 @@ class TrajectoryCalculator:
                 puck_y_reflected = -1 * (puck_y_reflected - self.table_y) \
                         + self.table_y
 
-            return self.compute_table_reflection(puck_x_reflected,
-                                                 puck_y_reflected)
+            return puck_x_reflected, puck_y_reflected
 
 
 class TrajectoryNode:

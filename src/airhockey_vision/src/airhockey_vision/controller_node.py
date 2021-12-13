@@ -53,9 +53,10 @@ class ControllerNode:
         rospy.spin()
 
     def puck_state_callback(self, puck_state_msg):
-        self.enable = abs(puck_state_msg.y_vel) > 0.1
-        self.center = puck_state_msg.y_vel > 0.5
+        self.enable = abs(puck_state_msg.y_vel) > 10
+        self.center = puck_state_msg.y_vel > 50
 
+        return
         self.controller.update_striker_state(0, puck_state_msg.x_pos, 0, 0, 0)
 
     def publish_state(self, event=None):
@@ -65,17 +66,16 @@ class ControllerNode:
             return
 
         header = Header(stamp=rospy.get_rostime())
-        point = Point(x=round(x - 62.5, 2), y=round(y, 2))
+        point = Point(x=round(x - 66, 2), y=round(y, 2))
 
         if self.center:
             point = Point(x=400, y=0)
 
-        if True: #self.enable:
+        if self.enable:
             self.arduino_command_publisher.publish(
                 PointStamped(header=header, point=point))
 
     def striker_state_callback(self, striker_state_msg):
-        return
         time = striker_state_msg.header.stamp
         x_pos = striker_state_msg.x_pos
         y_pos = striker_state_msg.y_pos
