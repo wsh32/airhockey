@@ -28,10 +28,10 @@
 # F: Approximate location of middle right
 
 table:
-    width: 35.875
-    length: 78
-    goal_width: 12
-    puck_diameter: 2.5
+    width: 851
+    length: 1925
+    goal_width: 30
+    puck_diameter: 63.5
 
 tag_locations:
     tag_black_front_left:
@@ -42,12 +42,12 @@ tag_locations:
     tag_black_front_right:
         tag_family: "tag16h5"
         tag_id: 1
-        table_x: 857.25
+        table_x: 863
         table_y: 50.8
     tag_black_back_right:
         tag_family: "tag16h5"
         tag_id: 2
-        table_x: 857.25
+        table_x: 863
         table_y: 1911.35
     tag_black_back_left:
         tag_family: "tag16h5"
@@ -62,5 +62,5 @@ tag_locations:
     tag_black_middle_right:
         tag_family: "tag16h5"
         tag_id: 9
-        table_x: 857.25
+        table_x: 863
         table_y: 889
