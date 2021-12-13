@@ -64,6 +64,7 @@ int16_t clamp(int16_t input, int16_t min_val, int16_t max_val) {
 void position_command_callback(const geometry_msgs::PointStamped& position_cmd) {
     last_msg_time = millis();
     x_pos = clamp(position_cmd.point.x, MIN_X, MAX_X);
+    y_pos = clamp(position_cmd.point.y, MIN_Y, MAX_Y);
     newPos = true; //(new_x_pos - x_pos) > 1;
 //    y_pos = position_cmd.point.y;
 }
