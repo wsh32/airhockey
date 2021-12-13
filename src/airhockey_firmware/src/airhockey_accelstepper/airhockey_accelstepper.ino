@@ -12,7 +12,7 @@ ros::NodeHandle nh;
 
 // configure the pins connected
 int16_t x_pos; // change in position, brought in over ROS
-//int16_t y_pos; 
+int16_t y_pos; 
 
 int16_t mode = 0; // changes state: 0 = stop, 1 = run, 2 = homing
 
@@ -21,10 +21,8 @@ unsigned long last_msg_time = millis() - 70000;
 unsigned long last_send = millis();
 int16_t MIN_X = 0;
 int16_t MAX_X = 800;
-int16_t MIN_Y1 = 0;
-int16_t MAX_Y1 = 860;
-int16_t MIN_Y2 = 0;
-int16_t MAX_Y2 = 860;
+int16_t MIN_Y = 0;
+int16_t MAX_Y = 860;
 int16_t STEPS_PER_REV = 400;
 int16_t MM_PER_REV = 60 * 2;
 float STEPS_PER_MM = 3.33;  // 400 steps per rev / 60 teeth * 2 mm per tooth
@@ -35,11 +33,14 @@ bool newPos = false;
 float inch_to_mm = 25.4;
 float x_offset_in = 2;
 
-int16_t run_speed = SPEED_MM_SEC * STEPS_PER_MM;
-int16_t run_accel = ACCEL_MM_SEC2 * STEPS_PER_MM;
+int16_t x_speed = SPEED_MM_SEC * STEPS_PER_MM;
+int16_t x_accel = ACCEL_MM_SEC2 * STEPS_PER_MM;
 
-int16_t home_speed = run_speed / 10;
-int16_t home_accel = run_accel;
+int16_t y_speed = SPEED_MM_SEC * STEPS_PER_MM;
+int16_t y_accel = ACCEL_MM_SEC2 * STEPS_PER_MM;
+
+int16_t home_speed = x_speed / 10;
+int16_t home_accel = x_accel;
 
 ros::Publisher position_feedback_publisher("/arduino/feedback/striker_pos",
                                            &position_feedback_msg);
@@ -50,10 +51,14 @@ ros::Publisher striker_command_publisher("/arduino/feedback/striker_command_mm",
  
 ros::Subscriber<geometry_msgs::PointStamped> position_command_subscriber(
     "/arduino/command/striker_pos", &position_command_callback);
-ros::Subscriber<std_msgs::Int16> speed_update_subscriber(
-    "/arduino/command/set_max_speed", &speed_update_callback);
-ros::Subscriber<std_msgs::Int16> acceleration_update_subscriber(
-    "/arduino/command/set_acceleration", &acceleration_update_callback);
+ros::Subscriber<std_msgs::Int16> x_speed_update_subscriber(
+    "/arduino/command/set_x_max_speed", &x_speed_update_callback);
+ros::Subscriber<std_msgs::Int16> x_acceleration_update_subscriber(
+    "/arduino/command/set_y_acceleration", &x_acceleration_update_callback);
+ros::Subscriber<std_msgs::Int16> y_speed_update_subscriber(
+    "/arduino/command/set_x_max_speed", &y_speed_update_callback);
+ros::Subscriber<std_msgs::Int16> y_acceleration_update_subscriber(
+    "/arduino/command/set_y_acceleration", &y_acceleration_update_callback);
 ros::Subscriber<std_msgs::Int16> state_subscriber(
     "/arduino/command/set_state", &set_state_callback);
     
@@ -65,18 +70,29 @@ void position_command_callback(const geometry_msgs::PointStamped& position_cmd) 
     last_msg_time = millis();
     x_pos = clamp(position_cmd.point.x, MIN_X, MAX_X);
     y_pos = clamp(position_cmd.point.y, MIN_Y, MAX_Y);
-    newPos = true; //(new_x_pos - x_pos) > 1;
-//    y_pos = position_cmd.point.y;
+    newPos = true;
 }
 
-void speed_update_callback(const std_msgs::Int16& speed) {
-    x_stepper.setMaxSpeed(speed.data);
-    run_speed = speed.data;
+void x_speed_update_callback(const std_msgs::Int16& xspeed) {
+    x_stepper.setMaxSpeed(xspeed.data);
+    x_speed = xspeed.data;
 }
 
-void acceleration_update_callback(const std_msgs::Int16& acceleration) {
-    x_stepper.setAcceleration(acceleration.data);
-    run_accel = acceleration.data;
+void y_speed_update_callback(const std_msgs::Int16& yspeed) {
+    y1_stepper.setMaxSpeed(yspeed.data);
+    y2_stepper.setMaxSpeed(yspeed.data);
+    y_speed = yspeed.data;
+}
+
+void x_acceleration_update_callback(const std_msgs::Int16& x_acceleration) {
+    x_stepper.setAcceleration(x_acceleration.data);
+    x_accel = x_acceleration.data;
+}
+
+void y_acceleration_update_callback(const std_msgs::Int16& y_acceleration) {
+    y1_stepper.setAcceleration(y_acceleration.data);
+    y1_stepper.setAcceleration(y_acceleration.data);
+    y_accel = y_acceleration.data;
 }
 
 void set_state_callback(const std_msgs::Int16& state) {
@@ -98,14 +114,22 @@ void setup() {
     x_stepper.setMaxSpeed(home_speed); //SPEED_MM_SEC * STEPS_PER_MM);
     x_stepper.setAcceleration(home_accel); //ACCEL_MM_SEC2 * STEPS_PER_MM);
     x_stepper.setPinsInverted(true, false, false);
+    y1_stepper.setMaxSpeed(home_speed);
+    y1_stepper.setAcceleration(home_accel);
+    y1_stepper.setPinsInverted(true, false, false);
+    y2_stepper.setMaxSpeed(home_speed);
+    y2_stepper.setAcceleration(home_accel);
+    y2_stepper.setPinsInverted(true, false, false);
 
     nh.initNode();
     nh.advertise(position_feedback_publisher);
     nh.advertise(striker_state_publisher);
     nh.advertise(striker_command_publisher);
     nh.subscribe(position_command_subscriber);
-    nh.subscribe(speed_update_subscriber);
-    nh.subscribe(acceleration_update_subscriber);
+    nh.subscribe(x_speed_update_subscriber);
+    nh.subscribe(x_acceleration_update_subscriber);
+    nh.subscribe(y_speed_update_subscriber);
+    nh.subscribe(y_acceleration_update_subscriber);
     nh.subscribe(state_subscriber);
 }
 
@@ -146,13 +170,19 @@ void loop() {
                 setStop(); // over two minute elapses since last message
                 break;
             }
+            y1_stepper.moveTo((long) (y_pos * STEPS_PER_MM));
+            y2_stepper.moveTo((long) (y_pos * STEPS_PER_MM));
             x_stepper.moveTo((long) (x_pos * STEPS_PER_MM));
             x_stepper.run();
+            y1_stepper.run();
+            y2_stepper.run();
             break;
 
         case 2: // homing
             if (homeX()) {
+              if (homeY()) {
                 setRun();
+              }  
             }
             break;
     }
@@ -160,6 +190,10 @@ void loop() {
     // oops recovery
     if (digitalRead(X_BW_BB)) {
         x_stepper.setCurrentPosition(MIN_X);
+    }
+    if (digitalRead(Y1_BW_BB)) {
+      y1_stepper.setCurrentPosition(MIN_Y);
+      y2_stepper.setCurrentPosition(MIN_Y);
     }
 
     if (millis() - last_sent > 50) {
@@ -182,22 +216,52 @@ bool homeX() {
     return false;
 }
 
+bool homeY() {
+  if (digitalRead(Y1_BW_BB)) {
+    y1_stepper.stop();
+    y2_stepper.stop();
+    y1_stepper.setCurrentPosition(MIN_Y);
+    y2_stepper.setCurrentPosition(MIN_Y);
+  }
+    y1_stepper.move(-500); 
+    y2_stepper.move(-500);
+    y1_stepper.run();
+    y2_stepper.run();
+    return false;
+}
+
 void setStop() {
     digitalWrite(X_EN, HIGH);
+    digitalWrite(Y1_EN, HIGH);
+    digitalWrite(Y2_EN, HIGH);
     x_stepper.stop();
+    y1_stepper.stop();
+    y2_stepper.stop();
     mode = 0;
 }
 
 void setRun() {
     digitalWrite(X_EN, LOW);
-    x_stepper.setMaxSpeed(run_speed);
-    x_stepper.setAcceleration(run_accel);
+    digitalWrite(Y1_EN, LOW);
+    digitalWrite(Y2_EN, LOW);
+    x_stepper.setMaxSpeed(x_speed);
+    x_stepper.setAcceleration(x_accel);
+    y1_stepper.setMaxSpeed(y_speed);
+    y1_stepper.setAcceleration(y_accel);
+    y2_stepper.setMaxSpeed(y_speed);
+    y2_stepper.setAcceleration(y_accel);
     mode = 1;
 }
 
 void setHoming() {
     digitalWrite(X_EN, LOW);
+    digitalWrite(Y1_EN, LOW);
+    digitalWrite(Y2_EN, LOW);
     x_stepper.setMaxSpeed(home_speed);
     x_stepper.setAcceleration(home_accel);
+    y1_stepper.setMaxSpeed(home_speed);
+    y1_stepper.setAcceleration(home_speed);
+    y2_stepper.setMaxSpeed(home_speed);
+    y2_stepper.setAcceleration(home_speed);
     mode = 2;
 }
