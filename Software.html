@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Software System</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico"/>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							<header id="header">
+								<!-- <a href="index.html" class="logo"><strong>Editorial</strong> by HTML5 UP</a> -->
+								<ul class="icons">
+									<li><a href="https://github.com/wsh32/airhockey" class="fab fa-github"><span class="label">Github</span></a></li>
+								</ul>
+							</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Software System</h1>
+									</header>
+
+									<span class="image main"><img src="images/init_s_block_diagram.png" alt="" /></span>
+									<h2>Communication</h2>
+									<p>Our software system utilized ROS to communicate between the camera, laptop, and Arduino. The ROS ecosystem allowed us to have many separate nodes on different pieces of hardware that could publish data that was then accessible for other nodes to subscribe to and factor in to their code.</p>
+
+									<hr class="major" />
+									<h3>Camera System</h3>
+									<p>We analyzed images from our camera using OpenCV, which allowed us to track where the puck was on the table and also track the edges of the table using fiducial markers.</p>
+
+									<hr class="major" />
+									<h3>Trajectory Predictions</h3>
+									<p>By keeping track of the puck position over time, we then were able to calculate the x and y velocity vectors of the puck and use those to extrapolate where the puck's future position would be. In order to account for bounces off the edges of the table, we assumed that all collisions would be perfectly inelastic (i.e. the puck would bounce at the exact same angle it hit the edge of the table at). As we were only initially working in the one axis, we calculated the point in which the puck would cross the line y = 12, where the one axis gantry laid on the table. If this point was off the table (i.e. the puck was aimed toward a wall), we then reflected the point of intersection back onto the table recursively to place the predicted position in the correct location. </p>
+									<p>We also applied low pass filters to the puck's position to reduce the amount of jitter that the predicted position experienced. </p>
+
+									<hr class="major" />
+									<h3>Striker Control</h3>
+									<p>We used the AccelStepper library on Arduino to control our stepper motors that moved the striker. We set up our system to be a state machine with three different states: run, stop, and home. Once turned on, we started the game in stop mode. This mode disabled our motors to help with temperature control and waited to recieve a position command from ROS. Once an initial position command was recieved, the state machine entered home mode. This involved enabling the motors and sending the striker to the left until it triggered the breakbeam sensor. The current location of the striker was set to be 0 and the state machine then entered run mode. Run mode was set up to recieve position commands from ROS and send the striker to that location as quickly as possible. If the break in recieving position commands was ever longer than two minutes, the system entered stop mode.</p>
+
+									<hr class="major" />
+									<h3>Future Work</h3>
+									<p>The next step for this project would be to implement control code to move the striker in two axes. This goal was unable to be reached during the timeframe of the project due to mechanical limitations. Two axes of motion would elevate the project as the puck would be able to be hit back to the human player (as opposed to just being blocked), and allows us to add another level of complexity to the project: gameplay. There are game simulations and machine learning algorithms that can be written to design the position commands in such a way that the robot is able to play offensively and score against a human opponent. </p>
+									<p>As we continued the project we had issues where the motors skipped steps. When this happened, we needed to rehome the striker more frequently to ensure that its current position was accurate. In a future revision of this project, we would track the striker position using the camera and compare it to the position that the striker was reporting at being. If there was ever a large discrepancy, we could then command the striker to rehome itself and resolve the difference. This would allow the robot to be more autonomous and require less human input. </p>
+
+						</div>
+					</div>
+
+					<!-- Sidebar -->
+						<div id="sidebar">
+							<div class="inner">
+
+								<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="SystemOverview.html">System Overview</a></li>
+										<li>
+											<span class="opener">Subsystems</span>
+											<ul>
+												<li><a href="Mechanical.html">Mechanical Overview</a></li>
+												<li><a href="Electrical.html">Electrical Overview</a></li>
+												<li><a href="Software.html">Software Overview</a></li>
+											</ul>
+										</li>
+										<li><a href="OurProcess.html">Our Process</a></li>
+										<li><a href="AboutTheTeam.html">Our Team</a></li>
+										<li><a href="BudgetAndMaterials.html">Budget and Materials</a></li>
+									</ul>
+								</nav>
+
+
+								<!-- Section -->
+								<section>
+									<ul class="contact">
+										<li class="icon solid fa-home">1000 Olin Way<br />
+										Needham, MA 02492</li>
+									</ul>
+								</section>
+
+								<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">What the Puck? 2021. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+								</footer>
+
+							</div>
+						</div>
+
+				</div>
+
+			<!-- Scripts -->
+				<script src="assets/js/jquery.min.js"></script>
+				<script src="assets/js/browser.min.js"></script>
+				<script src="assets/js/breakpoints.min.js"></script>
+				<script src="assets/js/util.js"></script>
+				<script src="assets/js/main.js"></script>
+
+		</body>
+	</html>

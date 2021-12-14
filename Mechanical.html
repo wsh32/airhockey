@@ -30,87 +30,97 @@
 							</header>
 
 							<!-- Content -->
-								<section>
-									<header class="main">
+							<section id="banner">
+								<div class="content">
+									<header>
 										<h1>Mechanical System</h1>
+										<p>Summary</p>
 									</header>
-
-									<span class="image main"><img src="images/pic11.jpg" alt="" /></span>
-									<h2>Summary</h2>
-									<p>The overall mechanical system is a 2-axis gantry that moves with the use of pulleys and belts. The pulleys are driven with stepper motors. Aluminum rods are used to constrain the sliding movement and the edges of the table are also used as guides. Over the center of the table there is an adjustable height camera mount for the computer vision system. </p>
+									<p>The overall mechanical system is a two-axis gantry that moves with the use of pulleys and belts. The pulleys are driven with stepper motors. Aluminum rods are used to constrain the sliding movement and the edges of the table are also used as guides. Over the center of the table there is an adjustable height camera mount for the computer vision system.</p>
+								</div>
+								<span class="image object">
+									<img src="images/rohil_drilling.jpg" alt="" />
+								</span>
+							</section>
 
 									<hr class="major" />
 									<h3>Version 1</h3>
 									<p>After constructing the first version of the gantry, we found that there were multiple issues with our initial prototype. First of all, we discovered that having single 0.25” rods as axial constraints was not rigid enough to stop the system from over-rotating due to torques induced by acceleration and deceleration. The plastic bushings we used to slide our 3D printed parts along the rods did help reduce some friction between the parts and the rods; however, they were still not smooth enough. Also, some of the 3D printed parts were not as strong as they needed to be, so they broke during assembly when fasteners were driven into them.</p>
 
+									<div class="row">
+										<div class="col-6 col-12-small">
+											<span class="image main"><img src="images/sr1_1axis.png" alt="" /></span>
+										</div>
+										<div class="col-6 col-12-small">
+											<span class="image main"><img src="images/sr1_camera.png" alt="" /></span>
+										</div>
+									</div>
+
+
 									<hr class="major" />
 									<h3>Version 2</h3>
-									<p>The second iteration of the design included some major improvements. For example, linear bearings helped reduce friction significantly and the second rod in each axis made the system much more stable. </p>
-									<p>However, we still ran into a myriad of issues. One issue was that in assembling the system, we hammered the linear bearings into the 3D prints, which damaged them and meant that the bearings had to be replaced. We then made sure to file down the insides of the parts before inserting the bearings so that they could go in more easily while still having a tight enough press fit that they wouldn’t move unintentionally.</p>
-									<p>Another major issue we ran into was that the motion of our parts was not smooth; the 3D printed parts seemed to be getting stuck in some places. There were a few reasons for this. For one, many of the rods were not perfectly smooth or were slightly bent. This meant that the 3D printed parts were getting stuck in certain places as they moved along the rods. In order to mitigate this issue, we sanded the rods and lubricated them with WD-40. It seemed like some of the issues with smooth movement were also caused by poor quality ball bearings—we found that even within a package of supposedly identical bearings, the quality of the bearings could vary significantly. Therefore, we tested the bearings out by seeing how easily they slid on the rods by themselves (independent of any 3D printed parts) and then replaced any poorly performing bearings with ones that had performed well during testing. We also noticed that the 3D printed parts were dragging against the table in some places, further impeding their movement. Therefore, we filed and sanded down the bottoms of the parts.</p>
+									<p>TThe second iteration of the design included some major improvements. For example, linear bearings helped reduce friction significantly and the second rod in each axis made the system much more stable. </p>
+									<p>However, we still ran into a myriad of issues. One issue was that in assembling the system, we hammered the linear bearings into the 3D prints, which damaged them and meant that the bearings had to be replaced. We then made sure to file down the insides of the parts before inserting the bearings so that the bearings wouldn’t be under large radial loads which would mess with the balls. By decreasing the radial load on the bearings, the assembly moved more smoothly.</p>
+									<p>Another major issue we ran into was that the linear travel across the beams was not smooth; the assembly seemed to get stuck in some places. There were a few reasons for this. For one, many of the rods were not perfectly smooth or were slightly bent. This meant that the 3D printed parts were getting stuck in certain places as they moved along the rods. In order to mitigate this issue, we sanded the rods and lubricated them with WD-40. It seemed like some of the issues with smooth movement were also caused by poor quality ball bearings—we found that even within a package of supposedly identical bearings, the quality of the bearings could vary significantly. Therefore, we tested the bearings out by seeing how easily they slid on the rods by themselves (independent of any 3D printed parts) and then replaced any poorly performing bearings with ones that had performed well during testing. We also noticed that the 3D printed parts were dragging against the table in some places, further impeding their movement. Therefore, we filed and sanded down the bottoms of the parts.</p>
+									<p>Despite making the travel as smooth as possible, the striker was unable to move fast enough for a hard hitting shot. We are not sure as to the reason the striker is too slow but we believe that it could be due to the stepper speed. When we ran the stepper at its fastest, the stepper would skip steps and wouldn’t move. This also brought up another problem where the system would think the striker is in a position that it’s not. </p>
+
+									<span class="image main"><img src="images/2axisTable.jpg" alt="" /></span>
 								</section>
 
 						</div>
 					</div>
 
-				<!-- Sidebar -->
-					<div id="sidebar">
-						<div class="inner">
+					<!-- Sidebar -->
+						<div id="sidebar">
+							<div class="inner">
 
-							<!-- Search -->
-								<section id="search" class="alt">
-									<form method="post" action="#">
-										<input type="text" name="query" id="query" placeholder="Search" />
-									</form>
+								<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="SystemOverview.html">System Overview</a></li>
+										<li>
+											<span class="opener">Subsystems</span>
+											<ul>
+												<li><a href="Mechanical.html">Mechanical Overview</a></li>
+												<li><a href="Electrical.html">Electrical Overview</a></li>
+												<li><a href="Software.html">Software Overview</a></li>
+											</ul>
+										</li>
+										<li><a href="OurProcess.html">Our Process</a></li>
+										<li><a href="AboutTheTeam.html">Our Team</a></li>
+										<li><a href="BudgetAndMaterials.html">Budget and Materials</a></li>
+									</ul>
+								</nav>
+
+
+								<!-- Section -->
+								<section>
+									<ul class="contact">
+										<li class="icon solid fa-home">1000 Olin Way<br />
+										Needham, MA 02492</li>
+									</ul>
 								</section>
 
-							<!-- Menu -->
-							<nav id="menu">
-								<header class="major">
-									<h2>Menu</h2>
-								</header>
-								<ul>
-									<li><a href="index.html">Homepage</a></li>
-									<li><a href="SystemOverview.html">System Overview</a></li>
-									<li>
-										<span class="opener">Subsystems</span>
-										<ul>
-											<li><a href="Mechanical.html">Mechanical Overview</a></li>
-											<li><a href="Electrical.html">Electrical Overview</a></li>
-											<li><a href="Software.html">Software Overview</a></li>
-										</ul>
-									</li>
-									<li><a href="OurProcess.html">Our Process</a></li>
-									<li><a href="AboutTheTeam.html">Our Team</a></li>
+								<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">What the Puck? 2021. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+								</footer>
 
-								</ul>
-							</nav>
-
-
-							<!-- Section -->
-							<section>
-								<ul class="contact">
-									<li class="icon solid fa-home">1000 Olin Way<br />
-									Needham, MA 02492</li>
-								</ul>
-							</section>
-
-							<!-- Footer -->
-							<footer id="footer">
-								<p class="copyright">What the Puck? 2021. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
-							</footer>
-
+							</div>
 						</div>
-					</div>
 
-			</div>
+				</div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+			<!-- Scripts -->
+				<script src="assets/js/jquery.min.js"></script>
+				<script src="assets/js/browser.min.js"></script>
+				<script src="assets/js/breakpoints.min.js"></script>
+				<script src="assets/js/util.js"></script>
+				<script src="assets/js/main.js"></script>
 
-	</body>
-</html>
+		</body>
+	</html>
