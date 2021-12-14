@@ -42,6 +42,16 @@
 									<img src="images/rohil_drilling.jpg" alt="" />
 								</span>
 							</section>
+							<section>
+								<h3>Speccing Motors</h3>
+								<p>Before we could start working on creating the mechanical system, we needed to figure out what motors we were going to use for the system. We looked into using stepper motors (PN can be found in the <a href="BudgetAndMaterials.html">budget spreadsheet</a>) and wanted to see if they would fulfill the project’s requirements. To check this we looked into the moment we expected the stepper would undergo and how fast the steppers were able to rotate. The equations below show how we came to the conclusion of using the steppers we have in the project. </p>
+								<p>Required Acceleration to Block Goals</p>
+								<span class="image"><img src="images/stepper1.png" alt="" width = "100%"/></span>
+								<p>Expected Torque for Required Acceleration</p>
+								<span class="image"><img src="images/stepper2.png" alt="" width = "100%"/></span>
+								<p>RPM from the Selected Steppers</p>
+								<span class="image"><img src="images/stepper3.png" alt="" width = "100%"/></span>
+								<p>Looking at the stepper spec sheet, we can see that the stepper we selected does fulfill the calculated requirements.</p>
 
 									<hr class="major" />
 									<h3>Version 1</h3>
@@ -64,7 +74,7 @@
 									<p>Another major issue we ran into was that the linear travel across the beams was not smooth; the assembly seemed to get stuck in some places. There were a few reasons for this. For one, many of the rods were not perfectly smooth or were slightly bent. This meant that the 3D printed parts were getting stuck in certain places as they moved along the rods. In order to mitigate this issue, we sanded the rods and lubricated them with WD-40. It seemed like some of the issues with smooth movement were also caused by poor quality ball bearings—we found that even within a package of supposedly identical bearings, the quality of the bearings could vary significantly. Therefore, we tested the bearings out by seeing how easily they slid on the rods by themselves (independent of any 3D printed parts) and then replaced any poorly performing bearings with ones that had performed well during testing. We also noticed that the 3D printed parts were dragging against the table in some places, further impeding their movement. Therefore, we filed and sanded down the bottoms of the parts.</p>
 									<p>Despite making the travel as smooth as possible, the striker was unable to move fast enough for a hard hitting shot. We are not sure as to the reason the striker is too slow but we believe that it could be due to the stepper speed. When we ran the stepper at its fastest, the stepper would skip steps and wouldn’t move. This also brought up another problem where the system would think the striker is in a position that it’s not. </p>
 
-									<span class="image main"><img src="images/2axisTable.jpg" alt="" /></span>
+									<span class="image"><img src="images/2axisTable.jpg" alt="" /></span>
 								</section>
 
 						</div>
